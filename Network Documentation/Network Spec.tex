@@ -1,0 +1,93 @@
+\documentclass[10pt,a4paper]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\author{Addie Morrison}
+\title{Project Edge Network Specification}
+\subtitle{Big Documentation for a Big World}
+\date{Documentation Started: September 4, 2015\\ Last Updated: \today}
+
+\usepackage{avant}
+\renewcommand{\familydefault}{\sfdefault}
+
+\renewcommand\thesection{\arabic{section}}
+\hyphenation{Maestro Hyperion Atlas}
+\begin{document}
+	\maketitle
+	TODO: Write an introduction or something
+	\subsection{Key}
+	\begin{itemize}[leftmargin=!,labelwidth=0.25\textwidth, itemsep=2ex]
+		\item Implemented Feature
+		\item[$\circ$] Feature to be implemented
+	\end{itemize}
+	\subsection{Ports}
+	\begin{description}[leftmargin=!,labelwidth=0.25\textwidth, itemsep=2ex]
+		\item[2345] Maestro server port
+		\item[2346] Maestro client port (different to avoid discovery traffic)
+		\item[2347] Atlas client port
+		\item[2348-2500] Atlas server ports
+	\end{description}
+	\newpage
+	\section{Maestro Packets}
+	\begin{description}[leftmargin=!,labelwidth=0.35\textwidth, itemsep=2ex]
+		\item[Create Lobby]
+			Sent from a Hyperion instance to Maestro to create a new lobby
+			\begin{itemize}
+				\item Byte: Number of players per team
+				\item Byte: Number of players invited
+				\item Several Strings: Usernames of players to invite
+			\end{itemize}
+		\item[Invite To Lobby]
+			Sent from Maestro to Hyperion instances to invite them to a lobby
+			\begin{itemize}
+				\item Int32: Lobby ID
+				\item String: Host Username
+			\end{itemize}
+		\item[Reply To Lobby Invite]
+			Sent from Hyperion instances to Maestro in response to an invitation
+			\begin{itemize}
+				\item Int32: Lobby ID
+				\item Bool: Whether they accepted or not
+			\end{itemize}
+		\item[Lobby Status]
+			Sent every 2(?) seconds from Maestro to Hyperion instances in a lobby, updating them on the lobby's status
+			\begin{itemize}
+				\item Byte: Number of people in the lobby
+				\item Several Strings: Usernames of people in the lobby
+			\end{itemize}
+		\item[Start Lobby]
+			Sent from the Hyperion instance `hosting' a lobby to Maestro telling to to place them into the queue
+			\begin{itemize}
+				\item Int32: Lobby ID
+			\end{itemize}
+		\item[Introduce Atlas]
+			Sent from Maestro to Hyperion instances giving them the information for their session
+			\begin{itemize}
+				\item String: Atlas host (currently defaults to same address as Maestro)
+				\item Int32: Atlas port number
+				\item[$\circ$] String: Session encryption key
+			\end{itemize}
+	\end{description}
+	\section{Atlas Packets}
+	\begin{description}[leftmargin=!,labelwidth=0.35\textwidth, itemsep=2ex]
+		\item \begin{Large} Debugging Structures \end{Large}
+		\item[Request Position Change]
+			Hyperion requests a position change
+			\begin{itemize}
+				\item UInt16: X position
+				\item UInt16: Y position
+			\end{itemize}	
+		\item[Update Positions]	
+			Atlas tells Hyperion where each player is
+			\begin{itemize}
+				\item UInt16: Number of players being described in this message
+				\item Several player data `Structures'
+					\begin{itemize}
+						\item UInt16: Player ID
+						\item UInt16: Player X position
+						\item Uint16: Player Y position
+					\end{itemize}
+			\end{itemize}
+		\item \begin{Large} Actual Packets \end{Large}
+		\item (Waiting on a class hierarchy to be started before attempting to transmit data about it)
+	\end{description}
+\end{document}
