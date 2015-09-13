@@ -40,7 +40,7 @@
     <Compile Include="Lobbies\Participant.cs" />
     <Compile Include="Maestro.cs" />
   </ItemGroup>
-  <Import Project="..\Net\Net.projitems" Label="Shared" Condition="Exists('..\Net\Net.projitems')" />
+  <Import Project="..\NetCommon\Net.projitems" Label="Shared" Condition="Exists('..\NetCommon\Net.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">

@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas", "Atlas\Atlas.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "Lidgren.Network\Lidgren.Network.csproj", "{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NetCommon", "Net\NetCommon.shproj", "{963AF4EF-D1D9-484B-BB91-E00DBEA4B8C2}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NetCommon", "NetCommon\NetCommon.shproj", "{963AF4EF-D1D9-484B-BB91-E00DBEA4B8C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperion", "Hyperion.Linux\Hyperion.csproj", "{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperion", "Hyperion\Hyperion.csproj", "{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{6E75E5F4-ABD9-42C7-BB2E-C173A9E9E818}"
 EndProject
