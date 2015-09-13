@@ -38,3 +38,8 @@ Thumbs.db
 
 #dotCover
 *.dotCover
+
+#Tex stuff
+*.aux
+*.log
+*.synctex.gz
