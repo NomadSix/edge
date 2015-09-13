@@ -47,8 +47,6 @@
     <Compile Include="Atlas.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Atlas\PlayerUpdate.cs" />
-    <Compile Include="Atlas\NetIncoming.cs" />
-    <Compile Include="Atlas\NetOutgoing.cs" />
   </ItemGroup>
   <Import Project="..\Net\Net.projitems" Label="Shared" Condition="Exists('..\Net\Net.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

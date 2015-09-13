@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.9.7)  8 SEP 2015 08:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.9.7)  12 SEP 2015 22:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -197,7 +197,7 @@ Here is how much of TeX's memory you used:
 se/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/avantgar/uagd8a.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/urw/avantgar/uagk8a.pfb>
-Output written on "Network Spec.pdf" (4 pages, 33722 bytes).
+Output written on "Network Spec.pdf" (4 pages, 33544 bytes).
 PDF statistics:
  30 PDF objects out of 1000 (max. 8388607)
  20 compressed objects within 1 object stream

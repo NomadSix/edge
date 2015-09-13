@@ -3,9 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Lidgren.Network;
 using System.Threading.Tasks;
-using Edge.NetCommon;
 using Edge.Maestro.Net;
 using Edge.Maestro.Lobbies;
+using Edge.NetCommon;
 
 namespace Edge.Maestro {
 	public class Maestro {

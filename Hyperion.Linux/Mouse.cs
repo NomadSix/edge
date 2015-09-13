@@ -112,4 +112,3 @@ namespace Edge.Hyperion.Input {
 		X2
 	}
 }
-

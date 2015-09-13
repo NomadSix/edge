@@ -3,12 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{2905FD91-2166-4F98-AD22-2226287A7EE2}</ProjectGuid>
+    <ProjectGuid>{6E75E5F4-ABD9-42C7-BB2E-C173A9E9E818}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Edge.Hyperion</RootNamespace>
-    <AssemblyName>Hyperion</AssemblyName>
-    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,24 +28,37 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Hyperion.cs" />
-    <Compile Include="Input\Keyboard.cs" />
-    <Compile Include="Input\Mouse.cs" />
-  </ItemGroup>
-  <Import Project="..\Net\Net.projitems" Label="Shared" Condition="Exists('..\Net\Net.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.2.99.1-Beta\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\MonoGame.Framework.dll</HintPath>
+      <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\packages\Lidgren.Network.Portable.1.0.1\lib\portable-net45+sl50+win+wpa81+wp80\Lidgren.Network.dll</HintPath>
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Sdl">
+      <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\Tao.Sdl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Input\" />
+    <Compile Include="AtlasTests.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="Tao.Sdl.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Atlas\Atlas.csproj">
+      <Project>{F778B80C-A131-484D-8B4F-972D0B4389A7}</Project>
+      <Name>Atlas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maestro\Maestro.csproj">
+      <Project>{01B3ED2C-D157-450C-B99A-DE1E6DA11A78}</Project>
+      <Name>Maestro</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -6,6 +6,9 @@ namespace Edge.Atlas {
 		public Vector2 Position;
 		public Vector2 MovingTo;
 		public Int64 NetID;
+		public DebugPlayer(Int64 netid){
+			NetID = netid;
+		}
 	}
 }
 

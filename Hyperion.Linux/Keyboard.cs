@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
@@ -107,7 +106,7 @@ namespace Edge.Hyperion.Input {
 					default:
 						if(x != Keys.LeftShift && x != Keys.RightShift) {
 							string temp = Regex.IsMatch(x.ToString(), @"\d")
-									? Regex.Match(x.ToString(), @"\d+").Value : x.ToString();
+								? Regex.Match(x.ToString(), @"\d+").Value : x.ToString();
 							keyString = isShiftDown ? temp.ToUpper() : temp.ToLower();
 						}
 						break;
@@ -160,4 +159,3 @@ namespace Edge.Hyperion.Input {
 		}
 	}
 }
-
