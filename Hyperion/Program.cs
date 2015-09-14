@@ -134,7 +134,7 @@ namespace Edge.Hyperion {
 							break;
 					}
 				}
-				if(mouse.IsButtonToggledDown(MouseButtons.Right)) {
+				if(mouse.IsButtonDown(MouseButtons.Right)) {
 					NetOutgoingMessage outMsg = atlasClient.CreateMessage();
 					outMsg.Write((byte)AtlasPackets.RequestPositionChange);
 					outMsg.Write((UInt16)mouse.Location.X);

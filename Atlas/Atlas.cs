@@ -11,10 +11,10 @@ namespace Edge.Atlas {
 		NetServer server;
 		public Boolean isExiting;
 		Boolean runningHeadless;
-		Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
+		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
 
-		Int64 lastTime;
-		Int64 currentTime = DateTime.UtcNow.Ticks;
+		public Int64 lastTime;
+		public Int64 currentTime = DateTime.UtcNow.Ticks;
 
 		public Atlas(Int32 port, Boolean runningHeadless) {
 			this.runningHeadless = runningHeadless;
@@ -56,7 +56,6 @@ namespace Edge.Atlas {
 							}
 							break;
 						case NetIncomingMessageType.DiscoveryRequest:
-							//Automatic discovery response
 							NetOutgoingMessage response = server.CreateMessage();
 							server.SendDiscoveryResponse(response, inMsg.SenderEndPoint);
 							break;
@@ -90,26 +89,33 @@ namespace Edge.Atlas {
 
 		void InputHandler() {
 			while(!isExiting) {
+				//Timing not needed, as ReadLine() locks the execution pointer
 				string readLine = Console.ReadLine();
 				#region Parse out the command and arguments
+				//If they didn't say anything, we don't need to do anything
 				if(String.IsNullOrWhiteSpace(readLine)) return;
-				string line = readLine.ToUpper();
 
 				string command;
 				try {
-					command = line.Substring(0, line.IndexOf('('));
+					//The command is anything that happens before the opening parenthesies
+					command = readLine.Substring(0, readLine.IndexOf('('));
 				}
 				catch(Exception) {
-					command = line;
+					//If there isn't an opening parenthesies, it's a parameterless command
+					command = readLine;
 				}
 
 				var args = new List<String>();
+				//Take everything between the opening and closing parenthesies
+				String argStr = readLine.Substring(readLine.IndexOf('(') + 1, readLine.IndexOf(')') - (readLine.IndexOf('(') + 1));
 				try {
-					args = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1)).Split(',').ToList();
+					//Try to split the arguments by commas
+					args = argStr.Split(',').ToList();
 				}
 				catch(Exception) {
 					try {
-						String argStr = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1));
+						//If the split failed, it ether had no arguments (do nothing)
+						//or had only one argument (add that argument)
 						if(!String.IsNullOrWhiteSpace(argStr))
 							args.Add(argStr);
 					}
@@ -118,7 +124,6 @@ namespace Edge.Atlas {
 					}
 				}
 				#endregion
-
 				try {
 					Control(command, args);
 				}
@@ -129,7 +134,7 @@ namespace Edge.Atlas {
 		}
 
 		public void Control(String command, List<String> args) {
-			switch(command) {
+			switch(command.ToUpper()) {
 				case "EXIT":
 					isExiting = true;
 					break;

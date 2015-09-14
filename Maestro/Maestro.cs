@@ -18,12 +18,11 @@ namespace Edge.Maestro {
 		/// Timing/Delays
 		/// </summary>
 
-		Boolean isExiting;
-		readonly List<ClientInstance> instances = new List<ClientInstance>();
-		readonly List<Lobby> lobbies = new List<Lobby>();
-		readonly List<String> inQueue = new List<String>();
+		public Boolean isExiting;
+		public readonly List<ClientInstance> instances = new List<ClientInstance>();
+		public readonly List<Lobby> lobbies = new List<Lobby>();
 
-		readonly List<Atlas.Atlas> serverPool = new List<Atlas.Atlas>();
+		public readonly Dictionary<Int32, Atlas.Atlas> serverPool = new Dictionary<Int32, Atlas.Atlas>();
 
 		NetServer server;
 
@@ -72,6 +71,11 @@ namespace Edge.Maestro {
 					case "EXIT":
 						isExiting = true;
 						break;
+					case "CONTROL":
+						//Argument 1: Server to control
+						//Argument 2: Command to execute on the server
+						//Argument 3-n: Arguments for the command
+						break;
 					case "CLEAR":
 					case "CLS":
 						Console.Clear();
@@ -86,6 +90,9 @@ namespace Edge.Maestro {
 			server.Shutdown("shutting down");
 		}
 
+		/// <summary>
+		/// Contains logic for networking interupt based events
+		/// </summary>
 		void NetworkIncomingLoop() {
 			while(!isExiting) {
 				NetIncomingMessage msg;
@@ -94,6 +101,7 @@ namespace Edge.Maestro {
 						case NetIncomingMessageType.Data:
 							switch((MaestroPackets)msg.ReadByte()) {
 								case MaestroPackets.CreateLobby:
+									//make a new lobby
 									byte playersPerTeam = msg.ReadByte();
 									byte numInvites = msg.ReadByte();
 									String hostName = Lookup(msg).UName;
@@ -114,20 +122,28 @@ namespace Edge.Maestro {
 									}
 									break;
 								case MaestroPackets.ReplyToLobbyInvite:
+									//Accept or declines an invite to a lobby
 									var lobbyParticipant = lobbies[msg.ReadInt32()].Members.Find(x => x.UName == Lookup(msg).UName);
 									lobbyParticipant.IsResponded = true;
 									lobbyParticipant.IsConnected = msg.ReadBoolean();
 									break;
 								case MaestroPackets.StartLobby:
+									//Starts a game with the players in a lobby
 									var lobbyUID = msg.ReadInt32();
 									if(lobbyUID == -1) {
-										inQueue.Add(Lookup(msg).UName);
+										//inQueue.Add(Lookup(msg).UName);
 										break;
 									}
 									var lobby = lobbies.Find(x => x.LobbyUID == lobbyUID);
 									if(lobby.Host == Lookup(msg).UName) {
-										lobby.Members.ForEach(x => inQueue.Add(x.UName));
-										lobbies.Remove(lobby);
+										var portNum = GetNextAvailablePort();
+										var newServer = new Atlas.Atlas(portNum, true);
+										serverPool.Add(portNum, newServer);
+										var introduction = server.CreateMessage();
+										introduction.Write((byte)MaestroPackets.IntroduceAtlas);
+										//introduction.Write({IPAddress});
+										introduction.Write(portNum);
+										lobby.Members.ForEach(x => server.SendMessage(introduction, Lookup(x.UName).Connection, NetDeliveryMethod.ReliableUnordered));
 									}
 									break;
 							}
@@ -135,9 +151,12 @@ namespace Edge.Maestro {
 						case NetIncomingMessageType.StatusChanged:
 							switch(msg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
+									//On new connection, add a client instance to keep track of it
 									instances.Add(new ClientInstance(msg.SenderConnection, msg.SenderConnection.RemoteHailMessage.ReadString()));
 									break;
 								case NetConnectionStatus.Disconnected:
+									//On disconnect, we no longer need the client instance
+									//TODO: Check if this is working
 									instances.Remove(Lookup(msg));
 									break;
 							}
@@ -151,38 +170,54 @@ namespace Edge.Maestro {
 						case NetIncomingMessageType.VerboseDebugMessage:
 						case NetIncomingMessageType.WarningMessage:
 						case NetIncomingMessageType.ErrorMessage:
-						// print diagnostics message
+							//Print all debug/diagnostics/warning messages to the console
 							Console.WriteLine(msg.ReadString());
 							break;
 					}
 				}
+				//TODO: Timing
 			}
 		}
 
+		/// <summary>
+		/// Loop containing server logic that needs to be 
+		/// run continuously (not network interupt based)
+		/// </summary>
 		void LogicLoop() {
 			while(!isExiting) {
-				if(inQueue.Count >= 1) {
-					var portNum = 4631;
-					var newServer = new Atlas.Atlas(portNum, true);
-					serverPool.Add(newServer);
-					inQueue.ForEach(x => {
-						var introduction = server.CreateMessage();
-						introduction.Write((byte)MaestroPackets.InviteToLobby);
-						introduction.Write("192.168.20.203");
-						introduction.Write(portNum);
-						server.SendMessage(introduction, Lookup(x).Connection, NetDeliveryMethod.ReliableUnordered);
-					});
-				}
 				//TODO: Queue things, running Atlas instances
 				//TODO: Data storage after Atlas finishes [sqlite?]
+
+				//TODO: Timing
 			}
 		}
 
+		/// <summary>
+		/// Gets the next available port.
+		/// </summary>
+		/// <returns>The next available port.</returns>
+		Int32 GetNextAvailablePort(){
+			Int32 port = 2348;
+			while(true) {
+				if(!serverPool.ContainsKey(port))
+					return port;
+				port++;
+			}
+		}
+
+		/// <summary>
+		/// Finds the ClientInstance associated with a given message
+		/// </summary>
+		/// <param name="msg">A message sent by the client</param>
 		ClientInstance Lookup(NetIncomingMessage msg) {
 			var n = instances.Find(x => x.UUID == msg.SenderConnection.RemoteUniqueIdentifier); 
 			return n;
 		}
 
+		/// <summary>
+		/// Finds the ClientInstance controlling a username
+		/// </summary>
+		/// <param name="uname">The client's Username</param>
 		ClientInstance Lookup(String uname) {
 			var n = instances.Find(x => x.UName == uname);
 			return n;

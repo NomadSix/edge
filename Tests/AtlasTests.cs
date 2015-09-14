@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using Edge.Atlas;
+using System;
 using System.Threading.Tasks;
+using System.Threading;
+using Lidgren.Network;
 
 namespace Tests {
 	[TestFixture]
