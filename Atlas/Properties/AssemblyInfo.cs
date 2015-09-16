@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle ("Atlas")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyDescription ("The Project Edge game server")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
+[assembly: AssemblyCompany ("PlutoQuality")]
 [assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("addie")]
+[assembly: AssemblyCopyright ("PlutoQuality")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
