@@ -81,7 +81,7 @@ namespace Lidgren.Network
 #if UNITY_WEBPLAYER || UNITY_4_5
 				MethodInfo getMethod = fi.GetGetMethod();
 #else
-				MethodInfo getMethod = fi.GetMethod;
+				MethodInfo getMethod = fi.GetSetMethod();
 #endif
 				if (getMethod != null)
 				{

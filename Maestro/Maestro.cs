@@ -2,21 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using Lidgren.Network;
-using System.Threading.Tasks;
 using Edge.Maestro.Net;
 using Edge.Maestro.Lobbies;
 using Edge.NetCommon;
+using System.Threading;
 
 namespace Edge.Maestro {
 	public class Maestro {
-
-		/// <summary>
-		/// Notes: 
-		/// If we're having issues with interators, it's probably the combination of Lists, ForEaches, and async operations
-		/// 
-		/// TODO: 
-		/// Timing/Delays
-		/// </summary>
 
 		public Boolean isExiting;
 		public readonly List<ClientInstance> instances = new List<ClientInstance>();
@@ -26,6 +18,15 @@ namespace Edge.Maestro {
 
 		NetServer server;
 
+		/// <summary>
+		/// The entry point of the program, where the program control starts and ends.
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
+		public static void Main(string[] args) {new Maestro().Run();}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Edge.Maestro.Maestro"/> class.
+		/// </summary>
 		public Maestro() {
 			var config = new NetPeerConfiguration("Maestro");
 			config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
@@ -34,67 +35,15 @@ namespace Edge.Maestro {
 			server.Start();
 		}
 
-		public void Run() {
-			Task.Run(NetworkIncomingLoop);
-			Task.Run(LogicLoop);
-
-			while(!isExiting) {
-				string readLine = Console.ReadLine();
-				#region Parse out the command and arguments
-				if(readLine == null) return;
-				string line = readLine.ToUpper();
-
-				string command;
-				try {
-					command = line.Substring(0, line.IndexOf('('));
-				}
-				catch(Exception) {
-					command = line;
-				}
-
-				var args = new List<String>();
-				try {
-					args = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1)).Split(',').ToList();
-				}
-				catch(Exception) {
-					try {
-						String argStr = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1));
-						if(!String.IsNullOrWhiteSpace(argStr))
-							args.Add(argStr);
-					}
-					// Analysis disable once EmptyGeneralCatchClause
-					catch {
-					}
-				}
-				#endregion
-				switch(command) {
-					case "EXIT":
-						isExiting = true;
-						break;
-					case "CONTROL":
-						//Argument 1: Server to control
-						//Argument 2: Command to execute on the server
-						//Argument 3-n: Arguments for the command
-						break;
-					case "CLEAR":
-					case "CLS":
-						Console.Clear();
-						break;
-					default:
-						Console.Write("Unrecognised command\nCommand: {0}\nArgs: ", command);
-						args.ForEach(arg => Console.Write(arg + ","));
-						Console.WriteLine();
-						break;
-				}
-			}
-			server.Shutdown("shutting down");
-		}
-
 		/// <summary>
-		/// Contains logic for networking interupt based events
+		/// Start the main server loop
 		/// </summary>
-		void NetworkIncomingLoop() {
+		public void Run() {
+			var inputThread = new Thread(() => InputHandler());
+			inputThread.Start(); 
+
 			while(!isExiting) {
+				#region NetIncoming
 				NetIncomingMessage msg;
 				while((msg = server.ReadMessage()) != null) {
 					switch(msg.MessageType) {
@@ -105,11 +54,11 @@ namespace Edge.Maestro {
 									byte playersPerTeam = msg.ReadByte();
 									byte numInvites = msg.ReadByte();
 									String hostName = Lookup(msg).UName;
-								#region Get Next Lobby ID
+									#region Get Next Lobby ID
 									Int32 lobbyID = -1;
 									lobbies.ForEach(x => lobbyID = x.LobbyUID > lobbyID ? x.LobbyUID : lobbyID);
 									lobbyID++;
-								#endregion
+									#endregion
 									lobbies.Add(new Lobby(lobbyID, playersPerTeam, hostName));
 									for(byte i = 0; i < numInvites; i++) {
 										String sendTo = msg.ReadString();
@@ -175,20 +124,75 @@ namespace Edge.Maestro {
 							break;
 					}
 				}
+				#endregion
+
+				//TODO: Queue, instance management, data storage
+
 				//TODO: Timing
 			}
+
+			server.Shutdown("shutting down");
 		}
 
 		/// <summary>
-		/// Loop containing server logic that needs to be 
-		/// run continuously (not network interupt based)
+		/// Handles input from the console.
 		/// </summary>
-		void LogicLoop() {
+		void InputHandler() {
 			while(!isExiting) {
-				//TODO: Queue things, running Atlas instances
-				//TODO: Data storage after Atlas finishes [sqlite?]
-
-				//TODO: Timing
+				string readLine = Console.ReadLine();
+				#region Parse out the command and arguments
+				if(readLine == null)
+					return;
+				string line = readLine.ToUpper();
+				string command;
+				try {
+					command = line.Substring(0, line.IndexOf('('));
+				}
+				catch(Exception) {
+					command = line;
+				}
+				var args = new List<String>();
+				try {
+					args = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1)).Split(',').ToList();
+				}
+				catch(Exception) {
+					try {
+						String argStr = line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - (line.IndexOf('(') + 1));
+						if(!String.IsNullOrWhiteSpace(argStr))
+							args.Add(argStr);
+					}
+					// Analysis disable once EmptyGeneralCatchClause
+					catch {
+					}
+				}
+				#endregion
+				switch(command) {
+					case "EXIT":
+						isExiting = true;
+						break;
+					case "CONTROL":
+						if(!serverPool.ContainsKey(Int32.Parse(args[0]))) {
+							Console.WriteLine("Server not found on port " + args[0]);
+							break;
+						}
+						var instance = serverPool[Int32.Parse(args[0])];
+						instance.Control(args[1], args.Skip(2).ToList());
+						break;
+					case "LIST_ATLAS":
+						Console.WriteLine("Currently Used Ports");
+						foreach(var a in serverPool)
+							Console.WriteLine(a.Key);
+						break;
+					case "CLEAR":
+					case "CLS":
+						Console.Clear();
+						break;
+					default:
+						Console.Write("Unrecognised command\nCommand: {0}\nArgs: ", command);
+						args.ForEach(arg => Console.Write(arg + ","));
+						Console.WriteLine();
+						break;
+				}
 			}
 		}
 

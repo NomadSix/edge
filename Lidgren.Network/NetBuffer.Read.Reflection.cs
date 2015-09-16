@@ -96,7 +96,7 @@ namespace Lidgren.Network
 #if UNITY_WEBPLAYER || UNITY_4_5
 					var setMethod = fi.GetSetMethod();
 #else
-					var setMethod = fi.SetMethod;
+					var setMethod = fi.GetSetMethod();
 #endif
 					if (setMethod != null)
 						setMethod.Invoke(target, new object[] { value });

@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
 using Edge.NetCommon;
 using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 
 namespace Edge.Atlas {
 	public partial class Atlas {
@@ -16,6 +17,22 @@ namespace Edge.Atlas {
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
 
+		/// <summary>
+		/// The entry point of the program, where the program control starts and ends.
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
+		public static void Main(string[] args) {
+			if(args.Length > 0)
+				new Atlas(Int32.Parse(args[0]), false).Run();
+			else
+				new Atlas(2348, false).Run();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Edge.Atlas.Atlas"/> class.
+		/// </summary>
+		/// <param name="port">Port.</param>
+		/// <param name="runningHeadless">If set to <c>false</c> do not bind to console</param>
 		public Atlas(Int32 port, Boolean runningHeadless) {
 			this.runningHeadless = runningHeadless;
 
@@ -26,9 +43,14 @@ namespace Edge.Atlas {
 			server.Start();
 		}
 
+		/// <summary>
+		/// Start the main server loop
+		/// </summary>
 		public void Run() {
-			if(runningHeadless)
-				Task.Run(InputHandler);
+			if(runningHeadless) {
+				var inputThread = new Thread(() => InputHandler());
+				inputThread.Start();                
+			}
 			
 			while(!isExiting) {
 				lastTime = currentTime;
@@ -72,6 +94,7 @@ namespace Edge.Atlas {
 				Parallel.ForEach(players.Values, PlayerUpdate);
 
 				#region Outgoing Updates
+				//TODO: Compute changed frames, keyframes, etc
 				NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
 				outMsg.Write((UInt16)players.Count);
@@ -87,6 +110,9 @@ namespace Edge.Atlas {
 			server.Shutdown("Bye!");
 		}
 
+		/// <summary>
+		/// Handles the input from the console
+		/// </summary>
 		void InputHandler() {
 			while(!isExiting) {
 				//Timing not needed, as ReadLine() locks the execution pointer
@@ -133,6 +159,11 @@ namespace Edge.Atlas {
 			}
 		}
 
+		/// <summary>
+		/// Control the server instance
+		/// </summary>
+		/// <param name="command">Command to be exected</param>
+		/// <param name="args">Arguments being passed in</param>
 		public void Control(String command, List<String> args) {
 			switch(command.ToUpper()) {
 				case "EXIT":
