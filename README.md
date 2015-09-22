@@ -8,6 +8,7 @@
 ### How do I get set up? ###
 
 * If you can't do this yourself, get out now.
+* To disable HTTPS requirement, from your git shell, git config --global http.sslVerify false
 
 ### Contribution guidelines ###
 
