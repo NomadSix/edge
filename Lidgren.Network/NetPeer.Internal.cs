@@ -49,7 +49,7 @@ namespace Lidgren.Network
 		/// <summary>
 		/// Call this to register a callback for when a new message arrives
 		/// </summary>
-		public void RegisterReceivedCallback(SendOrPostCallback callback, SynchronizationContext syncContext = null)
+		public void RegisterReceivedCallback(SendOrPostCallback callback, SynchronizationContext syncContext)
 		{
 			if (syncContext == null)
 				syncContext = SynchronizationContext.Current;

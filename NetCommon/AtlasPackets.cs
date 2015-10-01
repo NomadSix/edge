@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Edge.NetCommon {
-	public enum AtlasPackets:Int16 {
+	public enum AtlasPackets:int {
 		#region
 		RequestPositionChange,
 		UpdatePositions
