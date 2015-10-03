@@ -39,7 +39,7 @@ namespace Edge.Maestro {
 		/// Start the main server loop
 		/// </summary>
 		public void Run() {
-			var inputThread = new Thread(() => InputHandler());
+			var inputThread = new Thread(InputHandler);
 			inputThread.Start(); 
 
 			while(!isExiting) {

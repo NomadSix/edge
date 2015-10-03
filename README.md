@@ -19,24 +19,6 @@
 
 * NonSix
 
-# Project descriptions #
-
-### Atlas [Server] ###
-
-* Game server used for everything that happens in game.
-
-### Hyperion [Client] ###
-
-* Everything that the user sees (except for updating).
-
-### Lidgren.Network ###
-
-* Doesn't Exists~??!!?
-
-### Maestro ###
-
-* Handles all of out of game services: Chat, Lobbies, and Atlas instance managment.
-
-### NetCommon ###
-
-* Place for keeping track of packet headers.
+# Todo List #
+* PCL Library for Windows/Linux (/Android/iOS???) code gaps
+* Portable MonoDevelop for Windows development

@@ -23,7 +23,8 @@ namespace Edge.Atlas {
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args) {
 			if(args.Length > 0)
-				new Atlas(Int32.Parse(args[0]), false).Run();
+				try { new Atlas(Int32.Parse(args[0]), false).Run(); }
+				catch(Exception) { new Atlas(2348, false).Run(); }
 			else
 				new Atlas(2348, false).Run();
 		}
