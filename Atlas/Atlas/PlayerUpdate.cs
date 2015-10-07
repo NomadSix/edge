@@ -6,7 +6,7 @@ using System.Diagnostics;
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-		public float movespeed = 20;
+		public float movespeed = 100;
 
 		/// <summary>
 		///  Updates a player

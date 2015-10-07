@@ -26,7 +26,7 @@ namespace Edge.Atlas {
 				try { new Atlas(Int32.Parse(args[0]), false).Run(); }
 				catch(Exception) { new Atlas(2348, false).Run(); }
 			else
-				new Atlas(2348, false).Run();
+				new Atlas(2348, true).Run();
 		}
 
 		/// <summary>
@@ -167,17 +167,35 @@ namespace Edge.Atlas {
 		/// <param name="args">Arguments being passed in</param>
 		public void Control(String command, List<String> args) {
 			switch(command.ToUpper()) {
+                case "END":
+                case "STOP":
 				case "EXIT":
 					isExiting = true;
 					break;
 				case "CLEAR":
 				case "CLS":
 					Console.Clear();
-					break;
-				default:
-					String argList = String.Empty;
-					args.ForEach(arg => argList += arg + ",");
-					throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
+                    break;
+                case "ID":
+                    foreach (var player in players)
+                    {
+                        Console.WriteLine(player.ToString());
+                    }
+                    break;
+                case "MOVE": {
+                    String argList = String.Empty;
+                    args.ForEach(arg => argList += arg + ",");
+                    Vector2 location = new Vector2(Convert.ToSingle(args[1]), Convert.ToSingle(args[2]));
+                    Console.WriteLine("moving to " + location.ToString());
+                    foreach(var player in players.Where(x=>x.Value.NetID == Convert.ToInt64(args[0]))){
+                        players[Convert.ToInt64(args[0])].MovingTo = location;
+                    }
+                    break; }
+                default: {
+                        String argList = String.Empty;
+                        args.ForEach(arg => argList += arg + ",");
+                        throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
+                    }
 			}
 		}
 	}
