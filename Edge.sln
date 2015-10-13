@@ -5,11 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maestro", "Maestro\Maestro.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas", "Atlas\Atlas.csproj", "{F778B80C-A131-484D-8B4F-972D0B4389A7}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NetCommon", "NetCommon\NetCommon.shproj", "{64E0933A-B3B4-49DB-8B81-F693EFF0E5FF}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "Lidgren.Network\Lidgren.Network.csproj", "{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NetCommon", "NetCommon\NetCommon.shproj", "{963AF4EF-D1D9-484B-BB91-E00DBEA4B8C2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperion", "Hyperion\Hyperion.csproj", "{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperion", "Hyperion\Hyperion.csproj", "{3D374D18-D595-4294-B182-1296C3725197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,14 @@ Global
 		{01B3ED2C-D157-450C-B99A-DE1E6DA11A78}.Release|Mixed Platforms.Build.0 = Release|x86
 		{01B3ED2C-D157-450C-B99A-DE1E6DA11A78}.Release|x86.ActiveCfg = Release|x86
 		{01B3ED2C-D157-450C-B99A-DE1E6DA11A78}.Release|x86.Build.0 = Release|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Debug|x86.ActiveCfg = Debug|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Debug|x86.Build.0 = Debug|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Release|Mixed Platforms.Build.0 = Release|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Release|x86.ActiveCfg = Release|x86
-		{0ACCB430-51CB-46FF-A6CF-AFBD54916F21}.Release|x86.Build.0 = Release|x86
+		{3D374D18-D595-4294-B182-1296C3725197}.Debug|Mixed Platforms.ActiveCfg = Debug|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Debug|Mixed Platforms.Build.0 = Debug|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Debug|x86.ActiveCfg = Debug|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Debug|x86.Build.0 = Debug|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Release|Mixed Platforms.ActiveCfg = Release|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Release|Mixed Platforms.Build.0 = Release|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Release|x86.ActiveCfg = Release|Mixed Platforms
+		{3D374D18-D595-4294-B182-1296C3725197}.Release|x86.Build.0 = Release|Mixed Platforms
 		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|x86.ActiveCfg = Debug|Any CPU

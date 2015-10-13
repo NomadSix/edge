@@ -34,13 +34,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="MonoGame.Framework">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="System.Drawing" />
     <Reference Include="Tao.Sdl">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\Tao.Sdl.dll</HintPath>
     </Reference>
@@ -51,8 +51,9 @@
     <Compile Include="Player.cs" />
     <Compile Include="Atlas\PlayerUpdate.cs" />
   </ItemGroup>
-  <Import Project="..\NetCommon\Net.projitems" Label="Shared" Condition="Exists('..\NetCommon\Net.projitems')" />
+  <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
@@ -64,5 +65,4 @@
     <None Include="Tao.Sdl.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

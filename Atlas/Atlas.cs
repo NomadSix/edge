@@ -23,8 +23,12 @@ namespace Edge.Atlas {
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args) {
 			if(args.Length > 0)
-				try { new Atlas(Int32.Parse(args[0]), false).Run(); }
-				catch(Exception) { new Atlas(2348, false).Run(); }
+				try {
+					new Atlas(Int32.Parse(args[0]), false).Run();
+				}
+				catch (Exception) {
+					new Atlas(2348, false).Run();
+				}
 			else
 				new Atlas(2348, true).Run();
 		}
@@ -49,10 +53,10 @@ namespace Edge.Atlas {
 		/// </summary>
 		public void Run() {
 			if(runningHeadless) {
-				var inputThread = new Thread(() => InputHandler());
+				var inputThread = new Thread(InputHandler);
 				inputThread.Start();                
 			}
-			
+			Int64 lastUpdates = 0;
 			while(!isExiting) {
 				lastTime = currentTime;
 				currentTime = DateTime.UtcNow.Ticks;
@@ -64,7 +68,9 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.Data:
 							switch((AtlasPackets)inMsg.ReadByte()) {
 								case AtlasPackets.RequestPositionChange:
-									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(inMsg.ReadUInt16(), inMsg.ReadUInt16());
+									UInt16 x = inMsg.ReadUInt16();
+									UInt16 y = inMsg.ReadUInt16();
+									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
 									break;
 							}
 							break;
@@ -79,6 +85,7 @@ namespace Edge.Atlas {
 							}
 							break;
 						case NetIncomingMessageType.DiscoveryRequest:
+							//TODO: FIX DIS
 							NetOutgoingMessage response = server.CreateMessage();
 							server.SendDiscoveryResponse(response, inMsg.SenderEndPoint);
 							break;
@@ -92,19 +99,24 @@ namespace Edge.Atlas {
 				}
 				#endregion
 
-				Parallel.ForEach(players.Values, PlayerUpdate);
+				//Parallel.ForEach(players.Values, PlayerUpdate);
+				foreach (var p in players)
+					PlayerUpdate(p.Value);
 
 				#region Outgoing Updates
 				//TODO: Compute changed frames, keyframes, etc
+				if(currentTime-lastUpdates>(TimeSpan.TicksPerSecond/60)){
 				NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
 				outMsg.Write((UInt16)players.Count);
-				foreach(var p in players.Values) {
+				foreach (var p in players.Values) {
 					outMsg.Write(p.NetID);
-					outMsg.Write((UInt16)p.Position.X);
-					outMsg.Write((UInt16)p.Position.Y);
+					outMsg.Write(p.Position.X);
+					outMsg.Write(p.Position.Y);
 				}
-				server.SendToAll(outMsg, NetDeliveryMethod.UnreliableSequenced);
+					server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+					lastUpdates=currentTime;
+				}
 				#endregion
 			}
 
@@ -127,7 +139,7 @@ namespace Edge.Atlas {
 					//The command is anything that happens before the opening parenthesies
 					command = readLine.Substring(0, readLine.IndexOf('('));
 				}
-				catch(Exception) {
+				catch (Exception) {
 					//If there isn't an opening parenthesies, it's a parameterless command
 					command = readLine;
 				}
@@ -139,7 +151,7 @@ namespace Edge.Atlas {
 					//Try to split the arguments by commas
 					args = argStr.Split(',').ToList();
 				}
-				catch(Exception) {
+				catch (Exception) {
 					try {
 						//If the split failed, it ether had no arguments (do nothing)
 						//or had only one argument (add that argument)
@@ -154,7 +166,7 @@ namespace Edge.Atlas {
 				try {
 					Control(command, args);
 				}
-				catch(NotSupportedException e) {
+				catch (NotSupportedException e) {
 					Console.WriteLine(e.Message);
 				}
 			}
@@ -167,35 +179,33 @@ namespace Edge.Atlas {
 		/// <param name="args">Arguments being passed in</param>
 		public void Control(String command, List<String> args) {
 			switch(command.ToUpper()) {
-                case "END":
-                case "STOP":
+				case "END":
+				case "STOP":
 				case "EXIT":
 					isExiting = true;
 					break;
 				case "CLEAR":
 				case "CLS":
 					Console.Clear();
-                    break;
-                case "ID":
-                    foreach (var player in players)
-                    {
-                        Console.WriteLine(player.ToString());
-                    }
-                    break;
-                case "MOVE": {
-                    String argList = String.Empty;
-                    args.ForEach(arg => argList += arg + ",");
-                    Vector2 location = new Vector2(Convert.ToSingle(args[1]), Convert.ToSingle(args[2]));
-                    Console.WriteLine("moving to " + location.ToString());
-                    foreach(var player in players.Where(x=>x.Value.NetID == Convert.ToInt64(args[0]))){
-                        players[Convert.ToInt64(args[0])].MovingTo = location;
-                    }
-                    break; }
-                default: {
-                        String argList = String.Empty;
-                        args.ForEach(arg => argList += arg + ",");
-                        throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
-                    }
+					break;
+				case "ID":
+					foreach (var p in players) {
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})",p.Key,p.Value.Position.X,p.Value.Position.Y,p.Value.MovingTo.X,p.Value.MovingTo.Y);
+					}
+					break;
+				case "MOVE": {
+						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
+						Console.WriteLine("moving to " + location);
+						Int64 ID = Int64.Parse(args[0]);
+						if(players.ContainsKey(ID))
+							players[Convert.ToInt64(args[0])].MovingTo = location;
+						break; 
+					}
+				default: {
+						String argList = String.Empty;
+						args.ForEach(arg => argList += arg + ",");
+						throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
+					}
 			}
 		}
 	}
