@@ -65,7 +65,7 @@ namespace Edge.Hyperion {
 			atlasConfig.Port = 2347;
 			atlasClient = new NetClient(atlasConfig);
 			atlasClient.Start();
-			atlasClient.Connect("192.168.20.24", 2348);
+			atlasClient.Connect(System.IO.File.ReadAllText("ip.cfg"), 2348);
 			#endregion
 
 			LoadContent();
