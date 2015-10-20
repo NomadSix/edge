@@ -10,7 +10,13 @@ using Mouse = Edge.Hyperion.Input.Mouse;
 using MouseButtons = Edge.Hyperion.Input.MouseButtons;
 
 namespace Edge.Hyperion {
-	public class Hyperion: Game {
+	public class Hyperion:Game {
+
+		public static void Main(String[] args) {
+			using(var game = new Hyperion())
+				game.Run();
+		}
+
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		NetClient maestroClient, atlasClient;
@@ -24,26 +30,26 @@ namespace Edge.Hyperion {
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+			#region Event Handlers
+			Exiting += OnExit;
+			Activated += OnActivated;
+			Deactivated += OnDeactivated;
+			#endregion
 		}
 
 		protected override void Initialize() {
-			base.Initialize();
-
-			#region Window Configuration
-			graphics.PreferMultiSampling = true;
+			#region Window			 
 			graphics.PreferredBackBufferWidth = 1280;
 			graphics.PreferredBackBufferHeight = 720;
 			IsMouseVisible=true;
 			#endregion
-
 			#region Component Configuration
-			spriteBatch = new SpriteBatch(GraphicsDevice);
+			spriteBatch = new SpriteBatch(this.GraphicsDevice);
 			kb = new Keyboard(this);
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
 			#endregion
-
 			#region Maestro Configuration
 			//var maestroConfig = new NetPeerConfiguration("Maestro");
 			//maestroConfig.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
@@ -59,8 +65,10 @@ namespace Edge.Hyperion {
 			atlasConfig.Port = 2347;
 			atlasClient = new NetClient(atlasConfig);
 			atlasClient.Start();
-			atlasClient.DiscoverLocalPeers(2348);
+			atlasClient.Connect(System.IO.File.ReadAllText("ip.cfg"), 2348);
 			#endregion
+
+			LoadContent();
 		}
 
 		protected override void LoadContent() {
@@ -69,8 +77,6 @@ namespace Edge.Hyperion {
 		}
 
 		protected override void Update(GameTime gameTime) {
-			if(atlasConnection==null || atlasConnection.Status==NetConnectionStatus.Disconnected)
-				atlasConnection = atlasClient.Connect("127.0.0.1", 2348);
 			if(IsActive) {
 
 				if(kb.IsButtonToggledDown(Keys.Escape))
@@ -114,7 +120,14 @@ namespace Edge.Hyperion {
 					}
 				}
 				*/
-
+				if(mouse.IsButtonDown(MouseButtons.Right)) {
+					NetOutgoingMessage outMsg = atlasClient.CreateMessage();
+					outMsg.Write((byte)AtlasPackets.RequestPositionChange);
+					outMsg.Write((UInt16)mouse.Location.X);
+					outMsg.Write((UInt16)mouse.Location.Y);
+					atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
+				}
+			}
 				NetIncomingMessage inMsg;
 				while((inMsg = atlasClient.ReadMessage()) != null) {
 					switch(inMsg.MessageType) {
@@ -125,7 +138,7 @@ namespace Edge.Hyperion {
 
 									UInt16 numPlayers = inMsg.ReadUInt16();
 									for(UInt16 i = 0; i < numPlayers; i++)
-										players.Add(new DebugPlayer(inMsg.ReadInt64(),inMsg.ReadUInt16(), inMsg.ReadUInt16()));
+										players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle()));
 									break;
 							}
 							break;
@@ -134,28 +147,29 @@ namespace Edge.Hyperion {
 							break;
 					}
 				}
-				if(mouse.IsButtonDown(MouseButtons.Right) && IsActive) {
-					NetOutgoingMessage outMsg = atlasClient.CreateMessage();
-					outMsg.Write((byte)AtlasPackets.RequestPositionChange);
-					outMsg.Write((UInt16)mouse.Location.X);
-					outMsg.Write((UInt16)mouse.Location.Y);
-					atlasClient.SendMessage(outMsg, NetDeliveryMethod.UnreliableSequenced);
-				}
+
 				base.Update(gameTime);
-			}
 		}
 
 		protected override void Draw(GameTime gameTime) {
-			graphics.GraphicsDevice.Clear(Color.Black);
+			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin();
-			foreach(var p in players)
-				spriteBatch.Draw(pixel, p.Location.ToVector2(), null, null, null, 0, new Vector2(50, 50), new Color(Math.Abs(p.NetID % 255), Math.Abs(p.NetID % 254), Math.Abs(p.NetID % 253)), SpriteEffects.None, 0);
-			base.Draw(gameTime);
+			foreach (var p in players) {
+				var n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253),255);
+				spriteBatch.Draw(pixel, p.Location, null, null, null, 0, new Vector2(50, 50), n, SpriteEffects.None, 0);
+			}
 			spriteBatch.End();
+			base.Draw(gameTime);
 		}
-		[STAThread]
-		static void Main(){
-			new Hyperion().Run();
+
+		void OnExit(object sender, EventArgs e) {
+			//atlasClient.Disconnect("Client Closing");
+		}
+
+		void OnActivated(object sender, EventArgs e) {
+		}
+
+		void OnDeactivated(object sender, EventArgs e) {
 		}
 	}
 }

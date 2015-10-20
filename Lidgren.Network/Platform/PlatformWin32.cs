@@ -57,9 +57,7 @@ namespace Lidgren.Network {
 		/// </summary>
 		public static byte[] GetMacAddressBytes () {
 			var ni = GetNetworkInterface ();
-			if (ni == null)
-				return null;
-			return ni.GetPhysicalAddress ().GetAddressBytes ();
+			return ni == null ? null : ni.GetPhysicalAddress().GetAddressBytes();
 		}
 
 		public static IPAddress GetBroadcastAddress () {
@@ -77,7 +75,7 @@ namespace Lidgren.Network {
 					if (ipAdressBytes.Length != subnetMaskBytes.Length)
 						throw new ArgumentException ("Lengths of IP address and subnet mask do not match.");
 
-					byte[] broadcastAddress = new byte[ipAdressBytes.Length];
+					var broadcastAddress = new byte[ipAdressBytes.Length];
 					for (int i = 0; i < broadcastAddress.Length; i++) {
 						broadcastAddress [i] = (byte)(ipAdressBytes [i] | (subnetMaskBytes [i] ^ 255));
 					}

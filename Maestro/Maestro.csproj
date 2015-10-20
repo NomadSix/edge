@@ -42,16 +42,15 @@
     <Compile Include="Lobbies\Participant.cs" />
     <Compile Include="Maestro.cs" />
   </ItemGroup>
-  <Import Project="..\NetCommon\Net.projitems" Label="Shared" Condition="Exists('..\NetCommon\Net.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
-      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
-      <Name>Lidgren.Network</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Atlas\Atlas.csproj">
       <Project>{F778B80C-A131-484D-8B4F-972D0B4389A7}</Project>
       <Name>Atlas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+      <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
+      <Name>Lidgren.Network</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

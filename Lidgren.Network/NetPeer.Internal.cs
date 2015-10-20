@@ -59,6 +59,18 @@ namespace Lidgren.Network
 				m_receiveCallbacks = new List<NetTuple<SynchronizationContext, SendOrPostCallback>>();
 			m_receiveCallbacks.Add(new NetTuple<SynchronizationContext, SendOrPostCallback>(syncContext, callback));
 		}
+		/// <summary>
+		/// Call this to register a callback for when a new message arrives
+		/// </summary>
+		public void RegisterReceivedCallback(SendOrPostCallback callback)
+		{
+			SynchronizationContext syncContext = SynchronizationContext.Current;
+			if (syncContext == null)
+				throw new NetException("Need a SynchronizationContext to register callback on correct thread!");
+			if (m_receiveCallbacks == null)
+				m_receiveCallbacks = new List<NetTuple<SynchronizationContext, SendOrPostCallback>>();
+			m_receiveCallbacks.Add(new NetTuple<SynchronizationContext, SendOrPostCallback>(syncContext, callback));
+		}
 
 		/// <summary>
 		/// Call this to unregister a callback, but remember to do it in the same synchronization context!
@@ -232,18 +244,18 @@ namespace Lidgren.Network
 				foreach (var conn in m_connections)
 					if (conn != null)
 						list.Add(conn);
-
-				lock (m_handshakes)
-				{
-					foreach (var hs in m_handshakes.Values)
-						if (hs != null)
-							list.Add(hs);
-
-					// shut down connections
-					foreach (NetConnection conn in list)
-						conn.Shutdown(m_shutdownReason);
-				}
 			}
+
+			lock (m_handshakes)
+			{
+				foreach (var hs in m_handshakes.Values)
+					if (hs != null && list.Contains(hs) == false)
+						list.Add(hs);
+			}
+
+			// shut down connections
+			foreach (NetConnection conn in list)
+				conn.Shutdown(m_shutdownReason);
 
 			FlushDelayedPackets();
 
@@ -446,7 +458,7 @@ namespace Lidgren.Network
 				if (m_upnp != null && now < m_upnp.m_discoveryResponseDeadline && bytesReceived > 32)
 				{
 					// is this an UPnP response?
-					string resp = System.Text.Encoding.ASCII.GetString(m_receiveBuffer, 0, bytesReceived);
+					string resp = System.Text.Encoding.UTF8.GetString(m_receiveBuffer, 0, bytesReceived);
 					if (resp.Contains("upnp:rootdevice") || resp.Contains("UPnP/1.0"))
 					{
 						try
