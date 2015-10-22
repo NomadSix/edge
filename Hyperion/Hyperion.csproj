@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugPlayer.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="Mouse.cs" />

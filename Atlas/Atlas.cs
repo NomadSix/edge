@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
 using Edge.NetCommon;
+using Edge.Hyperion;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Edge.Atlas {
 		public Boolean isExiting;
 		Boolean runningHeadless;
 		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
+        public List<Entity> entitys = new List<Entity>();
 
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
@@ -114,6 +116,11 @@ namespace Edge.Atlas {
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
 				}
+                foreach (var n in entitys)
+                {
+                    outMsg.Write(n.Position.X);
+                    outMsg.Write(n.Position.Y);
+                }
 					server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 					lastUpdates=currentTime;
 				}
@@ -193,6 +200,17 @@ namespace Edge.Atlas {
 						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})",p.Key,p.Value.Position.X,p.Value.Position.Y,p.Value.MovingTo.X,p.Value.MovingTo.Y);
 					}
 					break;
+                case "ADDENT":
+                    if (args.Capacity > 0)
+                    {
+                        entitys.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+
+                    }
+                    break;
+                case "ENTS":
+                    foreach(var e in entitys)
+                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+                    break;
 				case "MOVE": {
 						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);

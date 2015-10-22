@@ -55,6 +55,10 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Hyperion\Hyperion.csproj">
+      <Project>{3D374D18-D595-4294-B182-1296C3725197}</Project>
+      <Name>Hyperion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
       <Name>Lidgren.Network</Name>
