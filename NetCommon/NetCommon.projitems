@@ -11,5 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)MaestroPackets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AtlasPackets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModelIDs.cs" />
   </ItemGroup>
 </Project>
