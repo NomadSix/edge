@@ -48,8 +48,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Atlas.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="Atlas\PlayerUpdate.cs" />
+    <Compile Include="DebugPlayer.cs" />
   </ItemGroup>
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

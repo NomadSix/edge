@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Edge.Atlas {
+namespace Edge.Atlas.DebugCode {
 	public class DebugPlayer {
 		public Vector2 Position;
 		public Vector2 MovingTo;

@@ -6,6 +6,7 @@ using System.Linq;
 using Edge.NetCommon;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
+using Edge.Atlas.DebugCode;
 
 namespace Edge.Atlas {
 	public partial class Atlas {
@@ -61,6 +62,7 @@ namespace Edge.Atlas {
 				lastTime = currentTime;
 				currentTime = DateTime.UtcNow.Ticks;
 
+				if(currentTime - lastUpdates <= (TimeSpan.TicksPerSecond / 120)) continue;
 				#region Incoming messages
 				NetIncomingMessage inMsg;
 				while((inMsg = server.ReadMessage()) != null) {
@@ -99,13 +101,21 @@ namespace Edge.Atlas {
 				}
 				#endregion
 
-				//Parallel.ForEach(players.Values, PlayerUpdate);
-				foreach (var p in players)
-					PlayerUpdate(p.Value);
+				#region Player Update
+				/*
+				 * Parallel vs Synchronous ForEach breakdown
+				 * Parallel foreach will use significantly less execution time, but at the cost of higher memory throughput
+				 * Synchronous foreach, in contrast, uses more exectuion time, at the benefit of memory throughput
+				 * 
+				 * Using parallel foreach introduced (approximately) 238,916,912 bytes over 277,771 calls (an average of 860 bytes per call)
+				 * Unfortunately, no data is currently available for execution time differences (due to mono profiler report limitations)
+				 */
+				Parallel.ForEach(players.Values, PlayerUpdate);
+				//foreach (var p in players.Values) PlayerUpdate(p);
+				#endregion
 
 				#region Outgoing Updates
 				//TODO: Compute changed frames, keyframes, etc
-				if(currentTime-lastUpdates>(TimeSpan.TicksPerSecond/60)){
 				NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
 				outMsg.Write((UInt16)players.Count);
@@ -114,9 +124,8 @@ namespace Edge.Atlas {
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
 				}
-					server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
-					lastUpdates=currentTime;
-				}
+				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+				lastUpdates = currentTime;
 				#endregion
 			}
 
@@ -135,6 +144,7 @@ namespace Edge.Atlas {
 				if(String.IsNullOrWhiteSpace(readLine)) return;
 
 				string command;
+				#region Parse out parameterless commands
 				try {
 					//The command is anything that happens before the opening parenthesies
 					command = readLine.Substring(0, readLine.IndexOf('('));
@@ -143,6 +153,7 @@ namespace Edge.Atlas {
 					//If there isn't an opening parenthesies, it's a parameterless command
 					command = readLine;
 				}
+				#endregion
 
 				var args = new List<String>();
 				//Take everything between the opening and closing parenthesies
@@ -190,10 +201,11 @@ namespace Edge.Atlas {
 					break;
 				case "ID":
 					foreach (var p in players) {
-						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})",p.Key,p.Value.Position.X,p.Value.Position.Y,p.Value.MovingTo.X,p.Value.MovingTo.Y);
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.MovingTo.X, p.Value.MovingTo.Y);
 					}
 					break;
-				case "MOVE": {
+				case "MOVE":
+					{
 						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
 						Int64 ID = Int64.Parse(args[0]);
@@ -201,7 +213,8 @@ namespace Edge.Atlas {
 							players[Convert.ToInt64(args[0])].MovingTo = location;
 						break; 
 					}
-				default: {
+				default:
+					{
 						String argList = String.Empty;
 						args.ForEach(arg => argList += arg + ",");
 						throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));

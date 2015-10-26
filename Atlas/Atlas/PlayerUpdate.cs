@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
+using Edge.Atlas.DebugCode;
 
 
 // Analysis disable once CheckNamespace
@@ -13,13 +13,14 @@ namespace Edge.Atlas {
 		/// </summary>
 		/// <param name="player">The player to update</param>
 		void PlayerUpdate(DebugPlayer player) {
-			Move(player);
+			DebugMove(player);
 		}
-		/*
-		void Move(DebugPlayer player) {
-			
-		}*/
-		void Move(DebugPlayer player){
+		/// <summary>
+		/// Execute the movement logic for the player
+		/// Note: This is the old debug logic, and will likely be removed eventually
+		/// </summary>
+		/// <param name="player">Reference to the player this is being run on</param>
+		void DebugMove(DebugPlayer player){
 			if(player.Position == player.MovingTo)
 				player.MovingTo = new Vector2(-1, -1);
 			if(player.MovingTo == new Vector2(-1, -1)) return;
@@ -30,8 +31,10 @@ namespace Edge.Atlas {
 			//Simplified version of cos(arctan(a/b))
 			float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
 			//Simplified version of sin(arctan(a/b))
-			float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY); //TODO: More math way of avoiding division by zero?
+			float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
 			player.Position += new Vector2(x, y);
+		}
+		void MoveLogic(){
 			/*
 			 * Okay, so 4 basic commands
 			 * Up, Down, Left, Right
