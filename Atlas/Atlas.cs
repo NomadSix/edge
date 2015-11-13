@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
 using Edge.NetCommon;
+using Edge.Hyperion;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 using Edge.Atlas.DebugCode;
@@ -14,6 +15,7 @@ namespace Edge.Atlas {
 		public Boolean isExiting;
 		Boolean runningHeadless;
 		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
+		public List<Entity> entities = new List<Entity>();
 
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
@@ -101,18 +103,9 @@ namespace Edge.Atlas {
 				}
 				#endregion
 
-				#region Player Update
-				/*
-				 * Parallel vs Synchronous ForEach breakdown
-				 * Parallel foreach will use significantly less execution time, but at the cost of higher memory throughput
-				 * Synchronous foreach, in contrast, uses more exectuion time, at the benefit of memory throughput
-				 * 
-				 * Using parallel foreach introduced (approximately) 238,916,912 bytes over 277,771 calls (an average of 860 bytes per call)
-				 * Unfortunately, no data is currently available for execution time differences (due to mono profiler report limitations)
-				 */
-				Parallel.ForEach(players.Values, PlayerUpdate);
-				//foreach (var p in players.Values) PlayerUpdate(p);
-				#endregion
+				//Parallel.ForEach(players.Values, PlayerUpdate);
+				foreach (var p in players)
+					PlayerUpdate(p.Value);
 
 				#region Outgoing Updates
 				//TODO: Compute changed frames, keyframes, etc
@@ -124,11 +117,24 @@ namespace Edge.Atlas {
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
 				}
+				/*
+				 * Okay I see what you're trying to do,
+				 * but the client and packet format in general are going to need
+				 * a lot of refactoring to expect a packet formatted like this.
+				 * 
+				 * Additionally, we should probably have some serious optimization in mind
+				 * when we're working on this new format, given that we're already going to be
+				 * sending packets really quickly, we don't need to be sending any unnecessary data.
+				 */
+//				foreach (var n in entities) {
+//					outMsg.Write(n.Position.X);
+//					outMsg.Write(n.Position.Y);
+//				}
+					
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 				lastUpdates = currentTime;
 				#endregion
 			}
-
 			server.Shutdown("Bye!");
 		}
 
@@ -203,6 +209,16 @@ namespace Edge.Atlas {
 					foreach (var p in players) {
 						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.MovingTo.X, p.Value.MovingTo.Y);
 					}
+					break;
+				case "ADDENT":
+					if(args.Capacity > 0) {
+						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+
+					}
+					break;
+				case "ENTS":
+					foreach (var e in entities)
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
 					break;
 				case "MOVE":
 					{

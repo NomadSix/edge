@@ -155,12 +155,21 @@ namespace Edge.Hyperion {
 			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin();
 			foreach (var p in players) {
-				var n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253),255);
+                Color n = new Color(newColor(),1f);
+                if (mouse.IsButtonToggledDown(MouseButtons.Left) && p.Location == mouse.LocationV2)
+                    n = newColor();
+                //else
+				    //n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253),255);
 				spriteBatch.Draw(pixel, p.Location, null, null, null, 0, new Vector2(50, 50), n, SpriteEffects.None, 0);
 			}
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
+
+        public Color newColor()
+        {
+            return new Color(NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0,255));
+        }
 
 		void OnExit(object sender, EventArgs e) {
 			//atlasClient.Disconnect("Client Closing");
