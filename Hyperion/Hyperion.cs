@@ -24,6 +24,7 @@ namespace Edge.Hyperion {
 		List<DebugPlayer> players = new List<DebugPlayer>();
 		Keyboard kb;
 		Mouse mouse;
+        Camera2d cam = new Camera2d();
 
 		Texture2D pixel;
 
@@ -72,8 +73,10 @@ namespace Edge.Hyperion {
 		}
 
 		protected override void LoadContent() {
-			pixel = new Texture2D(GraphicsDevice, 1, 1);
-			pixel.SetData<Color>(new[]{ Color.White });
+            //pixel = new Texture2D(GraphicsDevice, 1, 1);
+            //pixel.SetData<Color>(new[]{ Color.White });
+            pixel = Content.Load<Texture2D>("..\\Images\\Eagle.png");
+            cam.Pos = new Vector2(500.0f, 200.0f);
 		}
 
 		protected override void Update(GameTime gameTime) {
@@ -153,23 +156,14 @@ namespace Edge.Hyperion {
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.getTransforamtion(GraphicsDevice));
 			foreach (var p in players) {
-                Color n = new Color(newColor(),1f);
-                if (mouse.IsButtonToggledDown(MouseButtons.Left) && p.Location == mouse.LocationV2)
-                    n = newColor();
-                //else
-				    //n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253),255);
-				spriteBatch.Draw(pixel, p.Location, null, null, null, 0, new Vector2(50, 50), n, SpriteEffects.None, 0);
+                Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
+				spriteBatch.Draw(pixel, p.Location, null, null, null, 0f, new Vector2(1,1), n, SpriteEffects.None, 0);
 			}
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
-
-        public Color newColor()
-        {
-            return new Color(NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0,255));
-        }
 
 		void OnExit(object sender, EventArgs e) {
 			//atlasClient.Disconnect("Client Closing");

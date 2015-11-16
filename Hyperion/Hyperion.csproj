@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera2d.cs" />
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
@@ -63,5 +64,10 @@
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="Tao.Sdl.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Eagle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

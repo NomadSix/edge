@@ -208,7 +208,7 @@ namespace Edge.Atlas {
                     }
                     break;
                 case "ENTS":
-                    foreach(var e in entitys)
+                    foreach(var e in players)
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
                     break;
 				case "MOVE": {
