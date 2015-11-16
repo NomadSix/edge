@@ -214,14 +214,17 @@ namespace Edge.Atlas {
 					if(args.Capacity > 0) {
 						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
 
-					}
-					break;
-				case "ENTS":
-					foreach (var e in entities)
-						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
-					break;
-				case "MOVE":
-					{
+                    }
+                    break;
+                case "ENTS":
+                    foreach(var e in entities)
+                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+                    break;
+				case "PLAYERS":
+                    foreach(var e in players)
+                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+                    break;
+				case "MOVE": {
 						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
 						Int64 ID = Int64.Parse(args[0]);

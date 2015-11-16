@@ -19,13 +19,17 @@ namespace Edge.Hyperion {
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		NetClient maestroClient, atlasClient;
-		NetConnection maestroConnection, atlasConnection;
+		NetClient atlasClient;
+		//, maestroClient;
+		NetConnection atlasConnection;
+		//, maestroConnection;
 		List<DebugPlayer> players = new List<DebugPlayer>();
 		Keyboard kb;
 		Mouse mouse;
+		Camera2D cam;
 
 		Texture2D pixel;
+		Texture2D artDebug;
 
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
@@ -41,7 +45,7 @@ namespace Edge.Hyperion {
 			#region Window			 
 			graphics.PreferredBackBufferWidth = 1280;
 			graphics.PreferredBackBufferHeight = 720;
-			IsMouseVisible=true;
+			IsMouseVisible = true;
 			#endregion
 			#region Component Configuration
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
@@ -65,7 +69,7 @@ namespace Edge.Hyperion {
 			atlasConfig.Port = 2347;
 			atlasClient = new NetClient(atlasConfig);
 			atlasClient.Start();
-			atlasClient.Connect(System.IO.File.ReadAllText("ip.cfg"), 2348);
+			atlasConnection = atlasClient.Connect(System.IO.File.ReadAllText("ip.cfg"), 2348);
 			#endregion
 
 			LoadContent();
@@ -74,6 +78,8 @@ namespace Edge.Hyperion {
 		protected override void LoadContent() {
 			pixel = new Texture2D(GraphicsDevice, 1, 1);
 			pixel.SetData<Color>(new[]{ Color.White });
+			artDebug = Content.Load<Texture2D>("..\\Images\\Eagle.png");
+			cam = new Camera2D(new Vector2(500.0f, 200.0f));
 		}
 
 		protected override void Update(GameTime gameTime) {
@@ -128,57 +134,48 @@ namespace Edge.Hyperion {
 					atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
 				}
 			}
-				NetIncomingMessage inMsg;
-				while((inMsg = atlasClient.ReadMessage()) != null) {
-					switch(inMsg.MessageType) {
-						case NetIncomingMessageType.Data:
-							switch((AtlasPackets)inMsg.ReadByte()) {
-								case AtlasPackets.UpdatePositions:
-									players.Clear();
+			NetIncomingMessage inMsg;
+			while((inMsg = atlasClient.ReadMessage()) != null) {
+				switch(inMsg.MessageType) {
+					case NetIncomingMessageType.Data:
+						switch((AtlasPackets)inMsg.ReadByte()) {
+							case AtlasPackets.UpdatePositions:
+								players.Clear();
 
-									UInt16 numPlayers = inMsg.ReadUInt16();
-									for(UInt16 i = 0; i < numPlayers; i++)
-										players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle()));
-									break;
-							}
-							break;
-						case NetIncomingMessageType.DiscoveryResponse:
-							atlasClient.Connect(inMsg.SenderEndPoint);
-							break;
-					}
+								UInt16 numPlayers = inMsg.ReadUInt16();
+								for(UInt16 i = 0; i < numPlayers; i++)
+									players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle()));
+								break;
+						}
+						break;
+					case NetIncomingMessageType.DiscoveryResponse:
+						atlasClient.Connect(inMsg.SenderEndPoint);
+						break;
 				}
+			}
 
-				base.Update(gameTime);
+			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.Transform);
 			foreach (var p in players) {
-                Color n = new Color(newColor(),1f);
-                if (mouse.IsButtonToggledDown(MouseButtons.Left) && p.Location == mouse.LocationV2)
-                    n = newColor();
-                //else
-				    //n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253),255);
-				spriteBatch.Draw(pixel, p.Location, null, null, null, 0, new Vector2(50, 50), n, SpriteEffects.None, 0);
+				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
+				spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), n, SpriteEffects.None, 0);
 			}
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 
-        public Color newColor()
-        {
-            return new Color(NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0, 255), NetRandom.Instance.Next(0,255));
-        }
-
 		void OnExit(object sender, EventArgs e) {
 			//atlasClient.Disconnect("Client Closing");
 		}
 
-		void OnActivated(object sender, EventArgs e) {
+		protected override void OnActivated(object sender, EventArgs e) {
 		}
 
-		void OnDeactivated(object sender, EventArgs e) {
+		protected override void OnDeactivated(object sender, EventArgs e) {
 		}
 	}
 }
