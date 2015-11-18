@@ -20,6 +20,7 @@ namespace Edge.Atlas {
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
 
+
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.
 		/// </summary>
@@ -75,6 +76,7 @@ namespace Edge.Atlas {
 									UInt16 x = inMsg.ReadUInt16();
 									UInt16 y = inMsg.ReadUInt16();
 									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
+                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
 									break;
 							}
 							break;

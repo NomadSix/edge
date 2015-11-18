@@ -26,10 +26,13 @@ namespace Edge.Hyperion {
 		List<DebugPlayer> players = new List<DebugPlayer>();
 		Keyboard kb;
 		Mouse mouse;
-		Camera2D cam;
+        Camera2D cam;
 
 		Texture2D pixel;
-		Texture2D artDebug;
+        Texture2D backGround;
+        Texture2D artDebug;
+
+        Vector2 moveVector;
 
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
@@ -78,12 +81,19 @@ namespace Edge.Hyperion {
 		protected override void LoadContent() {
 			pixel = new Texture2D(GraphicsDevice, 1, 1);
 			pixel.SetData<Color>(new[]{ Color.White });
-			artDebug = Content.Load<Texture2D>("..\\Images\\Eagle.png");
-			cam = new Camera2D(new Vector2(500.0f, 200.0f));
+			artDebug = Content.Load<Texture2D>(@"..\Images\Eagle.png");
+            backGround = Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
+			cam = new Camera2D(new Vector2(0, 0));
 		}
 
 		protected override void Update(GameTime gameTime) {
 			if(IsActive) {
+
+                if (kb.IsButtonDown(Keys.Z)) {
+                    cam.Zoom -= .1f;
+                } else if (kb.IsButtonDown(Keys.X)) {
+                    cam.Zoom += .1f;
+                }
 
 				if(kb.IsButtonToggledDown(Keys.Escape))
 					Exit(); //Replace this...
@@ -130,9 +140,12 @@ namespace Edge.Hyperion {
 					NetOutgoingMessage outMsg = atlasClient.CreateMessage();
 					outMsg.Write((byte)AtlasPackets.RequestPositionChange);
 					outMsg.Write((UInt16)mouse.Location.X);
-					outMsg.Write((UInt16)mouse.Location.Y);
+                    outMsg.Write((UInt16)mouse.Location.Y);
+                    outMsg.Write((UInt16)moveVector.X);
+                    outMsg.Write((UInt16)moveVector.Y);
 					atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
 				}
+                //move vector stuff here
 			}
 			NetIncomingMessage inMsg;
 			while((inMsg = atlasClient.ReadMessage()) != null) {
@@ -153,17 +166,18 @@ namespace Edge.Hyperion {
 						break;
 				}
 			}
-
+            //cam.Position = players[0].Location;
 			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.Transform);
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Transform);
 			foreach (var p in players) {
-				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
-				spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), n, SpriteEffects.None, 0);
+				//Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
+				spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), Color.White , SpriteEffects.None, 0);
 			}
+            spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(1, 1), Color.White, SpriteEffects.None, 0);
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
