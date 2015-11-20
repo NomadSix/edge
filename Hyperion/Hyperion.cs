@@ -35,6 +35,8 @@ namespace Edge.Hyperion {
 
 		Vector2 moveVector;
 
+        Int64 NetID;
+
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -153,7 +155,12 @@ namespace Edge.Hyperion {
 			while((inMsg = atlasClient.ReadMessage()) != null) {
 				switch(inMsg.MessageType) {
 					case NetIncomingMessageType.Data:
-						switch((AtlasPackets)inMsg.ReadByte()) {
+                        switch ((AtlasPackets)inMsg.ReadByte())
+                        {
+                            //Would this work? We need a way for the clients to know there own id's
+                            //case AtlasPackets.FirstID:
+                            //    NetID = inMsg.ReadInt64();
+                            //    break;
 							case AtlasPackets.UpdatePositions:
 								players.Clear();
 
@@ -179,7 +186,7 @@ namespace Edge.Hyperion {
 				//Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
 				spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), Color.White, SpriteEffects.None, 0);
 			}
-			spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(1, 1), Color.White, SpriteEffects.None, 0);
+			spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}

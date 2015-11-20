@@ -84,7 +84,7 @@ namespace Edge.Atlas {
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
 									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier));
-									break;
+                                    break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
 									break;
