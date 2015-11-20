@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Mixed Platforms</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3D374D18-D595-4294-B182-1296C3725197}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Edge.Hyperion</RootNamespace>
@@ -43,12 +41,12 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
-    <Compile Include="inifile.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Camera2D.cs" />
