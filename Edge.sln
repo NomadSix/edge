@@ -16,11 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{85E42396-BC46-46DF-8FE9-BC601E861E70}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		NetCommon\NetCommon.projitems*{f778b80c-a131-484d-8b4f-972d0b4389a7}*SharedItemsImports = 4
-		NetCommon\NetCommon.projitems*{3d374d18-d595-4294-b182-1296c3725197}*SharedItemsImports = 4
-		NetCommon\NetCommon.projitems*{64e0933a-b3b4-49db-8b81-f693eff0e5ff}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
@@ -68,25 +63,6 @@ Global
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Release|Mixed Platforms.Build.0 = Release|x86
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Release|x86.ActiveCfg = Release|x86
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Release|x86.Build.0 = Release|x86
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|x86.Build.0 = Debug|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|x86.ActiveCfg = Release|Any CPU
-		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|x86.Build.0 = Release|Any CPU
-		{3D374D18-D595-4294-B182-1296C3725197}.Debug|Mixed Platforms.ActiveCfg = Debug|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Debug|Mixed Platforms.Build.0 = Debug|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Debug|x86.ActiveCfg = Debug|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Debug|x86.Build.0 = Debug|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Release|Mixed Platforms.ActiveCfg = Release|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Release|Mixed Platforms.Build.0 = Release|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Release|x86.ActiveCfg = Release|Mixed Platforms
-		{3D374D18-D595-4294-B182-1296C3725197}.Release|x86.Build.0 = Release|Mixed Platforms
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
