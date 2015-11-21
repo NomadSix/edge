@@ -11,11 +11,11 @@
 New UI Components:
 	Thinking:
 	Doing:
-		Buttons
-		Sliders (good for settings)
 		Popups (store[maybe] settings, chat, etc)
 	Done:
 		Screens
+		Sliders
+		Buttons
 New Misc:
 	Ability HUD Panel
 	Scoreboard (maybe just a popup, idk)

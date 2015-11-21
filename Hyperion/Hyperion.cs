@@ -101,6 +101,8 @@ namespace Edge.Hyperion {
 
 				if(kb.IsButtonToggledDown(Keys.Escape))
 					Exit(); //Replace this...
+				//to get rid of the warning as much as anything, but should keep a general eye on this
+				Console.WriteLine(atlasConnection.AverageRoundtripTime);
 				/*
 				#region Extract to lobby/queue screen
 				if(kb.IsButtonToggledDown(Keys.S)){

@@ -50,6 +50,17 @@
     <Compile Include="Keyboard.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="UI\Components\Screen.cs" />
+    <Compile Include="UI\Components\Slider.cs" />
+    <Compile Include="UI\Implementation\Screens\Gameplay.cs" />
+    <Compile Include="UI\Implementation\Screens\Loading.cs" />
+    <Compile Include="UI\Implementation\Screens\MainMenu.cs" />
+    <Compile Include="UI\Implementation\Screens\PostGame.cs" />
+    <Compile Include="UI\Implementation\Screens\Splash.cs" />
+    <Compile Include="Backing\AssetStore.cs" />
+    <Compile Include="UI\Components\Button.cs" />
+    <Compile Include="UI\Components\UIComponent.cs" />
+    <Compile Include="UI\Components\Popup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
@@ -62,6 +73,8 @@
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="Tao.Sdl.dll.config" />
+    <None Include="UI\BIG-TODO-FILE.dat" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Basic_Background.png">
@@ -71,4 +84,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
+    <Folder Include="Backing\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
+          <CSharpFormattingPolicy NamespaceBraceStyle="EndOfLine" ClassBraceStyle="EndOfLine" InterfaceBraceStyle="EndOfLine" StructBraceStyle="EndOfLine" EnumBraceStyle="EndOfLine" MethodBraceStyle="EndOfLine" ConstructorBraceStyle="EndOfLine" DestructorBraceStyle="EndOfLine" AfterDelegateDeclarationParameterComma="True" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>
