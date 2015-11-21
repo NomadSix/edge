@@ -42,3 +42,4 @@ Thumbs.db
 *.aux
 *.log
 *.synctex.gz
+/TestResult.xml
