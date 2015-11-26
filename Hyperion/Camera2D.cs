@@ -12,12 +12,22 @@ namespace Edge.Hyperion {
 
 		public Matrix ViewMatrix { 
 			get {
-				return Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0))
-				* Matrix.CreateScale(new Vector3(Zoom, Zoom, 1));
+				return Matrix.CreateTranslation (new Vector3 (-Position.X, -Position.Y, 0)) *
+				Matrix.CreateScale (new Vector3 (Zoom, Zoom, 1)
+				);
 			} 
 		}
 
-		public Camera2D(Vector2 position) {
+		public Matrix Deproject { 
+			get { 
+				return Matrix.Invert (
+					Matrix.CreateTranslation (new Vector3 (-Position.X, -Position.Y, 0)) *
+					Matrix.CreateScale (new Vector3 (Zoom, Zoom, 1))
+				); 
+			} 
+		}
+
+		public Camera2D (Vector2 position) {
 			Zoom = 1.0f;
 			Position = position;
 		}
