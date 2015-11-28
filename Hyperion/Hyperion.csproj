@@ -51,6 +51,8 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
+    <Compile Include="UI\Implementation\Popups\Alert.cs" />
+    <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
     <Compile Include="UI\Implementation\Screens\Gameplay.cs" />
     <Compile Include="UI\Implementation\Screens\Loading.cs" />
     <Compile Include="UI\Implementation\Screens\MainMenu.cs" />
@@ -81,6 +83,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Eagle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\icon.ico" />
+    <Content Include="Images\Mage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

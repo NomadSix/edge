@@ -1,0 +1,26 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin
+/intermediateDir:obj
+/platform:Windows
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Hyperion/Font/Anonymous.ttf
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=NoChange
+/build:Hyperion/Font/Anonymous.ttf
+
+#begin Hyperion/Font/FOnt.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Hyperion/Font/FOnt.xml
+

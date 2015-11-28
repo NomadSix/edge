@@ -24,7 +24,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		public Gameplay (Game game, String address, String port) : base (game) {
 			Address = address;
 			Port = port;
-			Initialize ();
 		}
 
 		public override void Initialize () {
@@ -33,10 +32,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			//maestroConfig.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 			atlasConfig.Port = 2347;
 			atlasClient = new NetClient (atlasConfig);
-			atlasClient.Start ();
+			atlasClient.Start();
 			atlasConnection = atlasClient.Connect (Address, int.Parse (Port));
 			#endregion
 			LoadContent ();
+            base.Initialize();
 		}
 
 		protected override void LoadContent () {
@@ -52,7 +52,10 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 				cam.Zoom -= .1f;
 			} else if (that.kb.IsButtonDown (Keys.X)) {
 				cam.Zoom += .1f;
-			}
+            } else if (that.kb.IsButtonDown(Keys.C)) {
+                cam.Zoom = 1f;
+            }
+
 
 			if (that.mouse.IsButtonDown (MouseButtons.Right)) {
 				NetOutgoingMessage outMsg = atlasClient.CreateMessage ();
@@ -91,14 +94,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Draw (GameTime gameTime) {
-			GraphicsDevice.Clear (Color.Black);
-			that.spriteBatch.Begin (SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.ViewMatrix);
-			foreach (var p in players) {
-				//Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
-				that.spriteBatch.Draw (artDebug, p.Location, null, null, null, 0f, new Vector2 (1, 1), Color.White, SpriteEffects.None, 0);
+            foreach (var p in players) {
+                that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
+				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
+				that.spriteBatch.Draw (artDebug, p.Location, null, null, null, 0f, new Vector2 (1, 1), n, SpriteEffects.None, 0);
 			}
-			that.spriteBatch.Draw (backGround, Vector2.Zero, null, null, null, 0f, new Vector2 (.25f), Color.White, SpriteEffects.None, 0);
-			that.spriteBatch.End ();
 			base.Draw (gameTime);
 		}
 	}
