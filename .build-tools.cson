@@ -1,0 +1,97 @@
+providers: [
+  {
+    key: "bt"
+    config:
+      commands: [
+        {
+          project: "/home/addie/Documents/School/Game Design/Edge"
+          source: "/home/addie/Documents/School/Game Design/Edge/.build-tools.cson"
+          name: "XBuild Project"
+          command: "xbuild Edge.sln"
+          wd: "."
+          env: {}
+          modifier:
+            save_all: {}
+          stdout:
+            pty: false
+            highlighting: "nh"
+            ansi_option: "ignore"
+          stderr:
+            highlighting: "nh"
+            ansi_option: "ignore"
+          output:
+            console:
+              close_success: true
+              queue_in_buffer: true
+              stdin: false
+            linter:
+              no_trace: false
+          version: 1
+        }
+        {
+          project: "/home/addie/Documents/School/Game Design/Edge"
+          source: "/home/addie/Documents/School/Game Design/Edge/.build-tools.cson"
+          name: "Run Atlas"
+          command: "mono Atlas.exe"
+          wd: "./Atlas/bin/Debug"
+          env: {}
+          modifier:
+            save_all: {}
+            dependency:
+              list: [
+                [
+                  "0"
+                  "0"
+                  "XBuild Project"
+                ]
+              ]
+              abort: true
+          stdout:
+            pty: false
+            highlighting: "nh"
+            ansi_option: "ignore"
+          stderr:
+            highlighting: "nh"
+            ansi_option: "ignore"
+          output:
+            console:
+              close_success: true
+              queue_in_buffer: true
+              stdin: true
+          version: 1
+        }
+        {
+          project: "/home/addie/Documents/School/Game Design/Edge"
+          source: "/home/addie/Documents/School/Game Design/Edge/.build-tools.cson"
+          name: "Run Hyperion"
+          command: "mono Hyperion.exe"
+          wd: "./Hyperion/bin/Debug"
+          env: {}
+          modifier:
+            dependency:
+              list: [
+                [
+                  "0"
+                  "0"
+                  "XBuild Project"
+                ]
+              ]
+              abort: true
+            save_all: {}
+          stdout:
+            pty: false
+            highlighting: "nh"
+            ansi_option: "ignore"
+          stderr:
+            highlighting: "nh"
+            ansi_option: "ignore"
+          output:
+            console:
+              close_success: true
+              queue_in_buffer: true
+              stdin: false
+          version: 1
+        }
+      ]
+  }
+]

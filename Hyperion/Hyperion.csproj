@@ -33,13 +33,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="OpenTK">
+    <Reference Include="OpenTK" Condition="'$(OS)'=='Unix'">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="Tao.Sdl">
+    <Reference Include="Tao.Sdl" Condition="'$(OS)'=='Unix'">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\Tao.Sdl.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework">
+    <Reference Include="MonoGame.Framework" Condition="'$(OS)'=='Unix'">
+      <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework" Condition="'$(OS)'=='Windows_NT'">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -81,8 +84,8 @@
     </Content>
     <None Include="packages.config" />
     <None Include="UI\BIG-TODO-FILE.dat" />
-    <None Include="OpenTK.dll.config" />
-    <None Include="Tao.Sdl.dll.config" />
+    <None Include="OpenTK.dll.config" Condition="'$(OS)'=='Unix'"/>
+    <None Include="Tao.Sdl.dll.config" Condition="'$(OS)'=='Unix'"/>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\base.png">

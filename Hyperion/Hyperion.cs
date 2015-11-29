@@ -40,7 +40,7 @@ namespace Edge.Hyperion {
 		}
 
 		protected override void Initialize() {
-			#region Window			 
+			#region Window
 			graphics.PreferredBackBufferWidth = 1280;
 			graphics.PreferredBackBufferHeight = 720;
 			IsMouseVisible = true;
@@ -73,49 +73,6 @@ namespace Edge.Hyperion {
 
 		protected override void Update(GameTime gameTime) {
 			if(IsActive) {
-
-				//Replace this...
-				//to get rid of the warning as much as anything, but should keep a general eye on this
-                
-				/*
-                #region Extract to lobby/queue screen
-                if(kb.IsButtonToggledDown(Keys.S)){
-                    NetOutgoingMessage start = maestroClient.CreateMessage();
-                    start.Write((byte)MaestroPackets.StartLobby);
-                    start.Write(-1);
-                    maestroClient.SendMessage(start, maestroConnection, NetDeliveryMethod.ReliableUnordered);
-                }
-                #endregion
-
-                NetIncomingMessage msg;
-                while((msg = maestroClient.ReadMessage()) != null) {
-                    switch(msg.MessageType) {
-                        case NetIncomingMessageType.Data:
-                            switch((MaestroPackets)msg.ReadByte()) {
-                                case MaestroPackets.InviteToLobby:
-                                    break;
-                                case MaestroPackets.LobbyStatus:
-                                    break;
-                                case MaestroPackets.IntroduceAtlas:
-                                    atlasClient.Connect(msg.ReadString(), msg.ReadInt32());
-                                    break;
-                            }
-                            break;
-                        case NetIncomingMessageType.DiscoveryResponse:
-                            NetOutgoingMessage hail = maestroClient.CreateMessage();
-                            const string uname = "Test User 0";
-                            hail.Write(uname);
-                            maestroClient.Connect(msg.SenderEndPoint, hail);
-                            break;
-                        case NetIncomingMessageType.DebugMessage:
-                        case NetIncomingMessageType.VerboseDebugMessage:
-                        case NetIncomingMessageType.WarningMessage:
-                        case NetIncomingMessageType.ErrorMessage:
-                            System.Diagnostics.Debug.WriteLine(msg.ReadString());
-                            break;
-                    }
-                }
-                */
 				bounds = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 				base.Update(gameTime);
 			}
@@ -129,7 +86,7 @@ namespace Edge.Hyperion {
 		}
 
 		void OnExit(object sender, EventArgs e) {
-			//atlasClient.Disconnect("Client Closing");
+			//TODO: This needs to be passed to individual Screens to notify the appropriate servers of the User prompted disconnect (this won't trigger if it's a crash, or internet issue)
 		}
 
 		protected override void OnActivated(object sender, EventArgs e) {

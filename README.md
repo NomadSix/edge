@@ -20,5 +20,6 @@
 * NonSix
 
 # Todo List #
-* PCL Library for Windows/Linux (/Android/iOS???) code gaps
-* Portable MonoDevelop for Windows development
+* Better testing
+* Better updates system (flatbuffers, only send changed entities)
+* A GOOD asset management system
