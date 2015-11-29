@@ -1,48 +1,86 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mouse = Edge.Hyperion.Input.Mouse;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Button:UIComponent {
 		Boolean _hovering;
-		Texture2D _base;
-		Rectangle _location;
-        ButtonStyle _style;
-		ButtonAction _action;
+		readonly Rectangle _location;
+		readonly ButtonStyle _style;
+		readonly ButtonAction _action;
+		readonly String _text;
+		readonly Vector2 _textLocation;
 
-		public delegate void ButtonAction ();
+		public delegate void ButtonAction();
 
-		public Button (Game game, Rectangle location, ButtonStyle style, ButtonAction action) : base (game) {
+		public Button(Game game, Rectangle location, ButtonStyle style, String text, ButtonAction action) : base(game) {
 			_location = location;
 			_action = action;
-            _base = style._Base;
-            _style = style;
+			_style = style;
+			_text = text;
+			Vector2 measurements = _style.Font.MeasureString(_text);
+			_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f, _location.Height / 2f - measurements.Y / 2f);
 		}
 
-		public override void Update (GameTime gameTime) {
-			_hovering = _location.Contains (that.mouse.Location);
-			if (_hovering && that.mouse.IsButtonToggledUp (Edge.Hyperion.Input.MouseButtons.Left))
-				_action ();
-			base.Update (gameTime);
+		public override void Update(GameTime gameTime) {
+			_hovering = _location.Contains(that.mouse.Location);
+			if(_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left))
+				_action();
+			base.Update(gameTime);
 		}
 
-		public override void Draw (GameTime gameTime) {
-            //for now we are going to just use a build in color
-            //will be using a custom color later
-			that.spriteBatch.Draw (_base, _location, _hovering ? Color.Gray : Color.White);
-			base.Draw (gameTime);
+		public override void Draw(GameTime gameTime) {
+			that.spriteBatch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering ? _style.HoverColour : _style.BaseColour);
+			that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
+			base.Draw(gameTime);
 		}
-        public class ButtonStyle {
-            public enum ButtonStyles : byte {
-                test
-            }
-            public Texture2D _Base;
-            public String _StyleName;
-            public ButtonStyle(String StyleName, Texture2D Base) {
-                _Base = Base;
-                _StyleName = StyleName;
-            }
-        }
+
+		public class ButtonStyle {
+			public enum ButtonStyles : byte {
+				test
+			}
+
+			public Texture2D Base, Hover;
+			public Color BaseColour, HoverColour, TextColour;
+			public SpriteFont Font;
+
+			public ButtonStyle(Texture2D texture, Texture2D hover, Color? baseColour, Color? hoverColour, Color? textColour) {
+				Base = texture;
+				Hover = hover;
+				BaseColour = baseColour ?? Color.LightGray;
+				HoverColour = hoverColour ?? Color.White;
+				TextColour = textColour ?? Color.Black;
+				Font = Edge.Hyperion.Backing.AssetStore.FontMain;
+			}
+
+			public ButtonStyle(Texture2D texture, Color? baseColour, Color? hoverColour, Color? textColour) {
+				Base = texture;
+				Hover = texture;
+				BaseColour = baseColour ?? Color.LightGray;
+				HoverColour = hoverColour ?? Color.White;
+				TextColour = textColour ?? Color.Black;
+				Font = Edge.Hyperion.Backing.AssetStore.FontMain;
+			}
+
+			public ButtonStyle(Texture2D texture, Texture2D hover, SpriteFont font, Color? baseColour, Color? hoverColour, Color? textColour) {
+				Base = texture;
+				Hover = hover;
+				BaseColour = baseColour ?? Color.LightGray;
+				HoverColour = hoverColour ?? Color.White;
+				TextColour = textColour ?? Color.Black;
+				Font = font;
+			}
+
+			public ButtonStyle(Texture2D texture, SpriteFont font, Color? baseColour, Color? hoverColour, Color? textColour) {
+				Base = texture;
+				Hover = texture;
+				BaseColour = baseColour ?? Color.LightGray;
+				HoverColour = hoverColour ?? Color.White;
+				TextColour = textColour ?? Color.Black;
+				Font = font;
+			}
+		}
 	}
 }
 

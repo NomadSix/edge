@@ -5,7 +5,7 @@ namespace Edge.Hyperion.UI.Components {
 	public class UIComponent:DrawableGameComponent {
 		protected Hyperion that;
 
-		public UIComponent (Game game) : base (game) {
+		public UIComponent(Game game) : base(game) {
 			that = (Hyperion)game;
 		}
 	}

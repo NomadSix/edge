@@ -14,12 +14,12 @@ namespace Edge.Hyperion.Input {
 		/// <summary>
 		///     Location of the Mouse as a Point
 		/// </summary>
-		public Point Location { get { return new Point(current.X, current.Y); } }
+		public Point Location { get { return new Point(current.X, current.Y); } set { Microsoft.Xna.Framework.Input.Mouse.SetPosition(value.X, value.Y); } }
 
 		/// <summary>
 		///     Location of the Mouse as a Vector2
 		/// </summary>
-		public Vector2 LocationV2 { get { return new Vector2(current.X, current.Y); } }
+		public Vector2 LocationV2 { get { return new Vector2(current.X, current.Y); } set { Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)value.X, (int)value.Y); } }
 
 		/// <summary>
 		///     Keeps track of the current state of the mouse
@@ -63,34 +63,21 @@ namespace Edge.Hyperion.Input {
 			return GetValues(test).CurrentButtonState == ButtonState.Released;
 		}
 
-		private ButtonSet GetValues(MouseButtons test) {
-			ButtonState lastButtonState;
-			ButtonState currentButtonState;
+		ButtonSet GetValues(MouseButtons test) {
 			switch(test) {
 				case MouseButtons.Left:
-					lastButtonState = last.LeftButton;
-					currentButtonState = current.LeftButton;
-					break;
+					return new ButtonSet(last.LeftButton, current.LeftButton);
 				case MouseButtons.Middle:
-					lastButtonState = last.MiddleButton;
-					currentButtonState = current.MiddleButton;
-					break;
+					return new ButtonSet(last.MiddleButton, current.MiddleButton);
 				case MouseButtons.Right:
-					lastButtonState = last.RightButton;
-					currentButtonState = current.RightButton;
-					break;
+					return new ButtonSet(last.RightButton, current.RightButton);
 				case MouseButtons.X1:
-					lastButtonState = last.XButton1;
-					currentButtonState = current.XButton1;
-					break;
+					return new ButtonSet(last.XButton1, current.XButton1);
 				case MouseButtons.X2:
-					lastButtonState = last.XButton2;
-					currentButtonState = current.XButton2;
-					break;
+					return new ButtonSet(last.XButton2, current.XButton2);
 				default:
 					throw new Exception("Unexpected Button" + Environment.NewLine + "Expected Left, Right, Middle, X1, or X2");
 			}
-			return new ButtonSet(lastButtonState, currentButtonState);
 		}
 
 		struct ButtonSet {
@@ -102,13 +89,13 @@ namespace Edge.Hyperion.Input {
 				CurrentButtonState = currentState;
 			}
 		}
-	}
 
-	public enum MouseButtons {
-		Left,
-		Right,
-		Middle,
-		X1,
-		X2
+		public enum MouseButtons {
+			Left,
+			Right,
+			Middle,
+			X1,
+			X2
+		}
 	}
 }

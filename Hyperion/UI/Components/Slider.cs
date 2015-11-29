@@ -16,11 +16,11 @@ namespace Edge.Hyperion.UI.Components {
 		}
 
 		public override void Update(GameTime gameTime) {
-			if(that.mouse.IsButtonDown(MouseButtons.Left) && _position.Contains(that.mouse.Location))
+			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Left) && _position.Contains(that.mouse.Location))
 				Value = MathHelper.Clamp(
 					(that.mouse.Location.X - (_knob.Width / 2f) - _position.X) / (float)(_position.Width - _knob.Width),
 					0, 1);
-				base.Update(gameTime);
+			base.Update(gameTime);
 		}
 
 		public override void Draw(GameTime gameTime) {

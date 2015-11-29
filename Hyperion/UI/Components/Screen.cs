@@ -6,12 +6,16 @@ namespace Edge.Hyperion.UI.Components {
 		//TODO: Background texture?
 		//TODO: How to handle popup finishing?
 		Popup _activePopup;
-		public Screen(Game game) : base(game) {}
-		public override void Update (GameTime gameTime) {
-			base.Update (gameTime);
+
+		public Screen(Game game) : base(game) {
 		}
-		protected void SetPopup(Popup popup){
-			if (_activePopup == null)
+
+		public override void Update(GameTime gameTime) {
+			base.Update(gameTime);
+		}
+
+		protected void SetPopup(Popup popup) {
+			if(_activePopup == null)
 				_activePopup = popup;
 		}
 	}

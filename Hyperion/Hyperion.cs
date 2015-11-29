@@ -11,11 +11,9 @@ using Edge.Hyperion.UI.Implementation.Screens;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 using Keyboard = Edge.Hyperion.Input.Keyboard;
 using Mouse = Edge.Hyperion.Input.Mouse;
-using MouseButtons = Edge.Hyperion.Input.MouseButtons;
 
 namespace Edge.Hyperion {
 	public class Hyperion:Game {
-
 		public static void Main(String[] args) {
 			using(var game = new Hyperion())
 				game.Run();
@@ -23,12 +21,13 @@ namespace Edge.Hyperion {
 
 		GraphicsDeviceManager graphics;
 		internal SpriteBatch spriteBatch;
+		internal Rectangle bounds;
 		//, maestroClient;
 		//, maestroConnection;
 		internal Keyboard kb;
 		internal Mouse mouse;
 
-        public Matrix viewMatrix;
+		public Matrix viewMatrix;
 
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
@@ -52,9 +51,9 @@ namespace Edge.Hyperion {
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
-            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle("test", Content.Load<Texture2D>(@"../Images/Mage.png")));
-            this.SetScreen(new MainMenu(this));
-            #endregion
+			AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Mage.png"), null, null, null));
+			this.SetScreen(new MainMenu(this));
+			#endregion
 			#region Maestro Configuration
 			//var maestroConfig = new NetPeerConfiguration("Maestro");
 			//maestroConfig.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
@@ -65,20 +64,20 @@ namespace Edge.Hyperion {
 			//maestroClient.DiscoverLocalPeers(2345);
 			#endregion
 
-            base.Initialize();
+			base.Initialize();
 		}
 
 		protected override void LoadContent() {
-            base.LoadContent();
+			base.LoadContent();
 		}
 
 		protected override void Update(GameTime gameTime) {
-            if (IsActive) {
+			if(IsActive) {
 
-                //Replace this...
-                //to get rid of the warning as much as anything, but should keep a general eye on this
+				//Replace this...
+				//to get rid of the warning as much as anything, but should keep a general eye on this
                 
-                /*
+				/*
                 #region Extract to lobby/queue screen
                 if(kb.IsButtonToggledDown(Keys.S)){
                     NetOutgoingMessage start = maestroClient.CreateMessage();
@@ -117,15 +116,16 @@ namespace Edge.Hyperion {
                     }
                 }
                 */
-            }
-			base.Update(gameTime);
+				bounds = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+				base.Update(gameTime);
+			}
 		}
 
 		protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null,null,null,null);
-            base.Draw(gameTime);
-            spriteBatch.End();
+			GraphicsDevice.Clear(Color.White);
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
+			base.Draw(gameTime);
+			spriteBatch.End();
 		}
 
 		void OnExit(object sender, EventArgs e) {
@@ -137,12 +137,13 @@ namespace Edge.Hyperion {
 
 		protected override void OnDeactivated(object sender, EventArgs e) {
 		}
-        internal void SetScreen(Screen newScreen) {
-            //viewMatrix = Matrix.CreateOrthographic(1280, 720, -1, 100);
-            Components.Clear();
-            Components.Add(kb);
-            Components.Add(mouse);
-            Components.Add(newScreen);
-        }
+
+		internal void SetScreen(Screen newScreen) {
+			viewMatrix = default(Matrix);
+			Components.Clear();
+			Components.Add(kb);
+			Components.Add(mouse);
+			Components.Add(newScreen);
+		}
 	}
 }
