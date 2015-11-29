@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
 using Edge.NetCommon;
-using Edge.Hyperion;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 using Edge.Atlas.DebugCode;
@@ -16,6 +15,7 @@ namespace Edge.Atlas {
 		Boolean runningHeadless;
 		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
 		public List<Entity> entities = new List<Entity>();
+		public List<Entity> structures = new List<Entity>();
 
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
@@ -30,7 +30,7 @@ namespace Edge.Atlas {
 				try {
 					new Atlas(Int32.Parse(args[0]), false).Run();
 				}
-				catch (Exception) {
+				catch(Exception) {
 					new Atlas(2348, false).Run();
 				}
 			else
@@ -76,7 +76,7 @@ namespace Edge.Atlas {
 									UInt16 x = inMsg.ReadUInt16();
 									UInt16 y = inMsg.ReadUInt16();
 									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
+									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
 									break;
 							}
 							break;
@@ -84,7 +84,7 @@ namespace Edge.Atlas {
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
 									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier));
-                                    break;
+									break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
 									break;
@@ -106,7 +106,7 @@ namespace Edge.Atlas {
 				#endregion
 
 				//Parallel.ForEach(players.Values, PlayerUpdate);
-				foreach (var p in players)
+				foreach(var p in players)
 					PlayerUpdate(p.Value);
 
 				#region Outgoing Updates
@@ -114,7 +114,7 @@ namespace Edge.Atlas {
 				NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
 				outMsg.Write((UInt16)players.Count);
-				foreach (var p in players.Values) {
+				foreach(var p in players.Values) {
 					outMsg.Write(p.NetID);
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
@@ -157,7 +157,7 @@ namespace Edge.Atlas {
 					//The command is anything that happens before the opening parenthesies
 					command = readLine.Substring(0, readLine.IndexOf('('));
 				}
-				catch (Exception) {
+				catch(Exception) {
 					//If there isn't an opening parenthesies, it's a parameterless command
 					command = readLine;
 				}
@@ -170,7 +170,7 @@ namespace Edge.Atlas {
 					//Try to split the arguments by commas
 					args = argStr.Split(',').ToList();
 				}
-				catch (Exception) {
+				catch(Exception) {
 					try {
 						//If the split failed, it ether had no arguments (do nothing)
 						//or had only one argument (add that argument)
@@ -185,7 +185,7 @@ namespace Edge.Atlas {
 				try {
 					Control(command, args);
 				}
-				catch (NotSupportedException e) {
+				catch(NotSupportedException e) {
 					Console.WriteLine(e.Message);
 				}
 			}
@@ -208,7 +208,7 @@ namespace Edge.Atlas {
 					Console.Clear();
 					break;
 				case "ID":
-					foreach (var p in players) {
+					foreach(var p in players) {
 						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.MovingTo.X, p.Value.MovingTo.Y);
 					}
 					break;
@@ -216,17 +216,18 @@ namespace Edge.Atlas {
 					if(args.Capacity > 0) {
 						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
 
-                    }
-                    break;
-                case "ENTS":
-                    foreach(var e in entities)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
-                    break;
+					}
+					break;
+				case "ENTS":
+					foreach(var e in entities)
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+					break;
 				case "PLAYERS":
-                    foreach(var e in players)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
-                    break;
-				case "MOVE": {
+					foreach(var e in players)
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+					break;
+				case "MOVE":
+					{
 						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
 						Int64 ID = Int64.Parse(args[0]);
