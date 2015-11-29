@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 
 namespace Edge.Hyperion.UI.Components {
-	public class Popup:UIComponent {
+	public class Popup:Screen {
 		public Int32 Width, Height;
 		public Vector2 Location;
 

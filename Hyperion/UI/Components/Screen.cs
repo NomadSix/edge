@@ -6,6 +6,7 @@ namespace Edge.Hyperion.UI.Components {
 		//TODO: Background texture?
 		//TODO: How to handle popup finishing?
 		Popup _activePopup;
+        public Boolean _isActive = true;
 
 		public Screen(Game game) : base(game) {
 		}

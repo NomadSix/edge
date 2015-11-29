@@ -51,7 +51,7 @@ namespace Edge.Hyperion {
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
-			AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Mage.png"), null, null, null));
+			AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/base.png"), Color.LightGray, Color.Gray, null));
 			this.SetScreen(new MainMenu(this));
 			#endregion
 			#region Maestro Configuration
@@ -123,7 +123,7 @@ namespace Edge.Hyperion {
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.White);
-			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 			base.Draw(gameTime);
 			spriteBatch.End();
 		}

@@ -6,6 +6,7 @@ using Mouse = Edge.Hyperion.Input.Mouse;
 namespace Edge.Hyperion.UI.Components {
 	public class Button:UIComponent {
 		Boolean _hovering;
+        Screen _screen;
 		readonly Rectangle _location;
 		readonly ButtonStyle _style;
 		readonly ButtonAction _action;
@@ -14,25 +15,26 @@ namespace Edge.Hyperion.UI.Components {
 
 		public delegate void ButtonAction();
 
-		public Button(Game game, Rectangle location, ButtonStyle style, String text, ButtonAction action) : base(game) {
+		public Button(Game game, Screen screen, Rectangle location, ButtonStyle style, String text, ButtonAction action) : base(game) {
 			_location = location;
 			_action = action;
 			_style = style;
 			_text = text;
-			Vector2 measurements = _style.Font.MeasureString(_text);
-			_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f, _location.Height / 2f - measurements.Y / 2f);
+            _screen = screen;
+			//Vector2 measurements = _style.Font.MeasureString(_text);
+			//_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f, _location.Height / 2f - measurements.Y / 2f);
 		}
 
 		public override void Update(GameTime gameTime) {
 			_hovering = _location.Contains(that.mouse.Location);
-			if(_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left))
+			if(_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
 				_action();
 			base.Update(gameTime);
 		}
 
 		public override void Draw(GameTime gameTime) {
-			that.spriteBatch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering ? _style.HoverColour : _style.BaseColour);
-			that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
+			that.spriteBatch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
+			//that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
 			base.Draw(gameTime);
 		}
 
