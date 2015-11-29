@@ -12,7 +12,6 @@ using Mouse = Edge.Hyperion.Input.Mouse;
 namespace Edge.Hyperion.UI.Implementation.Screens {
 	public class Gameplay:Screen {
 
-		Camera2D cam;
 		Texture2D pixel, backGround, artDebug;
 		NetClient atlasClient;
 		String Port, Address;
@@ -42,7 +41,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			pixel.SetData<Color>(new[] { Color.White });
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Eagle.png");
 			backGround = that.Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
-			cam = new Camera2D(new Vector2(0, 0));
 		}
 
 		public override void Update(GameTime gameTime) {
@@ -55,7 +53,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			else if(that.kb.IsButtonDown(Keys.C)) {
 				cam.Zoom = 1f;
 			}
-
+            that.viewMatrix = cam.ViewMatrix;
 
 			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Right)) {
 				NetOutgoingMessage outMsg = atlasClient.CreateMessage();

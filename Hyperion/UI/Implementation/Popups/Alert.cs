@@ -7,7 +7,6 @@ using AssetStore = Edge.Hyperion.Backing.AssetStore;
 namespace Edge.Hyperion.UI.Implementation.Popups {
 	class Alert:Popup {
         Button btnOk;
-        Texture2D backGround;
         Screen Screen;
 		public Alert(Game game, Screen screen, Vector2 location, Int32 width, Int32 height) 
             : base(game, location, width, height) {
@@ -23,7 +22,6 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
  	        base.Initialize();
         }
         protected override void LoadContent() {
-            backGround = that.Content.Load<Texture2D>(@"../Images/Grey.png");
             base.LoadContent();
         }
         public override void Draw(GameTime gameTime) {
