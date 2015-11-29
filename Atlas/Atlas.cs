@@ -213,7 +213,7 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+						entities.Add(new Entity(long.Parse(args[0]), new Vector2(float.Parse(args[1]), float.Parse(args[2]))));
 
 					}
 					break;
