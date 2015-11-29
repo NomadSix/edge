@@ -40,7 +40,7 @@ namespace Edge.Atlas {
 
 		void MoveLogic(DebugPlayer player) {
 			var colliding = false;
-			structures.ForEach(() => {
+			structures.ForEach(x => {
 				//This is gonna be a HUGE slowdown, especially when we have a lot of 
 				//If we're on top, Fix the position, and break
 			});

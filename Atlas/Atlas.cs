@@ -75,8 +75,7 @@ namespace Edge.Atlas {
 								case AtlasPackets.RequestPositionChange:
 									UInt16 x = inMsg.ReadUInt16();
 									UInt16 y = inMsg.ReadUInt16();
-									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
-									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
+									//players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
 									break;
 							}
 							break;
@@ -209,7 +208,7 @@ namespace Edge.Atlas {
 					break;
 				case "ID":
 					foreach(var p in players) {
-						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.MovingTo.X, p.Value.MovingTo.Y);
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.Velocity.X, p.Value.Velocity.Y);
 					}
 					break;
 				case "ADDENT":
@@ -232,7 +231,7 @@ namespace Edge.Atlas {
 						Console.WriteLine("moving to " + location);
 						Int64 ID = Int64.Parse(args[0]);
 						if(players.ContainsKey(ID))
-							players[Convert.ToInt64(args[0])].MovingTo = location;
+							players[Convert.ToInt64(args[0])].Velocity = location;
 						break; 
 					}
 				default:
