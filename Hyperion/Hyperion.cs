@@ -63,7 +63,7 @@ namespace Edge.Hyperion {
 			//send out discovery signal for local Maestro server
 			//maestroClient.DiscoverLocalPeers(2345);
 			#endregion
-
+            
 			base.Initialize();
 		}
 
