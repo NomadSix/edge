@@ -11,22 +11,22 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		//The main menu, handles interactions with maestro
 		//For now just a demo for ui componets
 		Button btnPlay;
-		Button btnAlert;
+		Button btnExit;
 		Texture2D backGround;
+        float buttonScale = .2f;
 
 		public MainMenu(Game game) : base(game) {
-			btnPlay = new Button(that, this, new Rectangle(0, 0, 100, 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.test], "Play", () => {
+			btnPlay = new Button(that, this, new Rectangle(that.GraphicsDevice.Viewport.Width / 2 - (int)(that.GraphicsDevice.Viewport.Width * buttonScale) / 2, 10, (int)(that.GraphicsDevice.Viewport.Width * buttonScale), 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Play", () => {
                 that.SetScreen(new Splash(that));
             });
-            btnAlert = new Button(that, this, new Rectangle(125, 0, 100, 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.test], "Alert", () => {
-                this._isActive = false;
-                that.Components.Add(new Alert(that, this, new Vector2(100, 100), 300, 300));
-            });
+            //btnExit = new Button(that, this, new Rectangle(that.GraphicsDevice.Viewport.Width * 1/2 - (int)(that.GraphicsDevice.Viewport.Width * buttonScale/10), 0, (int)(that.GraphicsDevice.Viewport.Width * buttonScale), 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.test], "Alert", () => {
+            //    that.Exit();
+            //});
 		}
 
 		public override void Initialize() {
 			that.Components.Add(btnPlay);
-            that.Components.Add(btnAlert);
+            that.Components.Add(btnExit);
             that.viewMatrix = cam.ViewMatrix;
 			base.Initialize();
 		}

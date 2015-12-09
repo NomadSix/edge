@@ -35,7 +35,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			atlasClient.Start();
 			atlasClient.Connect(Address, int.Parse(Port));
 			#endregion
-            cam.Position = new Vector2(-that.GraphicsDevice.Viewport.Width / 2, -that.GraphicsDevice.Viewport.Height / 2);
 			base.Initialize();
 		}
 
@@ -93,7 +92,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
                 foreach (var ent in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                     Vector2 position = new Vector2(ent.Location.X - that.GraphicsDevice.Viewport.Width / 2, ent.Location.Y - that.GraphicsDevice.Viewport.Height / 2);
-                    position = Vector2.Lerp(position, Vector2.Zero, .5f);
+                    //position = Vector2.Lerp(position, Vector2.Zero, .5f);
                     cam.Position = position;
                 }
 				base.Update(gameTime);
@@ -101,7 +100,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
         public override void Draw(GameTime gameTime) {
-            that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.5f), Color.White, SpriteEffects.None, 0);
+            that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
 			foreach(var p in players) {
 				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
 				that.spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), n, SpriteEffects.None, 0);

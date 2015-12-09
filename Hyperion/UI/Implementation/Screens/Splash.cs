@@ -12,7 +12,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		public Splash(Game game) : base(game) {
 		}
 
-		protected override void LoadContent() {
+        protected override void LoadContent() {
+            cam.Position = new Vector2(-that.GraphicsDevice.Viewport.Width / 2, -that.GraphicsDevice.Viewport.Height / 2);
 			debugArt = that.Content.Load<Texture2D>("../Images/Basic_Background");
 			base.LoadContent();
 		}

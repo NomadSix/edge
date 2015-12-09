@@ -6,7 +6,7 @@ using Edge.Atlas.DebugCode;
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-		public float movespeed = 250;
+		public float movespeed = 500;
 
 		/// <summary>
 		///  Updates a player

@@ -21,8 +21,8 @@ namespace Edge.Hyperion.UI.Components {
 			_style = style;
 			_text = text;
             _screen = screen;
-			//Vector2 measurements = _style.Font.MeasureString(_text);
-			//_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f, _location.Height / 2f - measurements.Y / 2f);
+			Vector2 measurements = _style.Font.MeasureString(_text);
+			_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f + location.X, _location.Height / 2f - measurements.Y / 2f + location.Y);
 		}
 
 		public override void Update(GameTime gameTime) {
@@ -34,13 +34,14 @@ namespace Edge.Hyperion.UI.Components {
 
 		public override void Draw(GameTime gameTime) {
 			that.spriteBatch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
-			//that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
+			that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
 			base.Draw(gameTime);
 		}
 
 		public class ButtonStyle {
 			public enum ButtonStyles : byte {
-				test
+				basic,
+                lessbasic
 			}
 
 			public Texture2D Base, Hover;

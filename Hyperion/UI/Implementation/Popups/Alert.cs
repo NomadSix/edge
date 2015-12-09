@@ -13,7 +13,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
                 Screen = screen;
 		}
         public override void Initialize() {
-            btnOk = new Button(that, this, new Rectangle(100, 150, 100, 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.test], "OK", () => {
+            btnOk = new Button(that, this, new Rectangle(100, 150, 100, 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "OK", () => {
                 Screen._isActive = true;
                 that.Components.Remove(btnOk);
                 that.Components.Remove(this);

@@ -51,7 +51,7 @@ namespace Edge.Hyperion {
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
-			AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/base.png"), Color.LightGray, Color.Gray, null));
+            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Greybutton.png"), Content.Load<SpriteFont>(@"../Font/Helvetica"), Color.LightGray, Color.Gray, Color.White));
 			this.SetScreen(new MainMenu(this));
 			#endregion
 			#region Maestro Configuration
