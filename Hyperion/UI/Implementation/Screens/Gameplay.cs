@@ -56,7 +56,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			else if(that.kb.IsButtonDown(Keys.C)) {
 				cam.Zoom = 1f;
 			}
-            that.viewMatrix = cam.ViewMatrix;
 
 			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Right)) {
 				NetOutgoingMessage outMsg = atlasClient.CreateMessage();
@@ -95,6 +94,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                     //position = Vector2.Lerp(position, Vector2.Zero, .5f);
                     cam.Position = position;
                 }
+                that.viewMatrix = cam.ViewMatrix;
 				base.Update(gameTime);
 			}
 		}
