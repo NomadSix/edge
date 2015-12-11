@@ -19,7 +19,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
         public override void Update(GameTime gameTime) {
-            that.viewMatrix = cam.ViewMatrix;
 			if(scale < .25f) {
 				scale += .001f;
 			}

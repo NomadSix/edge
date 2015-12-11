@@ -7,11 +7,14 @@ namespace Edge.Hyperion.UI.Components {
 		//TODO: How to handle popup finishing?
 		Popup _activePopup;
         public Boolean _isActive = true;
+        protected Camera2D cam;
 
 		public Screen(Game game) : base(game) {
+            cam = new Camera2D(Vector2.Zero);
 		}
 
 		public override void Update(GameTime gameTime) {
+            that.viewMatrix = cam.ViewMatrix;
 			base.Update(gameTime);
 		}
 

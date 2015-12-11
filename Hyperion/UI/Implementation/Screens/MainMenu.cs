@@ -27,7 +27,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		public override void Initialize() {
 			that.Components.Add(btnPlay);
             that.Components.Add(btnExit);
-            that.viewMatrix = cam.ViewMatrix;
 			base.Initialize();
 		}
 
