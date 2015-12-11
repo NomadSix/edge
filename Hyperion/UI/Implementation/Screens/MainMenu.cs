@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Edge.Hyperion.UI.Components;
 using Edge.Hyperion.UI.Implementation.Popups;
 using Microsoft.Xna.Framework;
@@ -10,23 +11,29 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 	public class MainMenu:Screen {
 		//The main menu, handles interactions with maestro
 		//For now just a demo for ui componets
-		Button btnPlay;
-		Button btnExit;
+        List<Button> btnList = new List<Button>();
 		Texture2D backGround;
         float buttonScale = .2f;
 
 		public MainMenu(Game game) : base(game) {
-			btnPlay = new Button(that, this, new Rectangle(that.GraphicsDevice.Viewport.Width / 2 - (int)(that.GraphicsDevice.Viewport.Width * buttonScale) / 2, 10, (int)(that.GraphicsDevice.Viewport.Width * buttonScale), 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Play", () => {
+            btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Home", () => {
                 that.SetScreen(new Splash(that));
-            });
-            //btnExit = new Button(that, this, new Rectangle(that.GraphicsDevice.Viewport.Width * 1/2 - (int)(that.GraphicsDevice.Viewport.Width * buttonScale/10), 0, (int)(that.GraphicsDevice.Viewport.Width * buttonScale), 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.test], "Alert", () => {
-            //    that.Exit();
-            //});
+            }));
+			btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Play", () => {
+                that.SetScreen(new Splash(that));
+            }));
+            btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Hats", () => {
+                that.SetScreen(new Splash(that));
+            }));
+            btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Quit", () => {
+                that.SetScreen(new Splash(that));
+            }));
 		}
 
 		public override void Initialize() {
-			that.Components.Add(btnPlay);
-            that.Components.Add(btnExit);
+            foreach(var btn in btnList){
+                that.Components.Add(btn);
+            }
 			base.Initialize();
 		}
 
