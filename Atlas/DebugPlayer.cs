@@ -8,6 +8,7 @@ namespace Edge.Atlas.DebugCode {
 		public Single Velocity;
 		public Int64 NetID;
         public Vector2 MoveVector;
+        public Boolean Jump;
 		public DebugPlayer(Int64 netid){
 			NetID = netid;
 		}

@@ -4,6 +4,7 @@ namespace Edge.NetCommon {
 	public enum AtlasPackets:int {
 		#region
 		RequestPositionChange,
+        RequestJumpChange,
 		UpdatePositions,
         FirstID
 		#endregion

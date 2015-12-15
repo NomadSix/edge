@@ -18,6 +18,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		Texture2D pixel, backGround, artDebug;
 		NetClient atlasClient;
 		String Port, Address;
+        Boolean jumping;
 
 		List<DebugPlayer> players = new List<DebugPlayer>();
 
@@ -56,10 +57,15 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			else if(that.kb.IsButtonDown(Keys.C)) {
 				cam.Zoom = 1f;
 			}
+            if (that.kb.IsButtonDown(Keys.Space)) {
+                NetOutgoingMessage outMsg = atlasClient.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.RequestJumpChange);
+                atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
+            }
 
 			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Right)) {
 				NetOutgoingMessage outMsg = atlasClient.CreateMessage();
-				outMsg.Write((byte)AtlasPackets.RequestPositionChange);
+                outMsg.Write((byte)AtlasPackets.RequestPositionChange);
 				var mouseNormal = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
 				outMsg.Write((UInt16)mouseNormal.X);
 				outMsg.Write((UInt16)mouseNormal.Y);

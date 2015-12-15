@@ -71,13 +71,16 @@ namespace Edge.Atlas {
 				while((inMsg = server.ReadMessage()) != null) {
 					switch(inMsg.MessageType) {
 						case NetIncomingMessageType.Data:
-							switch((AtlasPackets)inMsg.ReadByte()) {
-								case AtlasPackets.RequestPositionChange:
-									UInt16 x = inMsg.ReadUInt16();
-									UInt16 y = inMsg.ReadUInt16();
-									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
-									break;
+							 switch((AtlasPackets)inMsg.ReadByte()) {
+                                 case AtlasPackets.RequestPositionChange:
+                                     UInt16 x = inMsg.ReadUInt16();
+                                     UInt16 y = inMsg.ReadUInt16();
+                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
+                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
+                                     break;
+                                case AtlasPackets.RequestJumpChange:
+                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].Jump = true;
+                                    break;
 							}
 							break;
 						case NetIncomingMessageType.StatusChanged:

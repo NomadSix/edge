@@ -20,7 +20,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
         public override void Update(GameTime gameTime) {
 			if(scale < .25f) {
-				scale += .001f;
+				scale += .01f;
 			}
 			else {
 				that.SetScreen(new Gameplay(that, ConfigurationManager.AppSettings["DebugAtlasAddress"], ConfigurationManager.AppSettings["DebugAtlasPort"]));
