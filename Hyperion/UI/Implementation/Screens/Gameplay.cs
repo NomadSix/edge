@@ -105,10 +105,10 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
         public override void Draw(GameTime gameTime) {
-            that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
+            that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
 			foreach(var p in players) {
 				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
-				that.spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), n, SpriteEffects.None, 0);
+				that.spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(2f), n, SpriteEffects.None, 0);
 			}
 			base.Draw(gameTime);
 		}

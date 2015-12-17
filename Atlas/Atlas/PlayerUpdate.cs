@@ -13,8 +13,15 @@ namespace Edge.Atlas {
 		/// </summary>
 		/// <param name="player">The player to update</param>
 		void PlayerUpdate(DebugPlayer player) {
-			DebugMove(player);
+
             //Gravity(player);
+            if (player.Position.Y <= 547) {
+                DebugMove(player);
+            }
+            else {
+                player.Position.Y = 547;
+                player.MovingTo = new Vector2(-1, -1);
+            }
 		}
 		/// <summary>
 		/// Execute the movement logic for the player
@@ -33,9 +40,13 @@ namespace Edge.Atlas {
             float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
 			//Simplified version of sin(arctan(a/b))
 			float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
-			player.Position += new Vector2(x, y);
+            if (player.Position.Y + y <= 547 && player.Position.Y + y >= 0 && player.Position.X + x <= 500)
+			    player.Position += new Vector2(x, y);
 		}
 
+        void Gravity(DebugPlayer player) {
+            player.Position += new Vector2(0, 5);
+        }
 
 		void MoveLogic(){
 			/*
