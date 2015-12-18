@@ -7,11 +7,12 @@ namespace Edge.Hyperion.UI.Components {
 	public class Button:UIComponent {
 		Boolean _hovering;
         Screen _screen;
-		readonly Rectangle _location;
+        Vector2 _textLocation;
+		internal Rectangle _location;
 		readonly ButtonStyle _style;
 		readonly ButtonAction _action;
 		readonly String _text;
-		readonly Vector2 _textLocation;
+        readonly Vector2 _measurements;
 
 		public delegate void ButtonAction();
 
@@ -21,14 +22,15 @@ namespace Edge.Hyperion.UI.Components {
 			_style = style;
 			_text = text;
             _screen = screen;
-			Vector2 measurements = _style.Font.MeasureString(_text);
-			_textLocation = new Vector2(_location.Width / 2f - measurements.X / 2f + location.X, _location.Height / 2f - measurements.Y / 2f + location.Y);
+            _measurements = _style.Font.MeasureString(_text);
 		}
 
 		public override void Update(GameTime gameTime) {
 			_hovering = _location.Contains(that.mouse.Location);
 			if(_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
-				_action();
+                _action();
+            // I know this is bad but i dont want to think of how to make it better just took act
+            _textLocation = new Vector2(_location.Width / 2f - _measurements.X / 2f + _location.X, _location.Height / 2f - _measurements.Y / 2f + _location.Y);
 			base.Update(gameTime);
 		}
 
@@ -40,8 +42,7 @@ namespace Edge.Hyperion.UI.Components {
 
 		public class ButtonStyle {
 			public enum ButtonStyles : byte {
-				basic,
-                lessbasic
+				basic
 			}
 
 			public Texture2D Base, Hover;

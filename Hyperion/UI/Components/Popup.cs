@@ -14,6 +14,11 @@ namespace Edge.Hyperion.UI.Components {
 			Height = height;
 		}
 
+        public Popup(Game game, Vector2 location)
+            : base(game) {
+            Location = location;
+        }
+
         protected override void LoadContent() {
             backGround = that.Content.Load<Texture2D>(@"../Images/Grey.png");
             base.LoadContent();

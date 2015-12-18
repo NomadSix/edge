@@ -41,7 +41,7 @@ namespace Edge.Hyperion {
 
 		protected override void Initialize() {
 			#region Window
-			graphics.PreferredBackBufferWidth = 1280;
+			graphics.PreferredBackBufferWidth = 1270;
 			graphics.PreferredBackBufferHeight = 720;
             graphics.ApplyChanges();
 			IsMouseVisible = true;
@@ -52,8 +52,8 @@ namespace Edge.Hyperion {
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
-            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Button/Greybutton.png"), Content.Load<SpriteFont>(@"../Font/Helvetica"), Color.LightGray, Color.Gray, Color.White));
-			this.SetScreen(new Splash(this));
+            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Button/button.png"), Content.Load<SpriteFont>(@"../Font/Helvetica"), Color.LightGray, Color.Gray, Color.LightGray));
+			this.SetScreen(new MainMenu(this));
 			#endregion
 			#region Maestro Configuration
 			//var maestroConfig = new NetPeerConfiguration("Maestro");
@@ -81,7 +81,7 @@ namespace Edge.Hyperion {
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.White);
-			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointWrap, null, null, null, viewMatrix);
+			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
 			base.Draw(gameTime);
 			spriteBatch.End();
 		}

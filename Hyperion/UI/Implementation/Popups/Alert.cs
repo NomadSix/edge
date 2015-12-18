@@ -8,10 +8,12 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
 	class Alert:Popup {
         Button btnOk;
         Screen Screen;
+
 		public Alert(Game game, Screen screen, Vector2 location, Int32 width, Int32 height) 
             : base(game, location, width, height) {
                 Screen = screen;
 		}
+
         public override void Initialize() {
             btnOk = new Button(that, this, new Rectangle(100, 150, 100, 50), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "OK", () => {
                 Screen._isActive = true;
@@ -21,9 +23,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             that.Components.Add(btnOk);
  	        base.Initialize();
         }
-        protected override void LoadContent() {
-            base.LoadContent();
-        }
+
         public override void Draw(GameTime gameTime) {
             that.spriteBatch.Draw(backGround, new Vector2(100, 75), null, new Color(50, 50, 50, 100), 0f, Vector2.Zero, new Vector2(100, 100), SpriteEffects.None, 0f);
             base.Draw(gameTime);

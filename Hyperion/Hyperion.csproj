@@ -55,6 +55,7 @@
     <Compile Include="UI\Components\Slider.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
+    <Compile Include="UI\Implementation\Popups\Panel\MenuStrip.cs" />
     <Compile Include="UI\Implementation\Popups\PauseMenu.cs" />
     <Compile Include="UI\Implementation\Screens\Gameplay.cs" />
     <Compile Include="UI\Implementation\Screens\Loading.cs" />
@@ -92,6 +93,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Basic_Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Button\button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Button\Greybutton.png">

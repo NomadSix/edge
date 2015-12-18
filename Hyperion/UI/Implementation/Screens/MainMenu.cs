@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Edge.Hyperion.UI.Components;
 using Edge.Hyperion.UI.Implementation.Popups;
+using Edge.Hyperion.UI.Implementation.Popups.Panel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
@@ -12,8 +13,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		//The main menu, handles interactions with maestro
 		//For now just a demo for ui componets
         List<Button> btnList = new List<Button>();
+        List<Popup> popList = new List<Popup>();
 		Texture2D backGround;
-        float buttonScale = .2f;
 
 		public MainMenu(Game game) : base(game) {
             btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Home", () => {
@@ -31,10 +32,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Initialize() {
-            foreach(var btn in btnList){
-                that.Components.Add(btn);
-            }
-			base.Initialize();
+            that.Components.Add(new MenuStrip(that, this, Vector2.Zero, btnList));
+            base.Initialize();
 		}
 
 		protected override void LoadContent() {
