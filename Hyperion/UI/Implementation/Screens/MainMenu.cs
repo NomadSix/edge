@@ -27,7 +27,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 that.SetScreen(new Splash(that));
             }));
             btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Quit", () => {
-                that.SetScreen(new Splash(that));
+                that.Exit();
             }));
 		}
 

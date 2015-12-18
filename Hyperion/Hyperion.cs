@@ -53,7 +53,7 @@ namespace Edge.Hyperion {
 			mouse = new Mouse(this);
 			Components.Add(mouse);
             AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Button/button.png"), Content.Load<SpriteFont>(@"../Font/Helvetica"), Color.LightGray, Color.Gray, Color.LightGray));
-			this.SetScreen(new MainMenu(this));
+			this.SetScreen(new Opening(this, Content.Load<Texture2D>(@"../Images/Logo.png")));
 			#endregion
 			#region Maestro Configuration
 			//var maestroConfig = new NetPeerConfiguration("Maestro");
@@ -80,7 +80,7 @@ namespace Edge.Hyperion {
 		}
 
 		protected override void Draw(GameTime gameTime) {
-			GraphicsDevice.Clear(Color.White);
+			GraphicsDevice.Clear(new Color(53,68,81));
 			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
 			base.Draw(gameTime);
 			spriteBatch.End();

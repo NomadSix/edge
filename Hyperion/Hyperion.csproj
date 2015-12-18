@@ -60,6 +60,7 @@
     <Compile Include="UI\Implementation\Screens\Gameplay.cs" />
     <Compile Include="UI\Implementation\Screens\Loading.cs" />
     <Compile Include="UI\Implementation\Screens\MainMenu.cs" />
+    <Compile Include="UI\Implementation\Screens\Opening.cs" />
     <Compile Include="UI\Implementation\Screens\PostGame.cs" />
     <Compile Include="UI\Implementation\Screens\Splash.cs" />
     <Compile Include="Backing\AssetStore.cs" />
@@ -76,6 +77,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="app.config" />
     <Content Include="Font\Helvetica.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
