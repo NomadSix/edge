@@ -157,5 +157,9 @@ namespace Edge.Hyperion.Input {
 		public Boolean IsButtonUp(Keys test) {
 			return current.IsKeyUp(test);
 		}
+
+	    public Boolean IsAnyKeyDown() {
+	        return current.GetPressedKeys().Length > 0;
+	    }
 	}
 }

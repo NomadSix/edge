@@ -6,7 +6,7 @@ namespace Edge.NetCommon {
 		RequestPositionChange,
         RequestJumpChange,
 		UpdatePositions,
-        FirstID
+        UpdateName
 		#endregion
 
 		#region Server to Client

@@ -25,7 +25,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
         }
 
         public override void Draw(GameTime gameTime) {
-            that.spriteBatch.Draw(backGround, new Vector2(100, 75), null, new Color(50, 50, 50, 100), 0f, Vector2.Zero, new Vector2(100, 100), SpriteEffects.None, 0f);
+            that.batch.Draw(backGround, new Vector2(100, 75), null, new Color(50, 50, 50, 100), 0f, Vector2.Zero, new Vector2(100, 100), SpriteEffects.None, 0f);
             base.Draw(gameTime);
         }
 	}

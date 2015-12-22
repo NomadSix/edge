@@ -9,9 +9,11 @@ namespace Edge.Hyperion.UI.Implementation.Popups.Panel {
     public class MenuStrip : Popup {
         Screen Screen;
         Single buttonScale = .61f;
+        private List<Button> btnList;
 
-        public MenuStrip(Game game, Screen screen, Vector2 location, List<Button> btnList) : base(game, location) {
+        public MenuStrip(Game game, Screen screen, Vector2 location, List<Button> BtnList) : base(game, location) {
             Screen = screen;
+            btnList = BtnList;
             this.Width = (int)(261 * buttonScale);
             this.Height = (int)(100 * buttonScale);
             btnList.Insert(0, new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "", () => { }));

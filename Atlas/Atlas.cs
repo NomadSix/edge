@@ -73,15 +73,13 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.Data:
 							 switch((AtlasPackets)inMsg.ReadByte()) {
                                  case AtlasPackets.RequestPositionChange:
-                                     UInt16 x = inMsg.ReadUInt16();
-                                     UInt16 y = inMsg.ReadUInt16();
-                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
-                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
+                                     Int16 X = inMsg.ReadInt16();
+                                     Int16 Y = inMsg.ReadInt16();
+							         String Name = inMsg.ReadString();
+                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(X, Y);
+							         players[inMsg.SenderConnection.RemoteUniqueIdentifier].Name = Name;
                                      break;
-                                case AtlasPackets.RequestJumpChange:
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].Jump = true;
-                                    break;
-							}
+							 }
 							break;
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
@@ -121,6 +119,7 @@ namespace Edge.Atlas {
 					outMsg.Write(p.NetID);
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
+                    outMsg.Write(p.Name);
 				}
 				/*
 				 * Okay I see what you're trying to do,

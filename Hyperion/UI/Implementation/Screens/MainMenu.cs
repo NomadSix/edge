@@ -37,7 +37,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		protected override void LoadContent() {
-			//backGround = that.Content.Load<Texture2D>(@"../");
 			base.LoadContent();
 		}
 
@@ -84,8 +83,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Draw(GameTime gameTime) {
-			//that.spriteBatch.Draw(backGround, that.bounds, Color.White);
-			base.Draw(gameTime);
+            base.Draw(gameTime);
 		}
 	}
 }

@@ -29,7 +29,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Draw(GameTime gameTime) {
-			that.spriteBatch.Draw(debugArt, Vector2.Zero, null, Color.White, 0f, new Vector2(0f), scale, SpriteEffects.None, 0f);
+			that.batch.Draw(debugArt, Vector2.Zero, null, Color.White, 0f, new Vector2(0f), scale, SpriteEffects.None, 0f);
 			base.Draw(gameTime);
 		}
 	}

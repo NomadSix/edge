@@ -20,14 +20,18 @@ namespace Edge.Hyperion {
 		}
 
 		GraphicsDeviceManager graphics;
-		internal SpriteBatch spriteBatch;
+		internal SpriteBatch batch;
+	    internal RenderTarget2D target;
 		internal Rectangle bounds;
 		//, maestroClient;
 		//, maestroConnection;
 		internal Keyboard kb;
 		internal Mouse mouse;
+	    internal SpriteFont Helvetica;
 
 		public Matrix viewMatrix;
+
+	    internal Color BackColor;
 
 		public Hyperion() {
 			graphics = new GraphicsDeviceManager(this);
@@ -41,18 +45,21 @@ namespace Edge.Hyperion {
 
 		protected override void Initialize() {
 			#region Window
-			graphics.PreferredBackBufferWidth = 1270;
-			graphics.PreferredBackBufferHeight = 720;
+			graphics.PreferredBackBufferWidth = 1024;
+			graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
 			IsMouseVisible = true;
 			#endregion
 			#region Component Configuration
-			spriteBatch = new SpriteBatch(this.GraphicsDevice);
+			batch = new SpriteBatch(this.GraphicsDevice);
+            target = new RenderTarget2D(GraphicsDevice, 320, 240);
+            GraphicsDevice.SetRenderTarget(target);
 			kb = new Keyboard(this);
 			Components.Add(kb);
 			mouse = new Mouse(this);
 			Components.Add(mouse);
-            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Button/button.png"), Content.Load<SpriteFont>(@"../Font/Helvetica"), Color.LightGray, Color.Gray, Color.LightGray));
+		    Helvetica = Content.Load<SpriteFont>(@"../Font/Helvetica");
+            AssetStore.ButtonTypes.Add(0, new Button.ButtonStyle(Content.Load<Texture2D>(@"../Images/Button/newbtn.jpg"), Helvetica, Color.LightGray, Color.Gray, Color.LightGray));
 			this.SetScreen(new Opening(this, Content.Load<Texture2D>(@"../Images/Logo.png")));
 			#endregion
 			#region Maestro Configuration
@@ -64,7 +71,8 @@ namespace Edge.Hyperion {
 			//send out discovery signal for local Maestro server
 			//maestroClient.DiscoverLocalPeers(2345);
 			#endregion
-            
+
+		    BackColor = new Color(60, 88, 111);
 			base.Initialize();
 		}
 
@@ -80,10 +88,12 @@ namespace Edge.Hyperion {
 		}
 
 		protected override void Draw(GameTime gameTime) {
-			GraphicsDevice.Clear(new Color(53,68,81));
-			spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
+            GraphicsDevice.Clear(BackColor);
+            GraphicsDevice.SetRenderTarget(null);
+            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
+            batch.Draw(target, new Rectangle(0, 0, GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height), Color.White);
 			base.Draw(gameTime);
-			spriteBatch.End();
+			batch.End();
 		}
 
 		void OnExit(object sender, EventArgs e) {

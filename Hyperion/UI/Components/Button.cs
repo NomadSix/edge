@@ -35,8 +35,8 @@ namespace Edge.Hyperion.UI.Components {
 		}
 
 		public override void Draw(GameTime gameTime) {
-			that.spriteBatch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
-			that.spriteBatch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
+			that.batch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
+			that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
 			base.Draw(gameTime);
 		}
 

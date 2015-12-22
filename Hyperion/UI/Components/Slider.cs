@@ -24,8 +24,8 @@ namespace Edge.Hyperion.UI.Components {
 		}
 
 		public override void Draw(GameTime gameTime) {
-			that.spriteBatch.Draw(_background, _position, Color.White);
-			that.spriteBatch.Draw(
+			that.batch.Draw(_background, _position, Color.White);
+			that.batch.Draw(
 				_knob,
 				new Rectangle(
 					(int)(_position.X + (_position.Width - _knob.Width) * Value),
