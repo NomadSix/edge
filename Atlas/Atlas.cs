@@ -121,21 +121,17 @@ namespace Edge.Atlas {
 					outMsg.Write(p.Position.Y);
                     outMsg.Write(p.Name);
 				}
-				/*
-				 * Okay I see what you're trying to do,
-				 * but the client and packet format in general are going to need
-				 * a lot of refactoring to expect a packet formatted like this.
-				 * 
-				 * Additionally, we should probably have some serious optimization in mind
-				 * when we're working on this new format, given that we're already going to be
-				 * sending packets really quickly, we don't need to be sending any unnecessary data.
-				 */
-//				foreach (var n in entities) {
-//					outMsg.Write(n.Position.X);
-//					outMsg.Write(n.Position.Y);
-//				}
-					
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+
+                outMsg = server.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.UpdateMoveVector);
+                outMsg.Write((UInt16)players.Count);
+			    foreach (var p in players.Values) {
+			        outMsg.Write(p.MoveVector.X);
+                    outMsg.Write(p.MoveVector.Y);
+			    }
+                server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+
 				lastUpdates = currentTime;
 				#endregion
 			}

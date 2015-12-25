@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 namespace Edge.Hyperion {
 	public class DebugPlayer {
 		public Vector2 Location;
+	    public Vector2 MoveVector;
 	    public String Name;
 		public Int64 NetID;
 

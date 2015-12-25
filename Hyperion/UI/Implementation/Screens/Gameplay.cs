@@ -18,14 +18,16 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		NetClient atlasClient;
 		String Port, Address;
         Vector2 MoveVector;
+	    Boolean isLeft;
+        Rectangle player;
 
 		List<DebugPlayer> players = new List<DebugPlayer>();
 
         Int32 currentFrame = 0;
-        const Int32 totalFrames = 2;
-        const Int32 framesPerRow = 2;
+        Int32 totalFrames = 0;
+        Int32 framesPerRow = 0;
         int timeSinceLastFrame = 0;
-        int millisecondsPerFrame = 100;
+        int millisecondsPerFrame = 200;
 
 		public Gameplay(Game game, String address, String port) : base(game) {
 			Address = address;
@@ -48,6 +50,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			pixel = new Texture2D(GraphicsDevice, 1, 1);
 			pixel.SetData<Color>(new[] { Color.White });
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
+		    totalFrames = artDebug.Width/32;
+		    framesPerRow = totalFrames;
 			backGround = that.Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
             base.LoadContent();
 		}
@@ -65,8 +69,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		        MoveVector.X = -1;
             } else if (that.kb.IsButtonDown(Keys.D) || that.kb.IsButtonDown(Keys.Right)) {
 		        MoveVector.X = 1;
-		    }
-		    else {
+		    } else {
 		        MoveVector.X = 0;
 		    }
 
@@ -74,18 +77,18 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		        MoveVector.Y = -1;
             } else if (that.kb.IsButtonDown(Keys.S) | that.kb.IsButtonDown(Keys.Down)) {
 		        MoveVector.Y = 1;
-		    }
-		    else {
+		    } else {
 		        MoveVector.Y = 0;
 		    }
 
-		    if (MoveVector.X != 0) {
-                timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-                if (timeSinceLastFrame > millisecondsPerFrame) {
-                    timeSinceLastFrame -= millisecondsPerFrame;
-                    currentFrame += 1;
-                }
+		    if (MoveVector != Vector2.Zero) {
+		        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+		        if (timeSinceLastFrame > millisecondsPerFrame) {
+		            timeSinceLastFrame -= millisecondsPerFrame;
+		            currentFrame += 1;
+		        }
 		    }
+
 
 			NetOutgoingMessage outMsg = atlasClient.CreateMessage();
             outMsg.Write((byte)AtlasPackets.RequestPositionChange);
@@ -93,7 +96,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
             outMsg.Write((Int16)MoveVector.Y);
             outMsg.Write(Environment.UserName);
 			atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
-			//move vector stuff here
+			
 			NetIncomingMessage inMsg;
 			while((inMsg = atlasClient.ReadMessage()) != null) {
 				switch(inMsg.MessageType) {
@@ -108,6 +111,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 								UInt16 numPlayers = inMsg.ReadUInt16();
 								for(UInt16 i = 0; i < numPlayers; i++)
 									players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadString()));
+                                break;
+                            case AtlasPackets.UpdateMoveVector:								
+                                numPlayers = inMsg.ReadUInt16();
+						        for (UInt16 i = 0; i < numPlayers; i++)
+						            players[i].MoveVector = new Vector2(inMsg.ReadSingle(), inMsg.ReadSingle());
                                 break;
 						}
 						break;
@@ -128,9 +136,15 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
         public override void Draw(GameTime gameTime) {
             that.batch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
 			foreach(var p in players) {
+			    if (p.MoveVector.X < 0) {
+			        isLeft = true;
+			    }
+			    else if (p.MoveVector.X > 0){
+			        isLeft = false;
+			    }
 				//Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
                 that.batch.DrawString(that.Helvetica, p.Name, new Vector2(p.Location.X - (that.Helvetica.MeasureString(Environment.UserName).X *.5f) / 4f, p.Location.Y - that.Helvetica.MeasureString(Environment.UserName).Y*.5f), Color.Black, 0f, Vector2.Zero, new Vector2(.5f), SpriteEffects.None, 0f);
-                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), Color.White, 0f, Vector2.Zero, new Vector2(2f), MoveVector.X < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), Color.White, 0f, Vector2.Zero, new Vector2(2f), isLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			}
 			base.Draw(gameTime);
 		}

@@ -5,16 +5,17 @@ namespace Edge.NetCommon {
 		#region
 		RequestPositionChange,
         RequestJumpChange,
+        RequestMoveVector,
+        UpdateMoveVector,
 		UpdatePositions,
-        UpdateName
+        UpdateName,
 		#endregion
 
 		#region Server to Client
-
+        SendChatMessage
 		#endregion
 
 		#region Client to Server
-
 		#endregion
 	}
 }
