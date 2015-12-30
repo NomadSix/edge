@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Screen:UIComponent {
@@ -10,7 +11,7 @@ namespace Edge.Hyperion.UI.Components {
         protected Camera2D cam;
 
 		public Screen(Game game) : base(game) {
-            cam = new Camera2D(Vector2.Zero);
+            cam = new Camera2D(Vector2.Zero, that.GraphicsDevice);
 		}
 
 		public override void Update(GameTime gameTime) {

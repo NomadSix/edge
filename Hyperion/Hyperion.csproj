@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugPlayer.cs" />
+    <Compile Include="DebugTower.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
     <Compile Include="Camera2D.cs" />

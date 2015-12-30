@@ -29,7 +29,7 @@ namespace Edge.Hyperion.UI.Components {
 			_hovering = _location.Contains(that.mouse.Location);
 			if(_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
                 _action();
-            // I know this is bad but i dont want to think of how to make it better just took act
+            // I know this is Bad but i dont want to think of how to make it better just took act
             _textLocation = new Vector2(_location.Width / 2f - _measurements.X / 2f + _location.X, _location.Height / 2f - _measurements.Y / 2f + _location.Y);
 			base.Update(gameTime);
 		}

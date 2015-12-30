@@ -5,6 +5,7 @@ using Edge.Hyperion.UI.Implementation.Popups;
 using Edge.Hyperion.UI.Implementation.Popups.Panel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 
 namespace Edge.Hyperion.UI.Implementation.Screens {
@@ -13,7 +14,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		//The main menu, handles interactions with maestro
 		//For now just a demo for ui componets
         List<Button> btnList = new List<Button>();
-        List<Popup> popList = new List<Popup>();
+	    private MenuStrip menuStrip;
 		Texture2D backGround;
 
 		public MainMenu(Game game) : base(game) {
@@ -32,7 +33,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Initialize() {
-            that.Components.Add(new MenuStrip(that, this, Vector2.Zero, btnList));
+		    menuStrip = new MenuStrip(that, this, Vector2.Zero, btnList);
+            that.Components.Add(menuStrip);
             base.Initialize();
 		}
 
@@ -41,6 +43,10 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Update(GameTime gameTime) {
+		    if (that.kb.IsButtonToggledDown(Keys.Enter))
+		        for (int i = 0; i < btnList.Count; i++) {
+		            that.Components.Remove(btnList[i]);
+		        }
       /*
       //Let's just keep This all in the right place... (might be changing it around later to use FlatBuffs, idk yet)
               if(kb.IsButtonToggledDown(Keys.S)){

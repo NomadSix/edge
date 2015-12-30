@@ -1,18 +1,20 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Edge.Atlas.DebugCode;
+using OpenTK.Graphics.OpenGL;
+using Boolean = System.Boolean;
 
 
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-        public Single maxVel = 5f;
-        public Single friction = 1f;
-	    private Boolean Jumping = false;
+        private Vector2 maxVel = new Vector2(5,15);
+	    private Boolean Jumping;
         private Int32 Floor = 473;
-	    private Int16 upcount;
-	    private Vector2 oldPositon;
-	    private Single maxA = 25;
+	    private Single bleedOff = 100.0f;
+	    private Single oldY;
+	    private Single gravity = 1f;
+	    private Single jumpForce;
 
 		/// <summary>
 		///  Updates a player
@@ -21,32 +23,54 @@ namespace Edge.Atlas {
 		void PlayerUpdate(DebugPlayer player) {
 
             //Gravity(player);
-            oldPositon = player.Position;
             DebugMove(player);
+            oldY = player.Position.Y;
             Jump(player);
+            //MoveTo(player, 200);
 		}
 		/// <summary>
 		/// Execute the movement logic for the player
 		/// Note: This is the old debug logic, and will likely be removed eventually
 		/// </summary>
 		/// <param name="player">Reference to the player this is being run on</param>
-		void DebugMove(DebugPlayer player){
-            player.Velocity = player.MoveVector.Y >= 0 ? new Vector2(maxVel * player.MoveVector.X, maxVel * player.MoveVector.Y) : player.Velocity;
+		void DebugMove(DebugPlayer player) {
+
+		    var dt = (currentTime - lastTime)/TimeSpan.TicksPerMillisecond;
+
+            if (player.MoveVector.Y >= 0)
+                player.Velocity.X = maxVel.X * player.MoveVector.X;
 		    //Gravity
-            player.Velocity.Y += (player.Position.Y + 1f * player.Weight) < Floor ? 1f * player.Weight : 0;
+            if (player.Position.Y + gravity * dt < Floor)
+                player.Velocity.Y += gravity * dt;
             //Movment
-            player.Position += (player.Velocity.Y + player.Position.Y) < Floor ? player.Velocity : Vector2.Zero;
-		    if (player.Position.Y >= Floor) player.Position.Y = Floor-1;
+            player.Position += player.Velocity * dt;
+
+		    if (player.Position.Y >= Floor) {
+		        player.Position.Y = Floor-1;
+		        player.Velocity.Y = 0;
+		    }
 		}
 
 	    void Jump(DebugPlayer player) {
-	        upcount++;
-            if (upcount == 1 && oldPositon.Y == player.Position.Y && player.Velocity.Y >= 0) {
-                player.Velocity.Y = -maxA;
+	        if (player.MoveVector.Y == -1 && player.Velocity.Y == 0) {
+	            player.Velocity.Y = -maxVel.Y;
 	        }
-	        else {
-	            upcount = 0;
-	        }
+	    }
+
+        void MoveTo(DebugPlayer player, Single movespeed) {
+            if (player.Position == player.MovingTo)
+                player.MovingTo = new Vector2(-1, -1);
+            if (player.MovingTo == new Vector2(-1, -1)) return; 
+            var deltaY = player.MovingTo.Y - player.Position.Y;
+            var deltaX2 = Math.Pow(player.MovingTo.X - player.Position.X, 2);
+            var deltaY2 = Math.Pow(deltaY, 2);
+            var deltaLen = (float)Math.Sqrt(deltaX2 + deltaY2);
+            //Simplified version of cos(arctan(a/b))float y = 0;
+            float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
+            //Simplified version of sin(arctan(a/b))
+            float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
+            player.Position += new Vector2(x, 0);
+             
 	    }
 
 		void MoveLogic(){

@@ -7,6 +7,7 @@ namespace Edge.Hyperion {
 			Location = new Vector2(x, y);
 		}
 
+	    public Single Health = 1;
 		public Vector2 Location;
 		public Vector2 Vector;
 	}
