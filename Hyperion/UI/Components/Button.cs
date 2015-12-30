@@ -34,10 +34,10 @@ namespace Edge.Hyperion.UI.Components {
 			base.Update(gameTime);
 		}
 
-		public override void Draw(GameTime gameTime) {
+        public override void Draw(GameTime gameTime) {
 			that.batch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
-			that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
-			base.Draw(gameTime);
+            that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour);
+            base.Draw(gameTime);
 		}
 
 		public class ButtonStyle {

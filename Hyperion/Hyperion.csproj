@@ -82,6 +82,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
+    <Compile Include="UI\Effects\Parallax\Effect.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
     <Compile Include="UI\Implementation\Popups\Panel\MenuStrip.cs" />
@@ -109,6 +110,18 @@
     <Content Include="Images\Button\newbtn.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\layers\back-trees.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\layers\front-trees.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\layers\lights.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\layers\middle-trees.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -126,6 +139,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Hyperion_TemporaryKey.pfx" />
+    <None Include="Images\layers\Thumbs.db" />
     <None Include="packages.config" />
     <None Include="UI\BIG-TODO-FILE.dat" />
     <None Include="OpenTK.dll.config" Condition="'$(OS)'=='Unix'" />

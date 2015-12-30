@@ -4,6 +4,7 @@ using System.Linq;
 using Edge.Hyperion.UI.Components;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics.Eventing;
 using Edge.Hyperion.Backing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -24,6 +25,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
 		List<DebugPlayer> players = new List<DebugPlayer>();
         List<DebugTower> towers = new List<DebugTower>();
+        List<Texture2D> background = new List<Texture2D>();
         Int32 currentFrame = 0;
         Int32 totalFrames = 0;
         Int32 framesPerRow = 0;
@@ -46,6 +48,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			#endregion
             towers.Add(new DebugTower(0, 500f, 400f, 0f, DebugTower.TowerStyle.Team.Good));
             towers.Add(new DebugTower(0, 2001f, 400f, 0f, DebugTower.TowerStyle.Team.Bad));
+
 			base.Initialize();
 		}
 
@@ -55,7 +58,13 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
 		    totalFrames = artDebug.Width/32;
 		    framesPerRow = totalFrames;
-			backGround = that.Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
+            backGround = that.Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
+            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\lights.png"));
+            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png"));
+            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png"));
+            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png"));
+
+            that.Components.Add(new Effects.Parallax(that, background));
             base.LoadContent();
 		}
          
@@ -140,6 +149,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
         public override void Draw(GameTime gameTime) {
             that.batch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
+            for (int i = 0; i < background.Count; i++) {
+                //Single ratio = ((4-i) / 8f);
+                //cam.Position.Y * -ratio + (400/(i+1))
+                that.batch.Draw(background[i], new Vector2(cam.Position.X, 0), null, Color.White, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
+            }
 			foreach(var p in players) {
 			    if (p.MoveVector.X < 0) {
 			        isLeft = true;

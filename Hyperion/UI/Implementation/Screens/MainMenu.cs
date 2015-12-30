@@ -39,14 +39,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		protected override void LoadContent() {
+		    backGround = that.Content.Load<Texture2D>(@"../Images/Basic_Background.png");
 			base.LoadContent();
 		}
 
 		public override void Update(GameTime gameTime) {
-		    if (that.kb.IsButtonToggledDown(Keys.Enter))
-		        for (int i = 0; i < btnList.Count; i++) {
-		            that.Components.Remove(btnList[i]);
-		        }
       /*
       //Let's just keep This all in the right place... (might be changing it around later to use FlatBuffs, idk yet)
               if(kb.IsButtonToggledDown(Keys.S)){
@@ -88,8 +85,9 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			base.Update(gameTime);
 		}
 
-		public override void Draw(GameTime gameTime) {
-            base.Draw(gameTime);
+        public override void Draw(GameTime gameTime) {
+            //that.batch.Draw(backGround, Vector2.Zero, Color.White);
+            //base.Draw(gameTime);
 		}
 	}
 }
