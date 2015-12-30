@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maestro", "Maestro\Maestro.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas", "Atlas\Atlas.csproj", "{F778B80C-A131-484D-8B4F-972D0B4389A7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NetCommon", "NetCommon\NetCommon.shproj", "{64E0933A-B3B4-49DB-8B81-F693EFF0E5FF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "Lidgren.Network\Lidgren.Network.csproj", "{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperion", "Hyperion\Hyperion.csproj", "{3D374D18-D595-4294-B182-1296C3725197}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{85E42396-BC46-46DF-8FE9-BC601E861E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCommon", "NetCommon\NetCommon.csproj", "{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +55,14 @@ Global
 		{85E42396-BC46-46DF-8FE9-BC601E861E70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{85E42396-BC46-46DF-8FE9-BC601E861E70}.Release|x86.ActiveCfg = Release|Any CPU
 		{85E42396-BC46-46DF-8FE9-BC601E861E70}.Release|x86.Build.0 = Release|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Debug|x86.Build.0 = Debug|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}.Release|x86.Build.0 = Release|Any CPU
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{F778B80C-A131-484D-8B4F-972D0B4389A7}.Debug|x86.ActiveCfg = Debug|x86

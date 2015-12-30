@@ -3,19 +3,19 @@ using System.Threading;
 using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
-using Edge.NetCommon;
-using Edge.Hyperion;
+using FlatBuffers;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
-using Edge.Atlas.DebugCode;
+using Edge.Atlas.Components;
+using Buffers = Edge.NetCommon.Atlas;
 
 namespace Edge.Atlas {
 	public partial class Atlas {
 		NetServer server;
 		public Boolean isExiting;
 		Boolean runningHeadless;
-		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
-		public List<Entity> entities = new List<Entity>();
+		public Dictionary<Int64,Entity> entities = new Dictionary<Int64,Entity>();
+		public List<Projectile> projectiles = new List<Projectile>();
 
 		public Int64 lastTime;
 		public Int64 currentTime = DateTime.UtcNow.Ticks;
@@ -30,7 +30,7 @@ namespace Edge.Atlas {
 				try {
 					new Atlas(Int32.Parse(args[0]), false).Run();
 				}
-				catch (Exception) {
+				catch(Exception) {
 					new Atlas(2348, false).Run();
 				}
 			else
@@ -64,6 +64,7 @@ namespace Edge.Atlas {
 			while(!isExiting) {
 				lastTime = currentTime;
 				currentTime = DateTime.UtcNow.Ticks;
+				var deltaTime = currentTime - lastTime;
 
 				if(currentTime - lastUpdates <= (TimeSpan.TicksPerSecond / 120)) continue;
 				#region Incoming messages
@@ -71,22 +72,46 @@ namespace Edge.Atlas {
 				while((inMsg = server.ReadMessage()) != null) {
 					switch(inMsg.MessageType) {
 						case NetIncomingMessageType.Data:
-							switch((AtlasPackets)inMsg.ReadByte()) {
-								case AtlasPackets.RequestPositionChange:
-									UInt16 x = inMsg.ReadUInt16();
-									UInt16 y = inMsg.ReadUInt16();
-									players[inMsg.SenderConnection.RemoteUniqueIdentifier].MovingTo = new Vector2(x, y);
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(x, y);
+							var buff = new ByteBuffer(inMsg.ReadBytes(inMsg.LengthBytes));
+							var packet = Buffers.Packet.GetRootAsPacket(buff);
+							switch(packet.DataType) {
+								case Buffers.PacketData.MoveEvent:
+									var moveEvent = new Buffers.MoveEvent();
+									packet.GetData<Buffers.MoveEvent>(moveEvent);
+
+									throw new Exception("Player Moved" + moveEvent.Delta.X + moveEvent.Delta.Y);
+									break;
+								case Buffers.PacketData.AbilityEvent:
+									var abilityEvent = new Buffers.AbilityEvent();
+									packet.GetData<Buffers.AbilityEvent>(abilityEvent);
+									string s = abilityEvent.Id.ToString();
+									switch(abilityEvent.TargetType) {
+										case Buffers.AbilityTarget.Vector2:
+											{
+												var target = new Buffers.Vector2();
+												abilityEvent.GetTarget<Buffers.Vector2>(target);
+												s = "Player abilitied" + target.X + target.Y;
+											}
+											break;
+										case Buffers.AbilityTarget.EntityReference:
+											{
+												var target = new Buffers.EntityReference();
+												abilityEvent.GetTarget<Buffers.EntityReference>(target);
+												s = "Player abilitied" + target.Id;
+											}
+											break;
+									}
+
+									throw new Exception(s);
 									break;
 							}
-							break;
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier));
-                                    break;
+									entities.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new HumanPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier));
+									break;
 								case NetConnectionStatus.Disconnected:
-									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
+									entities.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
 									break;
 							}
 							break;
@@ -105,34 +130,44 @@ namespace Edge.Atlas {
 				}
 				#endregion
 
-				//Parallel.ForEach(players.Values, PlayerUpdate);
-				foreach (var p in players)
-					PlayerUpdate(p.Value);
+				var fbb = new FlatBufferBuilder(1); //TODO: RESIZE THIS CLOSER TO WHAT IT ACTUALLY IS
+				var eo = new Offset<Buffers.Entity>[entities.Count];
 
-				#region Outgoing Updates
-				//TODO: Compute changed frames, keyframes, etc
-				NetOutgoingMessage outMsg = server.CreateMessage();
-				outMsg.Write((byte)AtlasPackets.UpdatePositions);
-				outMsg.Write((UInt16)players.Count);
-				foreach (var p in players.Values) {
-					outMsg.Write(p.NetID);
-					outMsg.Write(p.Position.X);
-					outMsg.Write(p.Position.Y);
+				for(int i = 0, count = entities.Values.Count; i < count; i++) {
+					Entity e = entities[entities.Keys[i]];
+					e.Update(deltaTime);
+					eo[i] = e.ToBuffer(fbb);
 				}
-				/*
-				 * Okay I see what you're trying to do,
-				 * but the client and packet format in general are going to need
-				 * a lot of refactoring to expect a packet formatted like this.
+				var po = new Offset<Buffers.Projectile>[projectiles.Count];
+				for(int i = 0, projectilesCount = projectiles.Count; i < projectilesCount; i++) {
+					var p = projectiles[i];
+					po[i] = p.ToBuffer(fbb);
+				}
+				var pulse = Buffers.EntityPulse.CreateEntityPulse(fbb, Buffers.EntityPulse.CreateEntitiesVector(fbb, eo.ToArray()), Buffers.EntityPulse.CreateProjectilesVector(fbb, po));
+				var finalOffset = Buffers.Packet.CreatePacket(fbb, Buffers.PacketData.EntityPulse, pulse.Value);
+				Buffers.Packet.FinishPacketBuffer(fbb, finalOffset);
+				#region Outgoing Updates
+				/*TODO: Compute changed frames, keyframes, etc
+				 * Right, what we could do for that is have a hashing dictionary that keeps track of a hash of each entry 
+				 * (GetHashCode or something idk)
 				 * 
-				 * Additionally, we should probably have some serious optimization in mind
-				 * when we're working on this new format, given that we're already going to be
-				 * sending packets really quickly, we don't need to be sending any unnecessary data.
+				 * and then only run the update method if they're different, 
+				 * 
+				 * but we'd either need to be able to deep clone the dictionary, 
+				 * or make it so we can have a deepish clone of just the hashes and IDs for stuff
+				 * which is prob the better solution tbh
 				 */
-//				foreach (var n in entities) {
-//					outMsg.Write(n.Position.X);
-//					outMsg.Write(n.Position.Y);
-//				}
-					
+				NetOutgoingMessage outMsg = server.CreateMessage();
+				/* AIGHT PEOPLE
+				 * HERE'S WHAT WE'RE GONNA DO
+				 * 
+				 * MAKE A FLATBUFFER (AN ENTITYPULSE TO BE SPECIFIC)
+				 * AND WE'RE GONNA SEND IT TO EVERYONE
+				 */
+				byte[] data;
+				using(var ms = new System.IO.MemoryStream(fbb.DataBuffer.Data, fbb.DataBuffer.Position, fbb.Offset))
+					data = ms.ToArray();
+				outMsg.Write(data);
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 				lastUpdates = currentTime;
 				#endregion
@@ -157,7 +192,7 @@ namespace Edge.Atlas {
 					//The command is anything that happens before the opening parenthesies
 					command = readLine.Substring(0, readLine.IndexOf('('));
 				}
-				catch (Exception) {
+				catch(Exception) {
 					//If there isn't an opening parenthesies, it's a parameterless command
 					command = readLine;
 				}
@@ -170,7 +205,7 @@ namespace Edge.Atlas {
 					//Try to split the arguments by commas
 					args = argStr.Split(',').ToList();
 				}
-				catch (Exception) {
+				catch(Exception) {
 					try {
 						//If the split failed, it ether had no arguments (do nothing)
 						//or had only one argument (add that argument)
@@ -185,7 +220,7 @@ namespace Edge.Atlas {
 				try {
 					Control(command, args);
 				}
-				catch (NotSupportedException e) {
+				catch(NotSupportedException e) {
 					Console.WriteLine(e.Message);
 				}
 			}
@@ -208,7 +243,7 @@ namespace Edge.Atlas {
 					Console.Clear();
 					break;
 				case "ID":
-					foreach (var p in players) {
+					foreach(var p in players) {
 						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})", p.Key, p.Value.Position.X, p.Value.Position.Y, p.Value.MovingTo.X, p.Value.MovingTo.Y);
 					}
 					break;
@@ -216,17 +251,18 @@ namespace Edge.Atlas {
 					if(args.Capacity > 0) {
 						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
 
-                    }
-                    break;
-                case "ENTS":
-                    foreach(var e in entities)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
-                    break;
+					}
+					break;
+				case "ENTS":
+					foreach(var e in entities)
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+					break;
 				case "PLAYERS":
-                    foreach(var e in players)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
-                    break;
-				case "MOVE": {
+					foreach(var e in players)
+						Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+					break;
+				case "MOVE":
+					{
 						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
 						Int64 ID = Int64.Parse(args[0]);

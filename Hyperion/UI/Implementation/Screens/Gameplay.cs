@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Edge.NetCommon;
+using Buffers = Edge.NetCommon.Atlas;
 using Lidgren.Network;
+using FlatBuffers;
 
 using Mouse = Edge.Hyperion.Input.Mouse;
 
@@ -16,7 +17,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		NetClient atlasClient;
 		String Port, Address;
 
-		List<DebugPlayer> players = new List<DebugPlayer>();
+		List<DebugPlayer> entities = new List<DebugPlayer>();
 
 		public Gameplay(Game game, String address, String port) : base(game) {
 			Address = address;
@@ -53,32 +54,35 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			else if(that.kb.IsButtonDown(Keys.C)) {
 				cam.Zoom = 1f;
 			}
-            that.viewMatrix = cam.ViewMatrix;
-
-			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Right)) {
-				NetOutgoingMessage outMsg = atlasClient.CreateMessage();
-				outMsg.Write((byte)AtlasPackets.RequestPositionChange);
-				var mouseNormal = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
-				outMsg.Write((UInt16)mouseNormal.X);
-				outMsg.Write((UInt16)mouseNormal.Y);
-				atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
-			}
+			that.viewMatrix = cam.ViewMatrix;
 			//move vector stuff here
 			NetIncomingMessage inMsg;
 			while((inMsg = atlasClient.ReadMessage()) != null) {
 				switch(inMsg.MessageType) {
 					case NetIncomingMessageType.Data:
-						switch((AtlasPackets)inMsg.ReadByte()) {
-						//Would this work? We need a way for the clients to know there own id's
-						//case AtlasPackets.FirstID:
-						//    NetID = inMsg.ReadInt64();
-						//    break;
-							case AtlasPackets.UpdatePositions:
-								players.Clear();
-
-								UInt16 numPlayers = inMsg.ReadUInt16();
-								for(UInt16 i = 0; i < numPlayers; i++)
-									players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle()));
+						var buff = new ByteBuffer(inMsg.ReadBytes(inMsg.LengthBytes));
+						var packet = Buffers.Packet.GetRootAsPacket(buff);
+						switch(packet.DataType) {
+							case Buffers.PacketData.EntityPulse:
+								var pulse = new Buffers.EntityPulse();
+								packet.GetData<Buffers.EntityPulse>(pulse);
+								for(int i = 0; i < pulse.EntitiesLength; i++) {
+									NetCommon.Atlas.Entity temp = pulse.GetEntities(i);
+									entities.Remove(entities.Find(x => x.NetID == temp.Id)); //TODO: WE GOTTA FIND SOMETHING BETTER THAN LINQ ITS SO SLOW. ALSO DELTAS AND STUFF
+									//TODO: Figure out how we really want to keep track of entities, then add them to the List from here
+								}
+								break;
+							case Buffers.PacketData.StatusEvent:
+								var statusEvent = new Buffers.StatusEvent();
+								packet.GetData<Buffers.StatusEvent>(statusEvent);
+								switch(statusEvent.Id) {
+									case Buffers.Events.PlayerDisconnect:
+										//Notify user of teammate disconnecting or whatever
+										break;
+									case Buffers.Events.PlayerReconnect:
+										//Notify user or something
+										break;
+								}
 								break;
 						}
 						break;
@@ -92,8 +96,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		public override void Draw(GameTime gameTime) {
-			foreach(var p in players) {
-				that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
+			that.spriteBatch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.25f), Color.White, SpriteEffects.None, 0);
+			foreach(var p in entities) {
 				Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
 				that.spriteBatch.Draw(artDebug, p.Location, null, null, null, 0f, new Vector2(1, 1), n, SpriteEffects.None, 0);
 			}

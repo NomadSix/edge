@@ -1,0 +1,122 @@
+namespace Edge.NetCommon.Atlas;
+
+///Types of Packets we're going to be transmitting
+union PacketData { StatusEvent, EntityPulse, MoveEvent, AbilityEvent }
+///The target of an ability
+union AbilityTarget{Vector2,EntityReference}
+
+///Ability Slots
+enum AbilitySlots:byte {Ability1,Ability2,Ability3,Ability4,Summ1,Summ2}
+///All buffs or debuffs
+enum Buffs:ushort {TestHeal, TestDOT}
+///All items in the game
+enum Items:ushort {DebugStrengthItem, DebugDurabilityItem, DebugIntelligenceItem, DebugAgilityItem}
+///Models to be applied to entities
+enum Models:ushort {DebugModel}
+///StatusEvents that can happen
+enum Events:byte {PlayerDisconnect, PlayerReconnect}
+
+///The base type for all data being transmitted
+table Packet {
+	data:PacketData (required);
+}
+///A 2 Dimentional Vector
+table Vector2 {
+	///X Component of the Vector
+	x:float;
+	///Y Component of the Vector
+	y:float;
+}
+///Represents a player Ability's status
+table AbilityStatus {
+	///The ability slot being referred to (client can determine ability details from model and slot)
+	id:AbilitySlots;
+	///The current cooldown of this ability (in seconds)
+	///-1 for when the use of the ability was not seen
+	cooldown:float;
+}
+///A buff (or debuff) that gets applied to an entity
+table Buff {
+	///The buff being applied
+	id:Buffs;
+	///The amount of time left until the buff runs out.
+	///-1 for permanant buffs
+	duration:float;
+}
+///An item (to modify stats outside champion level)
+table Item {
+	///Item ID
+	id:Items;
+	///Count of the item (for stackables)
+	count:byte;
+	///Optionally, cooldown remaining for the activatable portion of an item
+	cooldown:float;
+}
+///A reference to an entity (mainly so we can put it into the union)
+table EntityReference {
+	///The entity's ID
+	id:long;
+}
+///Anything that exists in the game
+///Players, Minions, turrets
+table Entity {
+	///The ID of an entity (the RemoteUniqueID in the case of Players)
+	id:long;
+	///The model being used on this entity
+	model:Models;
+	///The entity's Hit Points
+	hp:uint;
+	///The entity's amount of resource (mana or energy or whatever)
+	resource:uint;
+	///The level of the entity (for stats)
+	level:byte;
+	///The entity's current location
+	location:Vector2;
+	///The point that the entity is moving towards (in the case of a minion), or facing (all other entities)
+	target:Vector2;
+	///Any buffs (or debuffs) currently on the entity
+	buffs:[Buff];
+	///The state of the entity's abilities
+	abilities:[AbilityStatus];
+	///The entity's inventory
+	inventory:[Item];
+}
+///This says projectile, but it really refers to any sort of ability result
+///Line missile, or AOE effect
+table Projectile {
+	///Position of 'projectile'
+	position:Vector2;
+	///Effect used to render it
+	effect:ushort;
+}
+///The main thing the server is going to send
+///Contains entity changes (or a keyframe with all current data)
+///And a the projectiles this player knows about
+table EntityPulse {
+	///[Changed] entities the player knows about
+	entities:[Entity];
+	///[Changed] ability results that the player can see
+	projectiles:[Projectile];
+}
+///An event that's not covered by EntityPulses
+///IE: Player/Turret Deaths, Disconnect/Reconnects
+table StatusEvent {
+	id:Events;
+	message:string;
+}
+
+///Requests the server to move the player
+table MoveEvent {
+	///The X and Y amounts being pushed by the controller
+	delta:Vector2 (required);
+}
+///Requests the server to fire an Ability
+table AbilityEvent {
+	///Ability to be fired (like, QWERDF slot)
+	id:AbilitySlots;
+	///Target of the Ability (can use either targeting reguardless of the ability's targeting)
+	///Targeted abilities will use the closest Player to a point when given a Vector2
+	///Point targeted abilities will target the location of a player when given an EntityReference
+	target:AbilityTarget (required);
+}
+root_type Packet;

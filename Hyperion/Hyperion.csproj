@@ -28,7 +28,6 @@
     <ConsolePause>false</ConsolePause>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
-  <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="System" />
@@ -41,6 +40,9 @@
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="FlatBuffers">
+      <HintPath>..\packages\FlatBuffers\FlatBuffers.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +72,10 @@
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
       <Name>Lidgren.Network</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetCommon\NetCommon.csproj">
+      <Project>{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}</Project>
+      <Name>NetCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -81,8 +87,8 @@
     </Content>
     <None Include="packages.config" />
     <None Include="UI\BIG-TODO-FILE.dat" />
-    <None Include="OpenTK.dll.config" />
-    <None Include="Tao.Sdl.dll.config" />
+    <None Include="OpenTK.dll.config" Condition="'$(OS)'=='Unix'" />
+    <None Include="Tao.Sdl.dll.config" Condition="'$(OS)'=='Unix'" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\base.png">

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BBB3EE7D-7595-4CD2-9CC7-25B36085A7E7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Edge.NetCommon</RootNamespace>
+    <AssemblyName>NetCommon</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="FlatBuffers">
+      <HintPath>..\packages\FlatBuffers\FlatBuffers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Atlas\AbilityEvent.cs" />
+    <Compile Include="Atlas\AbilitySlots.cs" />
+    <Compile Include="Atlas\AbilityStatus.cs" />
+    <Compile Include="Atlas\AbilityTarget.cs" />
+    <Compile Include="Atlas\Buff.cs" />
+    <Compile Include="Atlas\Buffs.cs" />
+    <Compile Include="Atlas\Entity.cs" />
+    <Compile Include="Atlas\EntityPulse.cs" />
+    <Compile Include="Atlas\EntityReference.cs" />
+    <Compile Include="Atlas\Events.cs" />
+    <Compile Include="Atlas\Item.cs" />
+    <Compile Include="Atlas\Items.cs" />
+    <Compile Include="Atlas\Models.cs" />
+    <Compile Include="Atlas\MoveEvent.cs" />
+    <Compile Include="Atlas\Packet.cs" />
+    <Compile Include="Atlas\PacketData.cs" />
+    <Compile Include="Atlas\Projectile.cs" />
+    <Compile Include="Atlas\StatusEvent.cs" />
+    <Compile Include="Atlas\Vector2.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Atlas\" />
+  </ItemGroup>
+</Project>
