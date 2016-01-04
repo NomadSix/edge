@@ -1,22 +1,18 @@
 ﻿using System;
-using System.CodeDom;
 using System.Linq;
 using Edge.Hyperion.UI.Components;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics.Eventing;
 using Edge.Hyperion.Backing;
+using Edge.Hyperion.UI.Effects.Parallax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.NetCommon;
 using Lidgren.Network;
 
-using Mouse = Edge.Hyperion.Input.Mouse;
-
 namespace Edge.Hyperion.UI.Implementation.Screens {
 	public class Gameplay:Screen {
-		Texture2D pixel, backGround, artDebug;
+		Texture2D pixel, artDebug;
 		NetClient atlasClient;
 		String Port, Address;
         Vector2 MoveVector;
@@ -25,7 +21,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
 		List<DebugPlayer> players = new List<DebugPlayer>();
         List<DebugTower> towers = new List<DebugTower>();
-        List<Texture2D> background = new List<Texture2D>();
+        List<Layer> Backgrounds = new List<Layer>();
         Int32 currentFrame = 0;
         Int32 totalFrames = 0;
         Int32 framesPerRow = 0;
@@ -58,13 +54,21 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
 		    totalFrames = artDebug.Width/32;
 		    framesPerRow = totalFrames;
-            backGround = that.Content.Load<Texture2D>(@"..\Images\Basic_Background.png");
-            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\lights.png"));
-            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png"));
-            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png"));
-            background.Add(that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png"));
-
-            that.Components.Add(new Effects.Parallax(that, background));
+            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\lights.png"), new Vector2(30, 30), 2f));
+            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png"), new Vector2(50, 50), 3f));
+            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png"), new Vector2(70, 70), 4f));
+            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png"), new Vector2(90, 90), 5f));
+		    Backgrounds = new List<Layer> {
+		        new Layer(that, cam) { Parallax = new Vector2(0.0f, 1f) },
+                new Layer(that, cam) { Parallax = new Vector2(0.25f, 1f) },
+                new Layer(that, cam) { Parallax = new Vector2(0.5f, 1f) },
+                new Layer(that, cam) { Parallax = new Vector2(1.0f, 1f) }
+		    };
+            Backgrounds[0].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\lights.png") });
+            Backgrounds[1].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png") });
+            Backgrounds[2].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png") });
+            Backgrounds[3].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png") });
+            //that.Components.Add(new Effects.Parallax(that, background));
             base.LoadContent();
 		}
          
@@ -98,7 +102,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		            currentFrame += 1;
 		        }
 		    }
-
 
 			NetOutgoingMessage outMsg = atlasClient.CreateMessage();
             outMsg.Write((byte)AtlasPackets.RequestPositionChange);
@@ -148,12 +151,13 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
         public override void Draw(GameTime gameTime) {
-            that.batch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
-            for (int i = 0; i < background.Count; i++) {
-                //Single ratio = ((4-i) / 8f);
-                //cam.Position.Y * -ratio + (400/(i+1))
-                that.batch.Draw(background[i], new Vector2(cam.Position.X, 0), null, Color.White, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
+            
+            #region background
+            //that.batch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
+            foreach (var background in Backgrounds) {
+                background.Draw(that.batch);
             }
+            #endregion
 			foreach(var p in players) {
 			    if (p.MoveVector.X < 0) {
 			        isLeft = true;
@@ -170,11 +174,10 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 that.batch.Draw(AssetStore.Pixel, new Rectangle((int)p.Location.X, (int)p.Location.Y-20, (int)(artDebug.Width*p.Health), 20), Color.Green);
                 }
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
-                var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width/2, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height/2), cam.ViewMatrix);
+                var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width/2f, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height/2f), cam.ViewMatrix);
                 var dirrection = player.Location - mouse;
                 that.batch.Draw(artDebug, playerArm, null, Color.White, (float) ((Math.Atan2(dirrection.Y, dirrection.X)) + .5*Math.PI), Vector2.Zero, SpriteEffects.None, 0f);
-                that.batch.DrawString(that.Helvetica, mouse.ToString(), new Vector2(player.Location.X, player.Location.Y - 60), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-                that.batch.DrawString(that.Helvetica, player.Location.ToString(), new Vector2(player.Location.X, player.Location.Y - 80), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+                that.batch.DrawString(that.Helvetica, mouse.ToString() + Environment.NewLine + player.Location.ToString() + Environment.NewLine + dirrection.ToString(), new Vector2(player.Location.X, player.Location.Y - 60), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
             }
             foreach (var tower in towers) {
                 var scale = 5f;
