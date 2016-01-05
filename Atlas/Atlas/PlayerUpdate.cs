@@ -69,8 +69,7 @@ namespace Edge.Atlas {
             float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
             //Simplified version of sin(arctan(a/b))
             float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
-            player.Position += new Vector2(x, 0);
-             
+            player.Position += new Vector2(x, y);
 	    }
 
 		void MoveLogic(){
