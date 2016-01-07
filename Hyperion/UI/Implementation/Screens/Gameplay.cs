@@ -158,18 +158,20 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 background.Draw(that.batch);
             }
             #endregion
-			foreach(var p in players) {
-			    if (p.MoveVector.X < 0) {
+            foreach (var p in players) {
+                var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width / 2f, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height / 2f), cam.ViewMatrix);
+
+                if (mouse.X < p.Location.X) {
 			        isLeft = true;
 			    }
-			    else if (p.MoveVector.X > 0){
+                else if (mouse.X > p.Location.X) {
 			        isLeft = false;
 			    }
                 playerArm = new Rectangle(p.Location.ToPoint(), new Point(32));
 			    playerArm.X += playerArm.Width/2;
 			    playerArm.Y += playerArm.Height/2;
 				//Color n = new Color((int)Math.Abs(p.NetID % 255), (int)Math.Abs(p.NetID % 254), (int)Math.Abs(p.NetID % 253), 255);
-                that.batch.DrawString(that.Helvetica, p.Name, new Vector2(p.Location.X - (that.Helvetica.MeasureString(Environment.UserName).X *.5f) / 4f, p.Location.Y - that.Helvetica.MeasureString(Environment.UserName).Y*.5f-20), Color.Black, 0f, Vector2.Zero, new Vector2(.5f), SpriteEffects.None, 0f);
+                //that.batch.DrawString(that.Helvetica, p.Name, new Vector2(p.Location.X - (that.Helvetica.MeasureString(Environment.UserName).X *.5f) / 4f, p.Location.Y - that.Helvetica.MeasureString(Environment.UserName).Y*.5f-20), Color.Black, 0f, Vector2.Zero, new Vector2(.5f), SpriteEffects.None, 0f);
                 that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), Color.White, 0f, Vector2.Zero, new Vector2(1f), isLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
                 that.batch.Draw(AssetStore.Pixel, new Rectangle((int)p.Location.X, (int)p.Location.Y-20, (int)(artDebug.Width*p.Health), 20), Color.Green);
                 }
@@ -177,8 +179,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width/2f, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height/2f), cam.ViewMatrix);
                 var dirrection = player.Location - mouse;
                 var art = that.Content.Load<Texture2D>(@"..\Images\MageArms.png");
-                that.batch.Draw(art, playerArm, null, Color.White, (float)((Math.Atan2(dirrection.Y, dirrection.X)) + Math.PI), new Vector2(art.Width/2, art.Height/2), isLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-                that.batch.DrawString(that.Helvetica, mouse.ToString() + Environment.NewLine + player.Location.ToString() + Environment.NewLine + dirrection.ToString(), new Vector2(player.Location.X, player.Location.Y - 60), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+                that.batch.Draw(art, playerArm, null, Color.White, (float)((Math.Atan2(dirrection.Y, dirrection.X)) + 2 * Math.PI), new Vector2(art.Width/2, art.Height/2), isLeft ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                that.batch.DrawString(that.Helvetica, mouse.ToString() + Environment.NewLine + player.Location.ToString() + Environment.NewLine + dirrection.ToString() + Environment.NewLine + cam.Zoom, new Vector2(player.Location.X, player.Location.Y - 100), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
             }
             foreach (var tower in towers) {
                 var scale = 5f;

@@ -24,7 +24,7 @@ namespace Edge.Hyperion {
 				return Matrix.Invert(
                        Matrix.CreateTranslation(new Vector3(-Position, 0f)) *
                        Matrix.CreateTranslation(new Vector3(-Origin, 0f)) *
-					   Matrix.CreateScale(new Vector3(Zoom, Zoom, 1f)) *
+					   Matrix.CreateScale(new Vector3(-Zoom, -Zoom, 1f)) *
                        Matrix.CreateTranslation(new Vector3(Origin, 0f))
                 );
 			} 
