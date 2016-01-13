@@ -8,7 +8,7 @@ using Boolean = System.Boolean;
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-        private Vector2 maxVel = new Vector2(5,15);
+        private Vector2 maxVel = new Vector2(1.5f,5f);
 	    private Boolean Jumping;
         private Int32 Floor = 473;
 	    private Single bleedOff = 100.0f;
@@ -41,9 +41,9 @@ namespace Edge.Atlas {
                 player.Velocity.X = maxVel.X * player.MoveVector.X;
 		    //Gravity
             if (player.Position.Y + gravity * dt < Floor)
-                player.Velocity.Y += gravity * dt;
+                player.Velocity.Y += gravity;
             //Movment
-            player.Position += player.Velocity * dt;
+            player.Position += player.Velocity;
 
 		    if (player.Position.Y >= Floor) {
 		        player.Position.Y = Floor-1;

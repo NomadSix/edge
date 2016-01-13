@@ -28,7 +28,6 @@ namespace Edge.Hyperion.UI.Effects.Parallax {
         public List<Sprite> Sprites { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch) {
-            cam.Parallax = Parallax.X;
             foreach (Sprite sprite in Sprites)
                 sprite.Draw(spriteBatch);
         }

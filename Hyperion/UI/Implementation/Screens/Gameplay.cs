@@ -73,12 +73,13 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
          
 		public override void Update(GameTime gameTime) {
+            var zoomFactor = 1f;
             if (that.kb.IsButtonDown(Keys.Z) || that.kb.IsButtonDown(Keys.PageDown)) {
-				cam.Zoom -= .1f;
+				cam.IncreaseZoom(zoomFactor);
 			} else if (that.kb.IsButtonDown(Keys.X) || that.kb.IsButtonDown(Keys.PageUp)) {
-				cam.Zoom += .1f;
+                cam.IncreaseZoom(-zoomFactor);
 			} else if (that.kb.IsButtonDown(Keys.C) || that.kb.IsButtonDown(Keys.Home)) {
-				cam.Zoom = 1f;
+                cam.IncreaseZoom(-2);
 			}
 
             if (that.kb.IsButtonDown(Keys.A) || that.kb.IsButtonDown(Keys.Left)) {
@@ -159,12 +160,11 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
             }
             #endregion
             foreach (var p in players) {
-                var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width / 2f, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height / 2f), cam.ViewMatrix);
-
-                if (mouse.X < p.Location.X) {
+                var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
+                if (mouse.X < p.Location.X + 16) {
 			        isLeft = true;
 			    }
-                else if (mouse.X > p.Location.X) {
+                else {
 			        isLeft = false;
 			    }
                 playerArm = new Rectangle(p.Location.ToPoint(), new Point(32));
@@ -176,11 +176,12 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 that.batch.Draw(AssetStore.Pixel, new Rectangle((int)p.Location.X, (int)p.Location.Y-20, (int)(artDebug.Width*p.Health), 20), Color.Green);
                 }
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
-                var mouse = Vector2.Transform(new Vector2(that.mouse.LocationV2.X - that.GraphicsDevice.Viewport.Width/2f, that.mouse.LocationV2.Y - that.GraphicsDevice.Viewport.Height/2f), cam.ViewMatrix);
+                //MousePosition = new Vector2((Mouse.GetState().X - DrawTransform.Translation.X) * (1 / Gamecode.Camera1.Scale), (Mouse.GetState().Y - DrawTransform.Translation.Y) * (1 / Gamecode.Camera1.Scale));
+                var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
                 var dirrection = player.Location - mouse;
                 var art = that.Content.Load<Texture2D>(@"..\Images\MageArms.png");
-                that.batch.Draw(art, playerArm, null, Color.White, (float)((Math.Atan2(dirrection.Y, dirrection.X)) + 2 * Math.PI), new Vector2(art.Width/2, art.Height/2), isLeft ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
-                that.batch.DrawString(that.Helvetica, mouse.ToString() + Environment.NewLine + player.Location.ToString() + Environment.NewLine + dirrection.ToString() + Environment.NewLine + cam.Zoom, new Vector2(player.Location.X, player.Location.Y - 100), Color.Black, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+                that.batch.Draw(art, playerArm, null, Color.White, (float)((Math.Atan2(dirrection.Y, dirrection.X)) + 2 * Math.PI), new Vector2(art.Width / 2, art.Height / 2), isLeft ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                Console.WriteLine(string.Format("{0} + \n + {1} + \n + {2}", mouse, dirrection, player.Location));
             }
             foreach (var tower in towers) {
                 var scale = 5f;
