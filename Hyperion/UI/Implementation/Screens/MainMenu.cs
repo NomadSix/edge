@@ -16,6 +16,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
         List<Button> btnList = new List<Button>();
 	    private MenuStrip menuStrip;
 		Texture2D backGround;
+        Texture2D Ribbon;
 
 		public MainMenu(Game game) : base(game) {
             btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Home", () => {
@@ -39,11 +40,13 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
 		protected override void LoadContent() {
-		    backGround = that.Content.Load<Texture2D>(@"../Images/Basic_Background.png");
+		    backGround = that.Content.Load<Texture2D>(@"../Images/Background.png");
+            Ribbon = that.Content.Load<Texture2D>(@"../Images/Grey.png");
 			base.LoadContent();
 		}
 
 		public override void Update(GameTime gameTime) {
+            menuStrip.Update();
       /*
       //Let's just keep This all in the right place... (might be changing it around later to use FlatBuffs, idk yet)
               if(kb.IsButtonToggledDown(Keys.S)){
@@ -86,8 +89,9 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 		}
 
         public override void Draw(GameTime gameTime) {
-            //that.batch.Draw(backGround, Vector2.Zero, Color.White);
-            //base.Draw(gameTime);
+            that.batch.Draw(backGround, Vector2.Zero, Color.White);
+            //var rec = new Rectangle(0, 0, that.GraphicsDevice.Viewport.Width, (int)(that.GraphicsDevice.Viewport.Height *  1/5));
+            base.Draw(gameTime);
 		}
 	}
 }

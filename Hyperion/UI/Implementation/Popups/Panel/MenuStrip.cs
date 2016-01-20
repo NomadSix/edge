@@ -21,17 +21,21 @@ namespace Edge.Hyperion.UI.Implementation.Popups.Panel {
             //    
             //    btnList.Insert(btnList.Count, new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "", () => { }));
             //}
+		}
+
+        public void Update() {
             var mid = that.GraphicsDevice.Viewport.Width / 2;
             for (var i = 0; i < btnList.Count; i++) {
+                that.Components.Remove(btnList[i]);
                 if (i == 0) {
-                    btnList[i]._location = new Rectangle(mid - ((btnList.Count / 2) * this.Width + (this.Width/(btnList.Count % 2 == 0 ? 2 : 1))), 10, this.Width, this.Height);
+                    btnList[i]._location = new Rectangle(mid - ((btnList.Count / 2) * this.Width + (this.Width / (btnList.Count % 2 == 0 ? 2 : 1))), 10, this.Width, this.Height);
                     continue;
                 }
                 btnList[i]._location = btnList[i - 1]._location;
                 btnList[i]._location.X = btnList[i - 1]._location.X + this.Width;
                 that.Components.Add(btnList[i]);
             }
-		}
+        }
 
         public override void Initialize() {
             base.Initialize();

@@ -8,7 +8,7 @@ using Boolean = System.Boolean;
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-        private Vector2 maxVel = new Vector2(1.5f,5f);
+        private Vector2 maxVel = new Vector2(2f,10f);
 	    private Boolean Jumping;
         private Int32 Floor = 473;
 	    private Single bleedOff = 100.0f;
