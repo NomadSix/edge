@@ -42,8 +42,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			atlasClient.Start();
 			atlasClient.Connect(Address, int.Parse(Port));
 			#endregion
-            towers.Add(new DebugTower(0, 500f, 400f, 0f, DebugTower.TowerStyle.Team.Good));
-            towers.Add(new DebugTower(0, 2001f, 400f, 0f, DebugTower.TowerStyle.Team.Bad));
 
 			base.Initialize();
 		}
@@ -54,20 +52,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
 		    totalFrames = artDebug.Width/32;
 		    framesPerRow = totalFrames;
-            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\lights.png"), new Vector2(30, 30), 2f));
-            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png"), new Vector2(50, 50), 3f));
-            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png"), new Vector2(70, 70), 4f));
-            //Backgrounds.Add(new Background(that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png"), new Vector2(90, 90), 5f));
-		    Backgrounds = new List<Layer> {
-		        new Layer(that, cam) { Parallax = new Vector2(0.0f, 1f) },
-                new Layer(that, cam) { Parallax = new Vector2(0.25f, 1f) },
-                new Layer(that, cam) { Parallax = new Vector2(0.5f, 1f) },
-                new Layer(that, cam) { Parallax = new Vector2(1.0f, 1f) }
-		    };
-            Backgrounds[0].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\lights.png") });
-            Backgrounds[1].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\back-trees.png") });
-            Backgrounds[2].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\middle-trees.png") });
-            Backgrounds[3].Sprites.Add(new Sprite { Texture = that.Content.Load<Texture2D>(@"..\Images\layers\front-trees.png") });
             //that.Components.Add(new Effects.Parallax(that, background));
             base.LoadContent();
 		}
