@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.NetCommon;
 using Lidgren.Network;
+using HardShadows;
 
 namespace Edge.Hyperion.UI.Implementation.Screens {
 	public class Gameplay:Screen {
@@ -28,6 +29,8 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
         int timeSinceLastFrame = 0;
         int millisecondsPerFrame = 200;
 
+        List<LightSource> lights = new List<LightSource>();
+
 		public Gameplay(Game game, String address, String port) : base(game) {
 			Address = address;
 			Port = port;
@@ -42,7 +45,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			atlasClient.Start();
 			atlasClient.Connect(Address, int.Parse(Port));
 			#endregion
-
+            //that.SetScreen(new Game1(that));
 			base.Initialize();
 		}
 
@@ -52,6 +55,15 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 			artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
 		    totalFrames = artDebug.Width/32;
 		    framesPerRow = totalFrames;
+
+            Texture2D lightTexture = that.Content.Load<Texture2D>(@"..\UI\Implementation\Screens\ligh\light");
+            lights.Add(new LightSource(lightTexture, Color.White, 150, that.mouse.LocationV2));
+            lights.Add(new LightSource(lightTexture, Color.Crimson, 250, new Vector2(40, 400)));
+            lights.Add(new LightSource(lightTexture, Color.CornflowerBlue, 250, new Vector2(40, 200)));
+            lights.Add(new LightSource(lightTexture, Color.Gold, 200, Vector2.Zero));
+            lights.Add(new LightSource(lightTexture, Color.Red, 150, new Vector2(510, 30)));
+            lights.Add(new LightSource(lightTexture, Color.ForestGreen, 150, new Vector2(50, 540)));
+
             //that.Components.Add(new Effects.Parallax(that, background));
             base.LoadContent();
 		}
@@ -108,7 +120,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 								players.Clear();
 								UInt16 numPlayers = inMsg.ReadUInt16();
 								for(UInt16 i = 0; i < numPlayers; i++)
-									players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadString()));
+									players.Add(new DebugPlayer(that, inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadString()));
                                 break;
                             case AtlasPackets.UpdateMoveVector:								
                                 numPlayers = inMsg.ReadUInt16();

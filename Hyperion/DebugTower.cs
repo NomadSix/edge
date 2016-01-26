@@ -11,8 +11,8 @@ namespace Edge.Hyperion {
         private Single Damage;
         internal TowerStyle.Team Team;
         internal Rectangle HitRectangle;
-        public DebugTower(Int64 id, Single x, Single y, Single damage, TowerStyle.Team team)
-            : base(id, x, y) {
+        public DebugTower(Game game, Int64 id, Single x, Single y, Single damage, TowerStyle.Team team)
+            : base(game, id, x, y) {
             Damage = damage;
             Team = team;
             //int tempWidth = AssetStore.TowerStyles[team].BaseTexture.Width*10;
