@@ -20,7 +20,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
 
 		public MainMenu(Game game) : base(game) {
             btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Home", () => {
-                that.SetScreen(new Splash(that));
+                that.SetScreen(new Edge.Hyperion.BSP.Dungeon(that));
             }));
 			btnList.Add(new Button(that, this, new Rectangle(), AssetStore.ButtonTypes[Button.ButtonStyle.ButtonStyles.basic], "Play", () => {
                 that.SetScreen(new Splash(that));

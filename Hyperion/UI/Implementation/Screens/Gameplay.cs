@@ -3,7 +3,6 @@ using System.Linq;
 using Edge.Hyperion.UI.Components;
 using System.Collections.Generic;
 using Edge.Hyperion.Backing;
-using Edge.Hyperion.UI.Effects.Parallax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,8 +20,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
         Rectangle playerArm;
 
 		List<DebugPlayer> players = new List<DebugPlayer>();
-        List<DebugTower> towers = new List<DebugTower>();
-        List<Layer> Backgrounds = new List<Layer>();
         Int32 currentFrame = 0;
         Int32 totalFrames = 0;
         Int32 framesPerRow = 0;
@@ -151,9 +148,9 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
             
             #region background
             //that.batch.Draw(backGround, Vector2.Zero, null, null, null, 0f, new Vector2(.45f), Color.White, SpriteEffects.None, 0);
-            foreach (var background in Backgrounds) {
-                background.Draw(that.batch);
-            }
+            //foreach (var background in Backgrounds) {
+            //    background.Draw(that.batch);
+            //}
             #endregion
             foreach (var p in players) {
                 var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
@@ -178,12 +175,6 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 var art = that.Content.Load<Texture2D>(@"..\Images\MageArms.png");
                 that.batch.Draw(art, playerArm, null, Color.White, (float)((Math.Atan2(dirrection.Y, dirrection.X)) + 2 * Math.PI), new Vector2(art.Width / 2, art.Height / 2), isLeft ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
                 Console.WriteLine(string.Format("{0} + \n + {1} + \n + {2}", mouse, dirrection, player.Location));
-            }
-            foreach (var tower in towers) {
-                var scale = 5f;
-                var text = AssetStore.TowerStyles[DebugTower.TowerStyle.Team.Good].BaseTexture;
-                that.batch.Draw(text, tower.Location, null, tower.Team == DebugTower.TowerStyle.Team.Good ? Color.White : Color.Red, 0f, Vector2.Zero, scale, tower.Location.X > 1000 ? SpriteEffects.None: SpriteEffects.FlipHorizontally, 0f);
-                that.batch.Draw(AssetStore.Pixel, new Rectangle((int)tower.Location.X, (int)tower.Location.Y - 20, (int)(scale *text.Width * tower.Health), 20), Color.Green);
             }
             base.Draw(gameTime);
         }

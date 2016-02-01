@@ -75,8 +75,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSP\BspRec.cs" />
+    <Compile Include="BSP\Dungeon.cs" />
     <Compile Include="DebugPlayer.cs" />
-    <Compile Include="DebugTower.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
     <Compile Include="Camera2D.cs" />
@@ -162,7 +163,6 @@
     <Content Include="Font\Helvetica.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Hyperion_TemporaryKey.pfx" />
     <None Include="Images\layers\Thumbs.db" />
     <None Include="packages.config" />
     <None Include="UI\BIG-TODO-FILE.dat" />
