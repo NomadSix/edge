@@ -9,8 +9,10 @@ namespace Edge.Hyperion.Backing {
 		public static SpriteFont FontMain, FontAccent;
 		//static place to keep assets
 		//TODO: Storage and retrieval list/dictionaries
-		public static Dictionary<Button.ButtonStyle.ButtonStyles, Button.ButtonStyle> ButtonTypes = new Dictionary<Button.ButtonStyle.ButtonStyles, Button.ButtonStyle>();
+		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
         public static Texture2D PlayerTexture, Pixel;
+        public static Single MasterVolume = 1f;
+        public static Byte TileSize = 32;
 	    //public static ContentManager Content = new ContentManager(Game);
 	}
 }

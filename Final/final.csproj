@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Mixed Platforms</Platform>
-    <ProjectGuid>{3D374D18-D595-4294-B182-1296C3725197}</ProjectGuid>
+    <ProjectGuid>{7852AC49-4D47-40F3-BFB2-5C287872F554}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Edge.Hyperion</RootNamespace>
     <AssemblyName>Hyperion</AssemblyName>
@@ -44,21 +44,13 @@
     <ConsolePause>false</ConsolePause>
     <LangVersion>3</LangVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>CEEC35B1AFE85FE4A0813009C613CF744F13A52C</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>Hyperion_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="OpenTK" Condition="'$(OS)'=='Unix'">
@@ -75,19 +67,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BSP\BspRec.cs" />
-    <Compile Include="BSP\Dungeon.cs" />
-    <Compile Include="DebugPlayer.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Hyperion.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="Engine\Dungen.cs" />
+    <Compile Include="Engine\MapCell.cs" />
+    <Compile Include="Engine\TileMap.cs" />
+    <Compile Include="Engine\Tile.cs" />
+    <Compile Include="Final.cs" />
+    <Compile Include="Backing\AssetStore.cs" />
+    <Compile Include="Images\Input\Keyboard.cs" />
+    <Compile Include="Images\Input\Mouse.cs" />
+    <Compile Include="MainMenu.cs" />
+    <Compile Include="Engine\Town.cs" />
+    <Compile Include="UI\Components\Button.cs" />
+    <Compile Include="UI\Components\Popup.cs" />
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
+    <Compile Include="UI\Components\UIComponent.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
     <Compile Include="UI\Implementation\Popups\Panel\MenuStrip.cs" />
     <Compile Include="UI\Implementation\Popups\PauseMenu.cs" />
-    <Compile Include="UI\Implementation\Screens\Gameplay.cs" />
     <Compile Include="UI\Implementation\Screens\lighttest.cs" />
     <Compile Include="UI\Implementation\Screens\ligh\ConvexHull.cs" />
     <Compile Include="UI\Implementation\Screens\ligh\CustomBlendStates.cs" />
@@ -98,12 +97,6 @@
     <Compile Include="UI\Implementation\Screens\Opening.cs" />
     <Compile Include="UI\Implementation\Screens\PostGame.cs" />
     <Compile Include="UI\Implementation\Screens\Splash.cs" />
-    <Compile Include="Backing\AssetStore.cs" />
-    <Compile Include="UI\Components\Button.cs" />
-    <Compile Include="UI\Components\UIComponent.cs" />
-    <Compile Include="UI\Components\Popup.cs" />
-    <Compile Include="Input\Keyboard.cs" />
-    <Compile Include="Input\Mouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
@@ -142,6 +135,9 @@
     <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Tiles\tileset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="UI\Implementation\Screens\ligh\AlphaOne.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -162,10 +158,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
+    <None Include="Map\grassDemo.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="UI\BIG-TODO-FILE.dat" />
     <None Include="OpenTK.dll.config" Condition="'$(OS)'=='Unix'" />
     <None Include="Tao.Sdl.dll.config" Condition="'$(OS)'=='Unix'" />
+    <None Include="UI\BIG-TODO-FILE.dat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\base.png">

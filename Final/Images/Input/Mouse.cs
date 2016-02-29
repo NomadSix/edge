@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Edge.Hyperion.Input {
+namespace Final.Input {
 	﻿
 	public class Mouse : GameComponent {
 		MouseState current;
