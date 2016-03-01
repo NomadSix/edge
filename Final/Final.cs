@@ -59,7 +59,7 @@ namespace Edge.Hyperion {
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.TransparentBlack);
-            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, viewMatrix);
             base.Draw(gameTime);
             batch.End();
         }

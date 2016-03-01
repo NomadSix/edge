@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Edge.Hyperion {
 	public class Camera2D {
-        private float Zoom;
+        public float Zoom;
         public Vector2 Position;
 	    private Vector2 Origin;
 	    private Viewport viewport;
@@ -35,9 +35,5 @@ namespace Edge.Hyperion {
 		    viewport = graphics.Viewport;
             Origin = new Vector2(viewport.Width/2f + 16, viewport.Height/2f + 16);
 		}
-
-        public void IncreaseZoom(float increment) {
-            Zoom += increment < 0 ? -Zoom + 1 : increment;
-        }
 	}
 }

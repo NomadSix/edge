@@ -8,13 +8,7 @@ using Boolean = System.Boolean;
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
 	public partial class Atlas {
-        private Vector2 maxVel = new Vector2(2f,10f);
-	    private Boolean Jumping;
-        private Int32 Floor = 473;
-	    private Single bleedOff = 100.0f;
-	    private Single oldY;
-	    private Single gravity = 1f;
-	    private Single jumpForce;
+        private Vector2 maxVel = new Vector2(2f,2f);
 
 		/// <summary>
 		///  Updates a player
@@ -24,8 +18,6 @@ namespace Edge.Atlas {
 
             //Gravity(player);
             DebugMove(player);
-            oldY = player.Position.Y;
-            Jump(player);
             //MoveTo(player, 200);
 		}
 		/// <summary>
@@ -37,25 +29,26 @@ namespace Edge.Atlas {
 
 		    var dt = (currentTime - lastTime)/TimeSpan.TicksPerMillisecond;
 
+            //if (player.MoveVector.Y < 0)
+            //    player.Velocity.Y = -maxVel.Y * dt;
+            //if (player.MoveVector.Y > 0)
+            //    player.Velocity.Y = maxVel.Y * dt;
+            //if (player.MoveVector.X < 0)
+            //    player.Velocity.X = -maxVel.X * dt;
+            //if (player.MoveVector.X > 0)
+            //    player.Velocity.X = maxVel.X * dt;
+            //player.Position += player.Velocity;
             if (player.MoveVector.Y >= 0)
+                player.Velocity.Y = maxVel.Y * player.MoveVector.Y;
+            if (player.MoveVector.Y <= 0)
+                player.Velocity.Y = maxVel.Y * player.MoveVector.Y;
+
+            if (player.MoveVector.X >= 0)
                 player.Velocity.X = maxVel.X * player.MoveVector.X;
-		    //Gravity
-            if (player.Position.Y + gravity * dt < Floor)
-                player.Velocity.Y += gravity;
-            //Movment
-            player.Position += player.Velocity;
-
-		    if (player.Position.Y >= Floor) {
-		        player.Position.Y = Floor-1;
-		        player.Velocity.Y = 0;
-		    }
-		}
-
-	    void Jump(DebugPlayer player) {
-	        if (player.MoveVector.Y == -1 && player.Velocity.Y == 0) {
-	            player.Velocity.Y = -maxVel.Y;
-	        }
-	    }
+            if (player.MoveVector.X <= 0)
+                player.Velocity.X = maxVel.X * player.MoveVector.X;
+            player.Position += player.Velocity * dt;
+        }
 
         void MoveTo(DebugPlayer player, Single movespeed) {
             if (player.Position == player.MovingTo)
@@ -71,25 +64,6 @@ namespace Edge.Atlas {
             float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
             player.Position += new Vector2(x, y);
 	    }
-
-		void MoveLogic(){
-			/*
-			 * Okay, so 4 basic commands
-			 * Up, Down, Left, Right
-			 * Up=jump/accelerate up
-			 * Down=duck/accelerate down
-			 * Left=move left
-			 * Right=move right
-			 * 
-			 * Up and down cancel, as do left and right
-			 * other directions can combine
-			 * 
-			 * PACKET TYPES
-			 * PositionDelta:
-			 * 	Single: XMag
-			 * 	Single: YMag
-			 */
-		}
 
 	}
 }
