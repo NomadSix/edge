@@ -68,10 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera2D.cs" />
+    <Compile Include="DebugPlayer.cs" />
     <Compile Include="Engine\Dungen.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\TileMap.cs" />
     <Compile Include="Engine\Tile.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Final.cs" />
     <Compile Include="Backing\AssetStore.cs" />
     <Compile Include="Images\Input\Keyboard.cs" />
@@ -135,7 +137,7 @@
     <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Tiles\tileset.png">
+    <Content Include="Images\Sheets\Tiles\GrassSheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\Implementation\Screens\ligh\AlphaOne.png">
@@ -158,9 +160,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
-    <None Include="Map\grassDemo.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" Condition="'$(OS)'=='Unix'" />
     <None Include="Tao.Sdl.dll.config" Condition="'$(OS)'=='Unix'" />

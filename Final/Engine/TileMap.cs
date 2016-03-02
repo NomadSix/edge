@@ -11,14 +11,14 @@ namespace Edge.Hyperion.Engine {
     }
 
     class TileMap {
-        public List<String[]> Rows = new List<string[]>();
-        public int MapWidth = 5;
-        public int MapHeight = 5;
+        public List<string[]> Rows = new List<string[]>();
+        public int MapWidth = 50;
+        public int MapHeight = 50;
 
-        public TileMap(String Path) {
+        public TileMap(string Path) {
 
-            String[] row;
-            using (var parser = new CsvParser(File.OpenText(@"c:\test.csv")))
+            string[] row;
+            using (var parser = new CsvParser(File.OpenText(@"Map\grassDemo.csv")))
                 while ((row = parser.Read()) != null) {
                     Rows.Add(row);
                 }
