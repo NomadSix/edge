@@ -17,7 +17,7 @@ namespace Edge.Hyperion {
         List<btn> btnList = new List<btn>();
 
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
-        Point mapSize = new Point(100);
+        Point mapSize = new Point(60);
 
         public MainMenu(Game game) : base(game) { }
 
@@ -26,7 +26,7 @@ namespace Edge.Hyperion {
             var Height = 45;
             var Width = 100;
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
-                that.SetScreen(new Town(that, "70.179.178.103", "2348"));
+                that.SetScreen(new Town(that, "127.0.0.1", "2348"));
             }));
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 2 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => { }));
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 3 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Options", () => {
@@ -41,8 +41,8 @@ namespace Edge.Hyperion {
             }));
             //strip = new MenuStrip(that, this, Vector2.Zero, btnList);
             //that.Components.Add(strip);
-            foreach (var btn in btnList)
-                that.Components.Add(btn);
+            foreach (btn button in btnList)
+                that.Components.Add(button);
 
             base.Initialize();
         }

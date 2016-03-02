@@ -26,18 +26,8 @@ namespace Edge.Atlas {
 		/// </summary>
 		/// <param name="player">Reference to the player this is being run on</param>
 		void DebugMove(DebugPlayer player) {
-
 		    var dt = (currentTime - lastTime)/TimeSpan.TicksPerMillisecond;
 
-            //if (player.MoveVector.Y < 0)
-            //    player.Velocity.Y = -maxVel.Y * dt;
-            //if (player.MoveVector.Y > 0)
-            //    player.Velocity.Y = maxVel.Y * dt;
-            //if (player.MoveVector.X < 0)
-            //    player.Velocity.X = -maxVel.X * dt;
-            //if (player.MoveVector.X > 0)
-            //    player.Velocity.X = maxVel.X * dt;
-            //player.Position += player.Velocity;
             if (player.MoveVector.Y >= 0)
                 player.Velocity.Y = maxVel.Y * player.MoveVector.Y;
             if (player.MoveVector.Y <= 0)
@@ -47,7 +37,7 @@ namespace Edge.Atlas {
                 player.Velocity.X = maxVel.X * player.MoveVector.X;
             if (player.MoveVector.X <= 0)
                 player.Velocity.X = maxVel.X * player.MoveVector.X;
-            player.Position += player.Velocity * dt;
+            player.Position += player.Velocity;
         }
 
         void MoveTo(DebugPlayer player, Single movespeed) {

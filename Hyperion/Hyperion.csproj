@@ -83,8 +83,6 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
-    <Compile Include="UI\Effects\Parallax\Background.cs" />
-    <Compile Include="UI\Effects\Parallax\Layer.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
     <Compile Include="UI\Implementation\Popups\Panel\MenuStrip.cs" />

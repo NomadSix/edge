@@ -49,7 +49,7 @@ namespace Edge.Hyperion {
             Components.Add(kb);
             Components.Add(mouse);
             Helvetica = Content.Load<SpriteFont>(@"../Font/Helvetica");
-            AssetStore.ButtonTypes.Add(0, new Button.Style(Content.Load<Texture2D>(@"../Images/Button/newbtn.jpg"), Helvetica, Color.LightGray, Color.Gray, Color.LightGray));
+            AssetStore.ButtonTypes.Add(0, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.White, Color.White));
             AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Mage.png");
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
             SetScreen(new MainMenu(this));

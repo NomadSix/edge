@@ -17,7 +17,7 @@ namespace Edge.Hyperion.Engine {
         string Port, Address;
 
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
-        Point mapSize = new Point(100);
+        Point mapSize = new Point(60);
         Vector2 MoveVector;
 
         List<DebugPlayer> players = new List<DebugPlayer>();
