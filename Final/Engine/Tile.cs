@@ -12,5 +12,10 @@ namespace Edge.Hyperion.Engine {
         static public Rectangle GetScorceRectangle(int titleIndex) {
             return new Rectangle(titleIndex * 32, 0, 32, 32);
         }
+
+        public enum Type {
+            Soild,
+            Air
+        }
     }
 }

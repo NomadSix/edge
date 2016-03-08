@@ -71,6 +71,7 @@
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Engine\Dungen.cs" />
     <Compile Include="Engine\MapCell.cs" />
+    <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />
     <Compile Include="Engine\Tile.cs" />
     <Compile Include="Entity.cs" />
@@ -86,8 +87,6 @@
     <Compile Include="UI\Components\Slider.cs" />
     <Compile Include="UI\Components\UIComponent.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
-    <Compile Include="UI\Implementation\Popups\Chatbox.cs" />
-    <Compile Include="UI\Implementation\Popups\Panel\MenuStrip.cs" />
     <Compile Include="UI\Implementation\Popups\PauseMenu.cs" />
     <Compile Include="UI\Implementation\Screens\lighttest.cs" />
     <Compile Include="UI\Implementation\Screens\ligh\ConvexHull.cs" />
@@ -95,7 +94,6 @@
     <Compile Include="UI\Implementation\Screens\ligh\IConvexHull.cs" />
     <Compile Include="UI\Implementation\Screens\ligh\lightSource.cs" />
     <Compile Include="UI\Implementation\Screens\Loading.cs" />
-    <Compile Include="UI\Implementation\Screens\MainMenu.cs" />
     <Compile Include="UI\Implementation\Screens\Opening.cs" />
     <Compile Include="UI\Implementation\Screens\PostGame.cs" />
     <Compile Include="UI\Implementation\Screens\Splash.cs" />
@@ -137,7 +135,13 @@
     <Content Include="Images\Sheets\Player\MageWalkingSprite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Sheets\Player\MageWalkingSpriteColor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sheets\Tiles\DungenSheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Tiles\GrassSheet.png">
@@ -163,6 +167,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
+    <None Include="Map\dungenDemo.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Map\grassDemo.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -4,24 +4,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Popup:Screen {
-		public Int32 Width, Height;
-        public Vector2 Location;
-        public Texture2D backGround;
+        public Rectangle Location;
+        public static Texture2D backGround;
 
-		public Popup(Game game, Vector2 location, Int32 width, Int32 height) : base(game) {
-			Location = location;
-			Width = width;
-			Height = height;
+        public Popup(Game game, int x, int y, int width, int height) : base(game) {
+			Location = new Rectangle(x, y, width, height);
 		}
 
-        public Popup(Game game, Vector2 location)
-            : base(game) {
-            Location = location;
+        public Popup(Game game) : base(game) {
+            Location = new Rectangle(0, 0, that.GraphicsDevice.Viewport.Width, that.GraphicsDevice.Viewport.Height);
         }
 
-        protected override void LoadContent() {
-            backGround = that.Content.Load<Texture2D>(@"../Images/Grey.png");
-            base.LoadContent();
+        public Popup(Game game, Rectangle location)
+            : base(game) {
+            Location = location;
         }
 
 		public void Kill() {

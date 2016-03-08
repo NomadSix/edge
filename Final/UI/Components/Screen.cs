@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Edge.Hyperion.UI.Implementation.Popups;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Screen:UIComponent {
 		//TODO: Background texture?
 		//TODO: How to handle popup finishing?
-		Popup _activePopup;
+		public Popup _activePopup;
         public Boolean _isActive = true;
         public readonly Viewport viewport;
         protected Camera2D cam;

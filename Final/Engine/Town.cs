@@ -8,17 +8,29 @@ using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.Backing;
 using Lidgren.Network;
 using Edge.NetCommon;
+using Edge.Hyperion.UI.Implementation.Popups;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
+using Microsoft.Xna.Framework.Input;
 
 namespace Edge.Hyperion.Engine {
     public class Town : Screen {
         Texture2D pixel, artDebug;
         NetClient atlasClient;
         string Port, Address;
+        string Name;
+        Color pColor = Color.Gray;
 
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
-        Point mapSize = new Point(60);
+        Point mapSize = new Point(AssetStore.TownSize);
         Vector2 MoveVector;
+
+        MouseState old, newer;
+
+        List<Slider> colorSliders = new List<Slider>();
+
+        PauseMenu pMenu;
+
+        Rectangle Portal;
 
         List<DebugPlayer> players = new List<DebugPlayer>();
         int currentFrame = 0;
@@ -27,9 +39,10 @@ namespace Edge.Hyperion.Engine {
         int timeSinceLastFrame = 0;
         int millisecondsPerFrame = 200;
 
-        public Town(Game game, String address, String port) : base(game) {
+        public Town(Game game, string address, string port) : base(game) {
             Port = port;
             Address = address;
+            cam.Zoom = 2f;
         }
 
         public override void Initialize() {
@@ -41,40 +54,76 @@ namespace Edge.Hyperion.Engine {
             atlasClient.Start();
             atlasClient.Connect(Address, int.Parse(Port));
             #endregion
+            colorSliders.Add(new Slider(that, that.Content.Load<Texture2D>(@"../Images/Basic_Background.png"), AssetStore.PlayerTexture, new Rectangle(0, 0, 255, 25)));
+            that.sampleState = SamplerState.PointClamp;
+            Portal = new Rectangle(AssetStore.TileSize * 0, AssetStore.TileSize * 5, 32, 32);
+            pMenu = new PauseMenu(that, this);
+            that.Components.Add(pMenu);
             base.Initialize();
         }
 
         protected override void LoadContent() {
-            artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSprite.png");
+            artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSpriteColor.png");
             Tile.TileSetTexture = that.Content.Load<Texture2D>(@"..\Images\Sheets\Tiles\GrassSheet");
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime) {
-            cameraControl();
-            playerMovment(gameTime);
+            if (_isActive == false) {
+                atlasClient.Disconnect("Disconnecting");
+                atlasClient.Shutdown("Shutingdown");
+            }
+
+            if (pMenu._isActive == false) {
+                cameraControl();
+                playerMovment(gameTime);
+            }
+
+            if (that.kb.IsButtonToggledDown(Keys.Space)) {
+                pColor.R = (byte)AssetStore.rng.Next(0, 255);
+                pColor.G = (byte)AssetStore.rng.Next(0, 255);
+                pColor.B = (byte)AssetStore.rng.Next(0, 255);
+            }
             serverIO();
+
+            if (pMenu._isActive) {
+                MoveVector = Vector2.Zero;
+            }
 
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 cam.Position = new Vector2(player.Location.X - viewport.Width / 2, player.Location.Y - viewport.Height / 2);
+                if (player.HitBox.Intersects(Portal)) {
+                    atlasClient.Disconnect(player.Name + " moving to Dungen");
+                    atlasClient.Shutdown(player.Name + " moving to Dungen");
+                    if (atlasClient.ServerConnection == null)
+                        that.SetScreen(new Dungen(that, Address, Port));
+                }
             }
+            pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16), cam);
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime) {
-            Point firstPos = new Point(mapSize.X/2 * AssetStore.TileSize);
+            Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
             for (int y = 0; y < mapSize.Y; y++) {
-                for(int x = 0; x < mapSize.X; x++) {
+                for (int x = 0; x < mapSize.X; x++) {
                     Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
                     Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
                     that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
                 }
             }
+            that.batch.Draw(AssetStore.Pixel, Portal, Color.White);
 
             foreach (var p in players) {
                 var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
-                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
+                var scale = 0.25f;
+                var mesurments = that.Helvetica.MeasureString(p.Name);
+                var location = new Vector2((p.Location.X + 16) - mesurments.X / 2 * scale, p.Location.Y - 32 + 16);
+                that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), new Color(p.R, p.G, p.B), 0f, Vector2.Zero, new Vector2(1f), p.MoveVector.X > 0.1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                that.batch.Draw(AssetStore.Pixel, p.AttackRec, Color.Wheat);
             }
+            pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
             base.Draw(gameTime);
         }
 
@@ -83,6 +132,9 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write((byte)AtlasPackets.RequestPositionChange);
             outMsg.Write((short)MoveVector.X);
             outMsg.Write((short)MoveVector.Y);
+            outMsg.Write(pColor.R);
+            outMsg.Write(pColor.G);
+            outMsg.Write(pColor.B);
             outMsg.Write(Environment.UserName);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
 
@@ -97,13 +149,13 @@ namespace Edge.Hyperion.Engine {
                             //    break;
                             case AtlasPackets.UpdatePositions:
                                 players.Clear();
-                                UInt16 numPlayers = inMsg.ReadUInt16();
-                                for (UInt16 i = 0; i < numPlayers; i++)
-                                    players.Add(new DebugPlayer(that, inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadString()));
+                                ushort numPlayers = inMsg.ReadUInt16();
+                                for (ushort i = 0; i < numPlayers; i++)
+                                    players.Add(new DebugPlayer(that, inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString()));
                                 break;
                             case AtlasPackets.UpdateMoveVector:
                                 numPlayers = inMsg.ReadUInt16();
-                                for (UInt16 i = 0; i < numPlayers; i++)
+                                for (ushort i = 0; i < numPlayers; i++)
                                     players[i].MoveVector = new Vector2(inMsg.ReadSingle(), inMsg.ReadSingle());
                                 break;
                         }
@@ -144,14 +196,16 @@ namespace Edge.Hyperion.Engine {
         }
 
         public void cameraControl() {
-            var zoomFactor = 0.1f;
-            if (that.kb.IsButtonDown(Keys.Z) || that.kb.IsButtonDown(Keys.PageDown)) {
-                cam.Zoom += cam.Zoom < 3 ? zoomFactor : 0;
-            } else if (that.kb.IsButtonDown(Keys.X) || that.kb.IsButtonDown(Keys.PageUp)) {
-                cam.Zoom -= cam.Zoom > 2 ? zoomFactor : 0;
+            var zoomFactor = 0.3f;
+            newer = Mouse.GetState();
+            if (newer.ScrollWheelValue > old.ScrollWheelValue) {
+                cam.Zoom += cam.Zoom <= 3 ? zoomFactor : 0;
+            } else if (newer.ScrollWheelValue < old.ScrollWheelValue) {
+                cam.Zoom -= cam.Zoom >= 2 ? zoomFactor : 0;
             } else if (that.kb.IsButtonDown(Keys.C) || that.kb.IsButtonDown(Keys.Home)) {
                 cam.Zoom = 1.0f;
             }
+            old = newer;
         }
     }
 }

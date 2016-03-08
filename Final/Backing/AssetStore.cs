@@ -12,8 +12,11 @@ namespace Edge.Hyperion.Backing {
 		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
         public static Texture2D PlayerTexture, Pixel;
         public static Single MasterVolume = 1f;
-        public static Byte TileSize = 32;
-	    //public static ContentManager Content = new ContentManager(Game);
-	}
+        public readonly static Byte TileSize = 32;
+        public readonly static Int16 TownSize = 100;
+        public readonly static Int16 DungenSize = 50;
+        public static Random rng = new Random();
+        //public static ContentManager Content = new ContentManager(Game);
+    }
 }
 

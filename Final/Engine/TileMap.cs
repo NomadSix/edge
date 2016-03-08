@@ -6,19 +6,16 @@ using CsvHelper;
 using System.IO;
 
 namespace Edge.Hyperion.Engine {
-    class MapRow {
-        public List<MapCell> Columns = new List<MapCell>();
-    }
 
-    class TileMap {
+    public class TileMap {
         public List<string[]> Rows = new List<string[]>();
         public int MapWidth = 50;
         public int MapHeight = 50;
 
         public TileMap(string Path) {
 
-            string[] row;
-            using (var parser = new CsvParser(File.OpenText(@"Map\grassDemo.csv")))
+            string[] row = { };
+            using (var parser = new CsvParser(File.OpenText(Path)))
                 while ((row = parser.Read()) != null) {
                     Rows.Add(row);
                 }

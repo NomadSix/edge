@@ -44,18 +44,6 @@
     <ConsolePause>false</ConsolePause>
     <LangVersion>3</LangVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>CEEC35B1AFE85FE4A0813009C613CF744F13A52C</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>Hyperion_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -81,6 +69,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="Hyperion.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="UI\Components\Menu.cs" />
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />

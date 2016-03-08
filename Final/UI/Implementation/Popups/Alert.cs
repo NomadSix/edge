@@ -9,8 +9,8 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
         Button btnOk;
         Screen Screen;
 
-		public Alert(Game game, Screen screen, Vector2 location, Int32 width, Int32 height) 
-            : base(game, location, width, height) {
+		public Alert(Game game, Screen screen, int x, int y, int width, int height) 
+            : base(game, x, y, width, height) {
                 Screen = screen;
 		}
 
@@ -18,7 +18,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             btnOk = new Button(that, this, new Rectangle(100, 150, 100, 50), AssetStore.ButtonTypes[Button.Style.Type.basic], "OK", () => {
                 Screen._isActive = true;
                 that.Components.Remove(btnOk);
-                that.Components.Remove(this);
+                Kill();
             });
             that.Components.Add(btnOk);
  	        base.Initialize();

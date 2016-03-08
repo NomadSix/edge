@@ -6,18 +6,16 @@ using Edge.Hyperion.UI.Components;
 using Microsoft.Xna.Framework;
 using Edge.Hyperion.Engine;
 using Microsoft.Xna.Framework.Graphics;
+using Edge.Hyperion.UI.Implementation.Popups;
 using btn = Edge.Hyperion.UI.Components.Button;
-using MenuStrip = Edge.Hyperion.UI.Implementation.Popups.Panel.MenuStrip;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 
 namespace Edge.Hyperion {
     public class MainMenu : Screen {
-        String title = "<title>";
-        MenuStrip strip;
+        string title = "B.U.T.T.S. Online";
         List<btn> btnList = new List<btn>();
-
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
-        Point mapSize = new Point(60);
+        Point mapSize = new Point(AssetStore.TownSize);
 
         public MainMenu(Game game) : base(game) { }
 
@@ -25,18 +23,16 @@ namespace Edge.Hyperion {
             var init = new Point(0, 175);
             var Height = 45;
             var Width = 100;
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 2 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
                 that.SetScreen(new Town(that, "127.0.0.1", "2348"));
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 2 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => { }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 3 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Options", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 3 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => {
 
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Credits", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => {
 
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 5 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => { }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 6 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
                 that.Exit();
             }));
             //strip = new MenuStrip(that, this, Vector2.Zero, btnList);
@@ -62,6 +58,10 @@ namespace Edge.Hyperion {
                     that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
                 }
             }
+            that.batch.Draw(AssetStore.Pixel, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
+            for (int i = 0; i < btnList.Count; i++)
+                btnList[i].Draw(gameTime);
+            
             DrawCenter(title);
             base.Draw(gameTime);
         }

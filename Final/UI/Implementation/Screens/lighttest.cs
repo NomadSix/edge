@@ -242,7 +242,7 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
             //draw the tile texture tiles across the screen
             Rectangle source = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, null, null, null, null, cam.ViewMatrix);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             spriteBatch.Draw(tileTexture, Vector2.Zero, source, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1.0f);
             spriteBatch.End();

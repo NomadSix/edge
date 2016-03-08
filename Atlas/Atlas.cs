@@ -73,12 +73,16 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.Data:
 							 switch((AtlasPackets)inMsg.ReadByte()) {
                                  case AtlasPackets.RequestPositionChange:
-                                     Int16 X = inMsg.ReadInt16();
-                                     Int16 Y = inMsg.ReadInt16();
-							         String Name = inMsg.ReadString();
-                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(X, Y);
-							         players[inMsg.SenderConnection.RemoteUniqueIdentifier].Name = Name;
-                                     break;
+                                    short X = inMsg.ReadInt16();
+                                    short Y = inMsg.ReadInt16();
+                                    byte R = inMsg.ReadByte();
+                                    byte G = inMsg.ReadByte();
+                                    byte B = inMsg.ReadByte();
+                                    string Name = inMsg.ReadString();
+                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(X, Y);
+							        players[inMsg.SenderConnection.RemoteUniqueIdentifier].Name = Name;
+                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].pColor = new Color(R,G,B);
+                                    break;
 							 }
 							break;
 						case NetIncomingMessageType.StatusChanged:
@@ -114,18 +118,21 @@ namespace Edge.Atlas {
 				//TODO: Compute changed frames, keyframes, etc
 				NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
-				outMsg.Write((UInt16)players.Count);
+				outMsg.Write((ushort)players.Count);
 				foreach (var p in players.Values) {
 					outMsg.Write(p.NetID);
 					outMsg.Write(p.Position.X);
 					outMsg.Write(p.Position.Y);
+                    outMsg.Write(p.pColor.R);
+                    outMsg.Write(p.pColor.G);
+                    outMsg.Write(p.pColor.B);
                     outMsg.Write(p.Name);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
                 outMsg = server.CreateMessage();
                 outMsg.Write((byte)AtlasPackets.UpdateMoveVector);
-                outMsg.Write((UInt16)players.Count);
+                outMsg.Write((ushort)players.Count);
 			    foreach (var p in players.Values) {
 			        outMsg.Write(p.MoveVector.X);
                     outMsg.Write(p.MoveVector.Y);

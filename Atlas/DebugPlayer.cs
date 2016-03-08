@@ -11,6 +11,7 @@ namespace Edge.Atlas.DebugCode {
         public Vector2 Velocity = new Vector2(0f);
         public Vector2 Acceleration = new Vector2(30f);
         public Single Weight = 2;
+        public Color pColor;
 		public DebugPlayer(Int64 netid){
 			NetID = netid;
 		}
