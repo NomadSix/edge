@@ -10,12 +10,14 @@ namespace Edge.Hyperion.Backing {
 		//static place to keep assets
 		//TODO: Storage and retrieval list/dictionaries
 		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
-        public static Texture2D PlayerTexture, Pixel;
-        public static Single MasterVolume = 1f;
-        public readonly static Byte TileSize = 32;
-        public readonly static Int16 TownSize = 100;
-        public readonly static Int16 DungenSize = 50;
+        public static Texture2D PlayerTexture, Pixel, Mouse, openingThing;
+        public static float MasterVolume = 1f;
+        public readonly static byte TileSize = 32;
+        public readonly static short TownSize = 100;
+        public readonly static short DungenSize = 50;
         public static Random rng = new Random();
+        public static int Width = 1280;
+        public static int Height = 720;
         //public static ContentManager Content = new ContentManager(Game);
     }
 }

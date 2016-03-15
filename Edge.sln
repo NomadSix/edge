@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maestro", "Maestro\Maestro.csproj", "{01B3ED2C-D157-450C-B99A-DE1E6DA11A78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas", "Atlas\Atlas.csproj", "{F778B80C-A131-484D-8B4F-972D0B4389A7}"
@@ -18,12 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "final", "Final\final.csproj", "{7852AC49-4D47-40F3-BFB2-5C287872F554}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		NetCommon\NetCommon.projitems*{f778b80c-a131-484d-8b4f-972d0b4389a7}*SharedItemsImports = 4
-		NetCommon\NetCommon.projitems*{3d374d18-d595-4294-b182-1296c3725197}*SharedItemsImports = 4
-		NetCommon\NetCommon.projitems*{64e0933a-b3b4-49db-8b81-f693eff0e5ff}*SharedItemsImports = 13
-		NetCommon\NetCommon.projitems*{7852ac49-4d47-40f3-bfb2-5c287872f554}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -98,6 +90,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		NetCommon\NetCommon.projitems*{f778b80c-a131-484d-8b4f-972d0b4389a7}*SharedItemsImports = 4
+		NetCommon\NetCommon.projitems*{3d374d18-d595-4294-b182-1296c3725197}*SharedItemsImports = 4
+		NetCommon\NetCommon.projitems*{64e0933a-b3b4-49db-8b81-f693eff0e5ff}*SharedItemsImports = 13
+		NetCommon\NetCommon.projitems*{7852ac49-4d47-40f3-bfb2-5c287872f554}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

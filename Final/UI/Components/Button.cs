@@ -58,7 +58,8 @@ namespace Edge.Hyperion.UI.Components {
 
         public class Style {
             public enum Type : byte {
-                basic
+                basic,
+                disabled
             }
 
             public Texture2D Base, Hover;

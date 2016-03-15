@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.Engine;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
-using btn = Edge.Hyperion.UI.Components.Button;
+using Edge.Hyperion.UI.Components;
 
 namespace Edge.Hyperion.UI.Implementation.Popups {
     public class PauseMenu : Popup {
 
-        List<btn> btnList = new List<btn>();
+        List<Button> ButtonList = new List<Button>();
         Screen World;
         Vector2 init;
         public PauseMenu(Game game, Screen world) : base(game) {
@@ -24,19 +24,25 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             init = Vector2.Zero;
             int Height = 45;
             int Width = 100;
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 6 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Resume", () => {
+            ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 6 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.basic], "Resume", () => {
                 _isActive = false;
                 that.sampleState = SamplerState.PointClamp;
-                foreach (var btn in btnList)
+                foreach (var btn in ButtonList)
                     that.Components.Remove(btn);
                 Kill();
-            }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 8 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
+            })); 
+            ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 7 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.disabled], "Options", () =>
+            {
                 that.sampleState = SamplerState.LinearWrap;
                 World._isActive = false;
                 that.SetScreen(new MainMenu(that));
             }));
-            foreach (btn button in btnList)
+            ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 8 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.basic], "Exit", () => {
+                that.sampleState = SamplerState.LinearWrap;
+                World._isActive = false;
+                that.SetScreen(new MainMenu(that));
+            }));
+            foreach (Button button in ButtonList)
                 that.Components.Add(button);
             base.Initialize();
         }
@@ -51,8 +57,8 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
                 _isActive = !_isActive;
                 Kill();
             }
-            for (int i = 0; i < 2; i++)
-                btnList[i].update(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix), cam2);
+            for (int i = 0; i < ButtonList.Count; i++)
+                ButtonList[i].update(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix), cam2);
         }
 
         public void draw(Vector2 pos) {
@@ -61,8 +67,8 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             if (_isActive) {
                 that.batch.Draw(backGround, Vector2.Zero, null, new Color(50, 50, 50, 75), 0f, Vector2.Zero, new Vector2(viewport.Width, viewport.Height), SpriteEffects.None, 0f);
                 that.batch.Draw(backGround, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
-                for (int i = 0; i < 2; i++)
-                    btnList[i].draw(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix));
+                for (int i = 0; i < ButtonList.Count; i++)
+                    ButtonList[i].draw(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix));
                 DrawCenter("Paused", pos);
             }
             that.batch.End();

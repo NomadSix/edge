@@ -57,8 +57,8 @@ namespace Lidgren.Network
 		[Conditional("DEBUG")]
 		public static void Assert(bool isOk, string message)
 		{
-			if (!isOk)
-				throw new NetException(message);
+			//if (!isOk)
+				//throw new NetException(message);
 		}
 
 		/// <summary>

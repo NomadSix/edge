@@ -54,9 +54,8 @@ namespace Edge.Hyperion.Engine {
             atlasClient.Start();
             atlasClient.Connect(Address, int.Parse(Port));
             #endregion
-            colorSliders.Add(new Slider(that, that.Content.Load<Texture2D>(@"../Images/Basic_Background.png"), AssetStore.PlayerTexture, new Rectangle(0, 0, 255, 25)));
             that.sampleState = SamplerState.PointClamp;
-            Portal = new Rectangle(AssetStore.TileSize * 0, AssetStore.TileSize * 5, 32, 32);
+            Portal = new Rectangle(AssetStore.TileSize * 0, AssetStore.TileSize * 10, 32, 32);
             pMenu = new PauseMenu(that, this);
             that.Components.Add(pMenu);
             base.Initialize();
@@ -92,12 +91,6 @@ namespace Edge.Hyperion.Engine {
 
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 cam.Position = new Vector2(player.Location.X - viewport.Width / 2, player.Location.Y - viewport.Height / 2);
-                if (player.HitBox.Intersects(Portal)) {
-                    atlasClient.Disconnect(player.Name + " moving to Dungen");
-                    atlasClient.Shutdown(player.Name + " moving to Dungen");
-                    if (atlasClient.ServerConnection == null)
-                        that.SetScreen(new Dungen(that, Address, Port));
-                }
             }
             pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16), cam);
             base.Update(gameTime);
@@ -124,7 +117,7 @@ namespace Edge.Hyperion.Engine {
                 that.batch.Draw(AssetStore.Pixel, p.AttackRec, Color.Wheat);
             }
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
-            base.Draw(gameTime);
+            DrawMouse();
         }
 
         public void serverIO() {

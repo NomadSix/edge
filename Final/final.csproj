@@ -56,6 +56,7 @@
     <Reference Include="OpenTK" Condition="'$(OS)'=='Unix'">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="Tao.Sdl" Condition="'$(OS)'=='Unix'">
       <HintPath>..\packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\Tao.Sdl.dll</HintPath>
     </Reference>
@@ -69,11 +70,11 @@
   <ItemGroup>
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
-    <Compile Include="Engine\Dungen.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />
     <Compile Include="Engine\Tile.cs" />
+    <Compile Include="Engine\World.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Final.cs" />
     <Compile Include="Backing\AssetStore.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
     <Compile Include="UI\Components\UIComponent.cs" />
+    <Compile Include="UI\Implementation\Hud\StatusBar.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\PauseMenu.cs" />
     <Compile Include="UI\Implementation\Screens\lighttest.cs" />
@@ -132,6 +134,9 @@
     <Content Include="Images\MageArms.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Mouse\placeholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Sheets\Player\MageWalkingSprite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -139,6 +144,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sheets\QXMPMD5.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Tiles\DungenSheet.png">

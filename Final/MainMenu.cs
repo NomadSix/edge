@@ -23,16 +23,18 @@ namespace Edge.Hyperion {
             var init = new Point(0, 175);
             var Height = 45;
             var Width = 100;
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 2 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2 + 16, init.Y + 2 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
                 that.SetScreen(new Town(that, "127.0.0.1", "2348"));
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 3 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2 + 16, init.Y + 3 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.disabled], "Options", () =>
+            {
 
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, 0, 0), AssetStore.ButtonTypes[btn.Style.Type.basic], "", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2 + 16, init.Y + 4 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.disabled], "Credits", () =>
+            {
 
             }));
-            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
+            btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2 + 16, init.Y + 5 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
                 that.Exit();
             }));
             //strip = new MenuStrip(that, this, Vector2.Zero, btnList);
@@ -50,7 +52,7 @@ namespace Edge.Hyperion {
 
         public override void Draw(GameTime gameTime) {
             //strip.Update();
-            Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
+            Point firstPos = new Point(AssetStore.TileSize * 20);
             for (int y = 0; y < mapSize.Y; y++) {
                 for (int x = 0; x < mapSize.X; x++) {
                     Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
@@ -61,8 +63,8 @@ namespace Edge.Hyperion {
             that.batch.Draw(AssetStore.Pixel, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
             for (int i = 0; i < btnList.Count; i++)
                 btnList[i].Draw(gameTime);
-            
             DrawCenter(title);
+            DrawMouse();
             base.Draw(gameTime);
         }
 

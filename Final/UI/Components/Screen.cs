@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.UI.Implementation.Popups;
+using System.Windows.Forms;
+using Screens = System.Windows.Forms.Screen;
+using Edge.Hyperion.Backing;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Screen:UIComponent {
@@ -26,6 +29,14 @@ namespace Edge.Hyperion.UI.Components {
 			if(_activePopup == null)
 				_activePopup = popup;
 		}
-	}
+
+        protected void DrawMouse() {
+            that.batch.End();
+            that.batch.Begin();
+            that.batch.Draw(AssetStore.Mouse, that.mouse.LocationV2, Color.White);
+            that.batch.End();
+        }
+
+    }
 }
 
