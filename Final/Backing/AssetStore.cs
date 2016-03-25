@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Button = Edge.Hyperion.UI.Components.Button;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace Edge.Hyperion.Backing {
 	public static class AssetStore {
@@ -10,7 +14,7 @@ namespace Edge.Hyperion.Backing {
 		//static place to keep assets
 		//TODO: Storage and retrieval list/dictionaries
 		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
-        public static Texture2D PlayerTexture, Pixel, Mouse, openingThing;
+        public static Texture2D PlayerTexture, Pixel, Mouse;
         public static float MasterVolume = 1f;
         public readonly static byte TileSize = 32;
         public readonly static short TownSize = 100;

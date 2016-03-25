@@ -161,5 +161,13 @@ namespace Final.Input {
 	    public Boolean IsAnyKeyDown() {
 	        return current.GetPressedKeys().Length > 0;
 	    }
+
+        public Boolean IsEdge() {
+            return current != last;
+        }
+
+        public KeyboardState getCurrent() {
+            return current;
+        }
 	}
 }

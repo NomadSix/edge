@@ -44,11 +44,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Atlas\EnemyUpdate.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Atlas.cs" />
     <Compile Include="Atlas\PlayerUpdate.cs" />
     <Compile Include="DebugPlayer.cs" />
+    <Compile Include="ServerEnemy.cs" />
   </ItemGroup>
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

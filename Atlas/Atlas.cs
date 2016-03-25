@@ -4,21 +4,19 @@ using System.Collections.Generic;
 using Lidgren.Network;
 using System.Linq;
 using Edge.NetCommon;
-using Edge.Hyperion;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
-using Edge.Atlas.DebugCode;
 
 namespace Edge.Atlas {
 	public partial class Atlas {
 		NetServer server;
-		public Boolean isExiting;
-		Boolean runningHeadless;
-		public Dictionary<Int64, DebugPlayer> players = new Dictionary<Int64, DebugPlayer>();
-		public List<Entity> entities = new List<Entity>();
+        bool runningHeadless;
+        public bool isExiting;
+		public Dictionary<long, DebugPlayer> players = new Dictionary<long, DebugPlayer>();
+		public Dictionary<long, ServerEnemy> enemys = new Dictionary<long, ServerEnemy>();
 
-		public Int64 lastTime;
-		public Int64 currentTime = DateTime.UtcNow.Ticks;
+		public long lastTime;
+		public long currentTime = DateTime.UtcNow.Ticks;
 
 
 		/// <summary>
@@ -28,10 +26,10 @@ namespace Edge.Atlas {
 		public static void Main(string[] args) {
 			if(args.Length > 0)
 				try {
-					new Atlas(Int32.Parse(args[0]), false).Run();
+					new Atlas(int.Parse(args[0]), true).Run();
 				}
 				catch (Exception) {
-					new Atlas(2348, false).Run();
+					new Atlas(2348, true).Run();
 				}
 			else
 				new Atlas(2348, true).Run();
@@ -42,7 +40,7 @@ namespace Edge.Atlas {
 		/// </summary>
 		/// <param name="port">Port.</param>
 		/// <param name="runningHeadless">If set to <c>false</c> do not bind to console</param>
-		public Atlas(Int32 port, Boolean runningHeadless) {
+		public Atlas(int port, bool runningHeadless) {
 			this.runningHeadless = runningHeadless;
 
 			var config = new NetPeerConfiguration("Atlas");
@@ -60,7 +58,7 @@ namespace Edge.Atlas {
 				var inputThread = new Thread(InputHandler);
 				inputThread.Start();                
 			}
-			Int64 lastUpdates = 0;
+			long lastUpdates = 0;
 			while(!isExiting) {
 				lastTime = currentTime;
 				currentTime = DateTime.UtcNow.Ticks;
@@ -79,16 +77,18 @@ namespace Edge.Atlas {
                                     byte G = inMsg.ReadByte();
                                     byte B = inMsg.ReadByte();
                                     string Name = inMsg.ReadString();
+                                    float Health = inMsg.ReadFloat();
                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(X, Y);
 							        players[inMsg.SenderConnection.RemoteUniqueIdentifier].Name = Name;
                                     players[inMsg.SenderConnection.RemoteUniqueIdentifier].pColor = new Color(R,G,B);
+                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].Health = Health;
                                     break;
 							 }
 							break;
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier));
+									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 1));
                                     break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
@@ -113,6 +113,8 @@ namespace Edge.Atlas {
 				//Parallel.ForEach(players.Values, PlayerUpdate);
 				foreach (var p in players)
 					PlayerUpdate(p.Value);
+                foreach (var e in enemys)
+                    EnemyUpdate(e.Value);
 
 				#region Outgoing Updates
 				//TODO: Compute changed frames, keyframes, etc
@@ -127,8 +129,19 @@ namespace Edge.Atlas {
                     outMsg.Write(p.pColor.G);
                     outMsg.Write(p.pColor.B);
                     outMsg.Write(p.Name);
+                    outMsg.Write(p.Health);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+
+                outMsg = server.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.DamageEnemy);
+                outMsg.Write((ushort)enemys.Count);
+                foreach (var e in enemys.Values) {
+                    outMsg.Write(e.NetID);
+                    outMsg.Write(e.Position.X);
+                    outMsg.Write(e.Position.Y);
+                }
+                server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
                 outMsg = server.CreateMessage();
                 outMsg.Write((byte)AtlasPackets.UpdateMoveVector);
@@ -219,12 +232,11 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						entities.Add(new Entity(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
-
+						enemys.Add(long.Parse(args[0]), new ServerEnemy(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
                     }
                     break;
                 case "ENTS":
-                    foreach(var e in entities)
+                    foreach(var e in enemys)
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
                     break;
 				case "PLAYERS":

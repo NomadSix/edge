@@ -1,19 +1,16 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace Edge.Atlas.DebugCode {
-    public class DebugPlayer {
-        public Int64 NetID;
-        public String Name;
-		public Vector2 Position;
-		public Vector2 MovingTo;
+namespace Edge.Atlas {
+    public class DebugPlayer : Entity {
+        public long NetID;
+        public string Name;
         public Vector2 MoveVector;
-        public Vector2 Velocity = new Vector2(0f);
         public Vector2 Acceleration = new Vector2(30f);
-        public Single Weight = 2;
         public Color pColor;
-		public DebugPlayer(Int64 netid){
-			NetID = netid;
+		public DebugPlayer(long id, float x, float y, float health) : base(id, x, y){
+			NetID = id;
+            Position = new Vector2(x, y);
+            Health = health;
 		}
 	}
 }

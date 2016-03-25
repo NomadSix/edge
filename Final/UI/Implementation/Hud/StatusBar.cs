@@ -13,6 +13,8 @@ namespace Edge.Hyperion.UI.Implementation.Hud
         float Height = 75;
         float Width = 0;
 
+        float Health;
+
         public StatusBar(Game game, float size) : base(game) {
             Size = size;
         }
@@ -21,6 +23,10 @@ namespace Edge.Hyperion.UI.Implementation.Hud
             Height *= Size;
             Width = that.GraphicsDevice.Viewport.Width;
             base.Initialize();
+        }
+
+        public void UpdateInfo(DebugPlayer player) {
+            Health = player.Health;
         }
 
         public override void Update(GameTime gameTime) {

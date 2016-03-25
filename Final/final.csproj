@@ -66,10 +66,14 @@
     <Reference Include="MonoGame.Framework" Condition="'$(OS)'=='Windows_NT'">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="xTile">
+      <HintPath>..\..\..\Users\Devon Schimming\Downloads\xTile207\Engine\PC\xTile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />
@@ -137,6 +141,9 @@
     <Content Include="Images\Mouse\placeholder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Sheets\Player\LinkSheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Sheets\Player\MageWalkingSprite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -144,9 +151,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Sheets\QXMPMD5.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Tiles\DungenSheet.png">
@@ -175,6 +179,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
+    <Content Include="Images\Mouse\portalunknown.ani">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sheets\grass.tbin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Map\dungenDemo.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

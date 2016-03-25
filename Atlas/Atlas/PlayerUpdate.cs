@@ -1,8 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Edge.Atlas.DebugCode;
-using OpenTK.Graphics.OpenGL;
-using Boolean = System.Boolean;
 
 
 // Analysis disable once CheckNamespace
@@ -39,21 +36,6 @@ namespace Edge.Atlas {
                 player.Velocity.X = maxVel.X * player.MoveVector.X;
             player.Position += player.Velocity;
         }
-
-        void MoveTo(DebugPlayer player, Single movespeed) {
-            if (player.Position == player.MovingTo)
-                player.MovingTo = new Vector2(-1, -1);
-            if (player.MovingTo == new Vector2(-1, -1)) return; 
-            var deltaY = player.MovingTo.Y - player.Position.Y;
-            var deltaX2 = Math.Pow(player.MovingTo.X - player.Position.X, 2);
-            var deltaY2 = Math.Pow(deltaY, 2);
-            var deltaLen = (float)Math.Sqrt(deltaX2 + deltaY2);
-            //Simplified version of cos(arctan(a/b))float y = 0;
-            float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
-            //Simplified version of sin(arctan(a/b))
-            float x = (player.MovingTo.X - player.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
-            player.Position += new Vector2(x, y);
-	    }
 
 	}
 }

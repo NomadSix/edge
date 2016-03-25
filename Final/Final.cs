@@ -9,7 +9,7 @@ using Edge.Hyperion.UI.Components;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 using Keyboard = Final.Input.Keyboard;
 using Mouse = Final.Input.Mouse;
-
+using xTile.Display;
 
 namespace Edge.Hyperion {
     public class Final : Game {
@@ -40,6 +40,8 @@ namespace Edge.Hyperion {
         bool contentLoaded = false;
         Thread thread;
 
+        public object NativeMethods { get; private set; }
+
         public Final() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -55,7 +57,7 @@ namespace Edge.Hyperion {
             graphics.PreferredBackBufferWidth = AssetStore.Width;
             graphics.PreferredBackBufferHeight = AssetStore.Height;
             graphics.IsFullScreen = false;
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             graphics.ApplyChanges();
             Window.Position = new Point(AssetStore.Width / 4, AssetStore.Height / 4);
             #endregion
@@ -73,31 +75,42 @@ namespace Edge.Hyperion {
             mouse = new Mouse(this);
             Components.Add(kb);
             Components.Add(mouse);
-            Helvetica = Content.Load<SpriteFont>(@"../Font/Helvetica");
             AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
-            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Mage.png");
+            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
             AssetStore.Mouse = Content.Load<Texture2D>(@"../Images/Mouse/placeholder.png");
             Popup.backGround = AssetStore.Pixel;
+            var hud = new UI.Implementation.Hud.StatusBar(this, 1.0f);
+            hud.Visible = false;
+            Components.Add(hud);
             SetScreen(new MainMenu(this));
             #endregion
             contentLoaded = true;
         }
 
         protected override void LoadContent() {
+            Helvetica = Content.Load<SpriteFont>(@"../Font/Helvetica");
+            sampleState = SamplerState.LinearWrap;
             base.LoadContent();
         }
 
         protected override void Draw(GameTime gameTime) {
+            GraphicsDevice.Clear(Color.TransparentBlack);
+            batch.Begin(SpriteSortMode.Deferred, null, sampleState, null, null, null, viewMatrix);
             if (contentLoaded) {
-                GraphicsDevice.Clear(Color.TransparentBlack);
-                batch.Begin(SpriteSortMode.Deferred, null, sampleState, null, null, null, viewMatrix);
                 base.Draw(gameTime);
-                batch.End();
             } else {
-
+                //draw loading screen
+                DrawCenter("Loading ...");
             }
+            batch.End();
+        }
+
+        void DrawCenter(String text) {
+            var measure = Helvetica.MeasureString(text);
+            var location = new Vector2(GraphicsDevice.Viewport.Width / 2 - measure.X / 2, 50);
+            batch.DrawString(Helvetica, text, location, Color.White);
         }
 
         internal void SetScreen(Screen newScreen) {

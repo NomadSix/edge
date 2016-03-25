@@ -1,14 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace Edge.Hyperion
+namespace Edge.Atlas
 {
     public class Entity
     {
         public Vector2 Position;
         public Vector2 MovingTo;
-        public Single Velocity;
-        public Entity(Int64 id, Single x, Single y) {
+        public Vector2 Velocity;
+        public float Health;
+        public Entity(long id, float x, float y) {
 			Position = new Vector2(x, y);
 		}
     }

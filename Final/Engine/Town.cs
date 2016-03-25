@@ -19,6 +19,7 @@ namespace Edge.Hyperion.Engine {
         string Port, Address;
         string Name;
         Color pColor = Color.Gray;
+        float health = 1;
 
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
         Point mapSize = new Point(AssetStore.TownSize);
@@ -30,14 +31,15 @@ namespace Edge.Hyperion.Engine {
 
         PauseMenu pMenu;
 
-        Rectangle Portal;
-
         List<DebugPlayer> players = new List<DebugPlayer>();
+        List<Enemy> enemys = new List<Enemy>();
+
         int currentFrame = 0;
         int totalFrames = 2;
         int framesPerRow = 2;
         int timeSinceLastFrame = 0;
         int millisecondsPerFrame = 200;
+        int mult = 0;
 
         public Town(Game game, string address, string port) : base(game) {
             Port = port;
@@ -55,14 +57,13 @@ namespace Edge.Hyperion.Engine {
             atlasClient.Connect(Address, int.Parse(Port));
             #endregion
             that.sampleState = SamplerState.PointClamp;
-            Portal = new Rectangle(AssetStore.TileSize * 0, AssetStore.TileSize * 10, 32, 32);
             pMenu = new PauseMenu(that, this);
             that.Components.Add(pMenu);
             base.Initialize();
         }
 
         protected override void LoadContent() {
-            artDebug = that.Content.Load<Texture2D>(@"..\Images\Sheets\Player\MageWalkingSpriteColor.png");
+            artDebug = AssetStore.PlayerTexture;
             Tile.TileSetTexture = that.Content.Load<Texture2D>(@"..\Images\Sheets\Tiles\GrassSheet");
             base.LoadContent();
         }
@@ -91,6 +92,11 @@ namespace Edge.Hyperion.Engine {
 
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 cam.Position = new Vector2(player.Location.X - viewport.Width / 2, player.Location.Y - viewport.Height / 2);
+                foreach (var e in enemys) {
+                    if (player.HitBox.Contains(e.Location))
+                        health -= .05f;
+                }
+                player.Health = health;
             }
             pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16), cam);
             base.Update(gameTime);
@@ -105,16 +111,19 @@ namespace Edge.Hyperion.Engine {
                     that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
                 }
             }
-            that.batch.Draw(AssetStore.Pixel, Portal, Color.White);
 
-            foreach (var p in players) {
+            foreach (var p in players.Where(x => x.entType == Entity.Type.Player)) {
                 var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
-                var location = new Vector2((p.Location.X + 16) - mesurments.X / 2 * scale, p.Location.Y - 32 + 16);
+                var location = new Vector2((p.Location.X + 8) - mesurments.X / 2 * scale, p.Location.Y - 8);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 32, 0, 32, 32), new Color(p.R, p.G, p.B), 0f, Vector2.Zero, new Vector2(1f), p.MoveVector.X > 0.1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 16, mult * 16, 16, 16), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
+                that.batch.Draw(AssetStore.Pixel, p.Location, null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f); 
                 that.batch.Draw(AssetStore.Pixel, p.AttackRec, Color.Wheat);
+            }
+            foreach (var e in enemys) {
+                that.batch.Draw(AssetStore.Pixel, e.Location, null, Color.White, 0f, Vector2.Zero, 50f, SpriteEffects.None, 0f);
             }
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
             DrawMouse();
@@ -129,6 +138,7 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write(pColor.G);
             outMsg.Write(pColor.B);
             outMsg.Write(Environment.UserName);
+            outMsg.Write(health);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
 
             NetIncomingMessage inMsg;
@@ -144,8 +154,14 @@ namespace Edge.Hyperion.Engine {
                                 players.Clear();
                                 ushort numPlayers = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numPlayers; i++)
-                                    players.Add(new DebugPlayer(that, inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString()));
+                                    players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString(), inMsg.ReadFloat()));
                                 break;
+                            case AtlasPackets.DamageEnemy:
+                                enemys.Clear();
+                                ushort numEnemys = inMsg.ReadUInt16();
+                                for (ushort i = 0; i < numEnemys; i++)
+                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadFloat(), inMsg.ReadFloat()));
+                                break; 
                             case AtlasPackets.UpdateMoveVector:
                                 numPlayers = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numPlayers; i++)
@@ -163,16 +179,20 @@ namespace Edge.Hyperion.Engine {
         public void playerMovment(GameTime gameTime) {
 
             if (that.kb.IsButtonDown(Keys.W) || that.kb.IsButtonDown(Keys.Up)) {
+                mult = 2;
                 MoveVector.Y = -1;
             } else if (that.kb.IsButtonDown(Keys.S) || that.kb.IsButtonDown(Keys.Down)) {
+                mult = 1;
                 MoveVector.Y = 1;
             } else {
                 MoveVector.Y = 0;
             }
 
             if (that.kb.IsButtonDown(Keys.A) || that.kb.IsButtonDown(Keys.Left)) {
+                mult = 0;
                 MoveVector.X = -1;
             } else if (that.kb.IsButtonDown(Keys.D) || that.kb.IsButtonDown(Keys.Right)) {
+                mult = 3;
                 MoveVector.X = 1;
             } else {
                 MoveVector.X = 0;

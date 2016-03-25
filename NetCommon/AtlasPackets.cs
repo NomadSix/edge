@@ -12,11 +12,13 @@ namespace Edge.NetCommon {
 		#endregion
 
 		#region Server to Client
-        SendChatMessage
-		#endregion
+        SendChatMessage,
+        UpdateEnemy,
+        #endregion
 
-		#region Client to Server
-		#endregion
-	}
+        #region Client to Server
+        DamageEnemy
+        #endregion
+    }
 }
 

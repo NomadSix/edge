@@ -16,9 +16,9 @@ namespace Edge.Hyperion {
         int timeSinceLastFrame = 0;
         int millisecondsPerFrame = 200;
 
-        public Opening(Game game)
+        public Opening(Game game, Texture2D logo)
             : base(game) {
-                Logo = Edge.Hyperion.Backing.AssetStore.openingThing;
+                Logo = logo;
         }
 
         public override void Update(GameTime gameTime) {
