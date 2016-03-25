@@ -17,7 +17,7 @@ namespace Edge.Hyperion.Backing {
         public static Texture2D PlayerTexture, Pixel, Mouse;
         public static float MasterVolume = 1f;
         public readonly static byte TileSize = 32;
-        public readonly static short TownSize = 100;
+        public readonly static short TownSize = 50;
         public readonly static short DungenSize = 50;
         public static Random rng = new Random();
         public static int Width = 1280;

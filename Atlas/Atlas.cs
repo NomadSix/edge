@@ -111,10 +111,11 @@ namespace Edge.Atlas {
 				#endregion
 
 				//Parallel.ForEach(players.Values, PlayerUpdate);
-				foreach (var p in players)
-					PlayerUpdate(p.Value);
-                foreach (var e in enemys)
-                    EnemyUpdate(e.Value);
+                foreach (var p in players) {
+                    PlayerUpdate(p.Value);
+                    foreach (var e in enemys)
+                        EnemyUpdate(e.Value, p.Value);
+                }
 
 				#region Outgoing Updates
 				//TODO: Compute changed frames, keyframes, etc

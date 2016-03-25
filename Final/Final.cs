@@ -9,7 +9,6 @@ using Edge.Hyperion.UI.Components;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 using Keyboard = Final.Input.Keyboard;
 using Mouse = Final.Input.Mouse;
-using xTile.Display;
 
 namespace Edge.Hyperion {
     public class Final : Game {

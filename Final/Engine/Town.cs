@@ -112,7 +112,7 @@ namespace Edge.Hyperion.Engine {
                 }
             }
 
-            foreach (var p in players.Where(x => x.entType == Entity.Type.Player)) {
+            foreach (var p in players.Where(x => x.entType == DebugPlayer.Type.Player)) {
                 var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);

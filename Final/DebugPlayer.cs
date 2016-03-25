@@ -11,6 +11,7 @@ namespace Edge.Hyperion {
         public byte G = 255;
         public byte B = 255;
         public string Name;
+        public Type entType;
 
         public DebugPlayer(long id, float x, float y, byte r, byte g, byte b, string name, float health)
             : base(id, x, y) {
@@ -22,6 +23,10 @@ namespace Edge.Hyperion {
             R = r;
             G = g;
             B = b;
+        }
+
+        public enum Type : byte {
+            Player
         }
     }
 }

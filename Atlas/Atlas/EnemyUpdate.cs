@@ -4,10 +4,10 @@ using System;
 namespace Edge.Atlas {
     public partial class Atlas {
 
-        void EnemyUpdate(ServerEnemy enemy) {
+        void EnemyUpdate(ServerEnemy enemy, DebugPlayer player) {
             //update
-            enemy.MovingTo = new Vector2(100, 100);
-            MoveTo(enemy, 5);
+            enemy.MovingTo = new Vector2(player.Position.X, player.Position.Y);
+            MoveTo(enemy, 200);
         }
         
         void MoveTo(ServerEnemy ent, float movespeed) {

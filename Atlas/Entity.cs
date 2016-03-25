@@ -8,6 +8,8 @@ namespace Edge.Atlas
         public Vector2 MovingTo;
         public Vector2 Velocity;
         public float Health;
+        public int Width;
+        public int Height;
         public Entity(long id, float x, float y) {
 			Position = new Vector2(x, y);
 		}
