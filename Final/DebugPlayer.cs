@@ -19,7 +19,7 @@ namespace Edge.Hyperion {
             entType = Type.Player;
             Name = name.Split(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' })[0];
             Location = new Vector2(x, y);
-            HitBox = new Rectangle(Location.ToPoint(), new Point(32));
+            HitBox = new Rectangle(Location.ToPoint(), new Point(16));
             R = r;
             G = g;
             B = b;

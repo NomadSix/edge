@@ -93,8 +93,8 @@ namespace Edge.Hyperion.Engine {
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 cam.Position = new Vector2(player.Location.X - viewport.Width / 2, player.Location.Y - viewport.Height / 2);
                 foreach (var e in enemys) {
-                    if (player.HitBox.Contains(e.Location))
-                        health -= .05f;
+                    if (player.HitBox.Intersects(e.hitBox))
+                        health -= .005f;
                 }
                 player.Health = health;
             }
@@ -119,11 +119,11 @@ namespace Edge.Hyperion.Engine {
                 var location = new Vector2((p.Location.X + 8) - mesurments.X / 2 * scale, p.Location.Y - 8);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
                 that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 16, mult * 16, 16, 16), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
-                that.batch.Draw(AssetStore.Pixel, p.Location, null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f); 
-                that.batch.Draw(AssetStore.Pixel, p.AttackRec, Color.Wheat);
+                that.batch.Draw(AssetStore.Pixel, p.Location, null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
+                that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
             }
             foreach (var e in enemys) {
-                that.batch.Draw(AssetStore.Pixel, e.Location, null, Color.White, 0f, Vector2.Zero, 50f, SpriteEffects.None, 0f);
+                that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
             }
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
             DrawMouse();

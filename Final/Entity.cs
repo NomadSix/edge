@@ -8,5 +8,7 @@ namespace Edge.Hyperion {
 		}
 	    public float Health = 1;
 		public Vector2 Location;
+        public int Width;
+        public int Height;
     }
 }

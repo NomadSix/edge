@@ -7,7 +7,7 @@ namespace Edge.Atlas {
         void EnemyUpdate(ServerEnemy enemy, DebugPlayer player) {
             //update
             enemy.MovingTo = new Vector2(player.Position.X, player.Position.Y);
-            MoveTo(enemy, 200);
+            MoveTo(enemy, 20);
         }
         
         void MoveTo(ServerEnemy ent, float movespeed) {
