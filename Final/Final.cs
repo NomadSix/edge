@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Screen2 = System.Windows.Forms.Screen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.UI.Components;
@@ -55,10 +56,11 @@ namespace Edge.Hyperion {
             #region Window
             graphics.PreferredBackBufferWidth = AssetStore.Width;
             graphics.PreferredBackBufferHeight = AssetStore.Height;
+            var Screen = Screen2.PrimaryScreen.WorkingArea.Size;
+            Window.Position = new Point((Screen.Width - AssetStore.Width) / 2, (Screen.Height - AssetStore.Height) / 2);
             graphics.IsFullScreen = false;
             IsMouseVisible = true;
             graphics.ApplyChanges();
-            Window.Position = new Point(AssetStore.Width / 4, AssetStore.Height / 4);
             #endregion
             thread = new Thread(new ThreadStart(LoadLostsOfContent));
             thread.Name = "Content Loading Thread";
