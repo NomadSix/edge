@@ -209,6 +209,8 @@ namespace Edge.Hyperion.Engine {
                     timeSinceLastFrame -= millisecondsPerFrame;
                     currentFrame += 1;
                 }
+            } else {
+                currentFrame = 0;
             }
         }
 
