@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Screen2 = System.Windows.Forms.Screen;
+﻿using Screen2 = System.Windows.Forms.Screen;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Edge.Hyperion.UI.Components;
+
+using ThreadStart = System.Threading.ThreadStart;
+using Thread = System.Threading.Thread;
+
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
+using Edge.Hyperion.UI.Components;
 
 namespace Edge.Hyperion {
     public class Final : Game {
@@ -15,9 +15,6 @@ namespace Edge.Hyperion {
             using (var game = new Final())
                 game.Run();
         }
-
-        private Screen _currentScreen;
-        private Screen[] _currentScreens;
 
         public SpriteFont GreySpriteFont;
         public Texture2D GreyImageMap;
@@ -34,21 +31,13 @@ namespace Edge.Hyperion {
         public delegate void Action();
 
         bool contentLoaded = false;
-        Thread thread;
+        Thread ContentThread;
 
         public object NativeMethods { get; private set; }
 
         public Final() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-        }
-
-        void OnExit(object sender, EventArgs e) {
-            //TODO: This needs to be passed to individual Screens to notify the appropriate servers of the User prompted disconnect (this won't trigger if it's a crash, or internet issue)
-            
-        }
-
-        protected override void Initialize() {
             #region Window
             graphics.PreferredBackBufferWidth = AssetStore.Width;
             graphics.PreferredBackBufferHeight = AssetStore.Height;
@@ -58,9 +47,17 @@ namespace Edge.Hyperion {
             IsMouseVisible = true;
             graphics.ApplyChanges();
             #endregion
-            thread = new Thread(new ThreadStart(LoadLostsOfContent));
-            thread.Name = "Content Loading Thread";
-            thread.Start();
+        }
+
+        void OnExit(object sender, System.EventArgs e) {
+            //TODO: This needs to be passed to individual Screens to notify the appropriate servers of the User prompted disconnect (this won't trigger if it's a crash, or internet issue)
+            
+        }
+
+        protected override void Initialize() {
+            ContentThread = new Thread(new ThreadStart(LoadLostsOfContent));
+            ContentThread.Name = "Content Loading Thread";
+            ContentThread.Start();
 
             base.Initialize();
         }
@@ -100,7 +97,7 @@ namespace Edge.Hyperion {
             batch.End();
         }
 
-        void DrawCenter(String text) {
+        void DrawCenter(string text) {
             var measure = Helvetica.MeasureString(text);
             var location = new Vector2(GraphicsDevice.Viewport.Width / 2 - measure.X / 2, 50);
             batch.DrawString(Helvetica, text, location, Color.White);
