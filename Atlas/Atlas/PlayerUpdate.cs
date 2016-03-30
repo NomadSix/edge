@@ -26,14 +26,14 @@ namespace Edge.Atlas {
 		    var dt = (currentTime - lastTime)/TimeSpan.TicksPerMillisecond;
 
             if (player.MoveVector.Y >= 0)
-                player.Velocity.Y = maxVel.Y * player.MoveVector.Y;
+                player.Velocity.Y = (int)(maxVel.Y * player.MoveVector.Y);
             if (player.MoveVector.Y <= 0)
-                player.Velocity.Y = maxVel.Y * player.MoveVector.Y;
+                player.Velocity.Y = (int)(maxVel.Y * player.MoveVector.Y);
 
             if (player.MoveVector.X >= 0)
-                player.Velocity.X = maxVel.X * player.MoveVector.X;
+                player.Velocity.X = (int)(maxVel.X * player.MoveVector.X);
             if (player.MoveVector.X <= 0)
-                player.Velocity.X = maxVel.X * player.MoveVector.X;
+                player.Velocity.X = (int)(maxVel.X * player.MoveVector.X);
             player.Position += player.Velocity;
         }
 

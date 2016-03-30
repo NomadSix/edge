@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Edge.Hyperion.Backing;
 
 namespace Edge.Hyperion {
     public class DebugPlayer : Entity {
@@ -13,16 +15,19 @@ namespace Edge.Hyperion {
         public string Name;
         public Type entType;
 
-        public DebugPlayer(long id, float x, float y, byte r, byte g, byte b, string name, float health)
+        public DebugPlayer(long id, int x, int y, byte r, byte g, byte b, string name, float health)
             : base(id, x, y) {
             NetID = id;
             entType = Type.Player;
             Name = name.Split(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' })[0];
-            Location = new Vector2(x, y);
-            HitBox = new Rectangle(Location.ToPoint(), new Point(16));
+            X = x;
+            Y = y;
             R = r;
             G = g;
             B = b;
+            Width = 16;
+            Height = 16;
+            HitBox = new Rectangle(new Point(X - Width / 2, Y - Height / 2), new Point(Width));
         }
 
         public enum Type : byte {

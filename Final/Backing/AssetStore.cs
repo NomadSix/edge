@@ -22,6 +22,9 @@ namespace Edge.Hyperion.Backing {
         public static Random rng = new Random();
         public static int Width = 1280;
         public static int Height = 720;
+
+        internal static Keyboard kb;
+        internal static Mouse mouse;
         //public static ContentManager Content = new ContentManager(Game);
     }
 }

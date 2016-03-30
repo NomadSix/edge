@@ -1,17 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Edge.Hyperion.UI.Implementation.Popups;
-using System.Windows.Forms;
-using Screens = System.Windows.Forms.Screen;
-using Edge.Hyperion.Backing;
+﻿using Game = Microsoft.Xna.Framework.Game;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using GameTime = Microsoft.Xna.Framework.GameTime;
+using Viewport = Microsoft.Xna.Framework.Graphics.Viewport;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Screen:UIComponent {
 		//TODO: Background texture?
 		//TODO: How to handle popup finishing?
 		public Popup _activePopup;
-        public Boolean _isActive = true;
+        public bool _isActive = true;
         public readonly Viewport viewport;
         protected Camera2D cam;
 
@@ -29,13 +26,6 @@ namespace Edge.Hyperion.UI.Components {
 			if(_activePopup == null)
 				_activePopup = popup;
 		}
-
-        protected void DrawMouse() {
-            that.batch.End();
-            that.batch.Begin();
-            that.batch.Draw(AssetStore.Mouse, that.mouse.LocationV2, Color.White);
-            that.batch.End();
-        }
 
     }
 }

@@ -6,7 +6,7 @@ namespace Edge.Atlas {
         public Vector2 MoveVector;
         public Vector2 Acceleration = new Vector2(30f);
         public Color pColor;
-        public ServerEnemy(long id, float x, float y) : base(id, x, y) {
+        public ServerEnemy(long id, int x, int y) : base(id, x, y) {
             NetID = id;
         }
     }

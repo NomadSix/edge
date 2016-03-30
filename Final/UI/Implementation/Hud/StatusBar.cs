@@ -4,14 +4,16 @@ using System.Text;
 using System.Collections.Generic;
 using Edge.Hyperion.UI.Components;
 using Microsoft.Xna.Framework;
+using Edge.Hyperion.Backing;
 
-namespace Edge.Hyperion.UI.Implementation.Hud
-{
+namespace Edge.Hyperion.UI.Components {
     public class StatusBar : UIComponent
     {
         float Size;
         float Height = 75;
-        float Width = 0;
+        int Width = 0;
+        int X, Y;
+        Rectangle Bounds;
 
         float Health;
 
@@ -20,8 +22,12 @@ namespace Edge.Hyperion.UI.Implementation.Hud
         }
 
         public override void Initialize() {
+            this.Visible = true;
             Height *= Size;
             Width = that.GraphicsDevice.Viewport.Width;
+            X = 0;
+            Y = that.GraphicsDevice.Viewport.Height - (int)Height;
+            Bounds = new Rectangle(X, Y, Width, (int)Height);
             base.Initialize();
         }
 
@@ -29,12 +35,11 @@ namespace Edge.Hyperion.UI.Implementation.Hud
             Health = player.Health;
         }
 
-        public override void Update(GameTime gameTime) {
-            base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime) {
-            base.Draw(gameTime);
+        public void draw() {
+            that.batch.End();
+            that.batch.Begin();
+            that.batch.Draw(AssetStore.Pixel, Bounds, Color.Gray);
+            that.batch.End();
         }
     }
 }

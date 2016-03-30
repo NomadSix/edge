@@ -52,7 +52,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
         }
 
         public void update(Vector2 pos, Camera2D cam2) {
-            if (that.kb.IsButtonToggledDown(Keys.Escape)) {
+            if (AssetStore.kb.IsButtonToggledDown(Keys.Escape)) {
                 that.sampleState = SamplerState.PointClamp;
                 _isActive = !_isActive;
                 Kill();

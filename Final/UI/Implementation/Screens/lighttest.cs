@@ -192,14 +192,14 @@ namespace Edge.Hyperion.UI.Implementation.Screens {
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
-                playerPosition.Y--;
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-                playerPosition.X--;
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
-                playerPosition.Y++;
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                playerPosition.X++;
+            //if (Keyboard.GetState().IsKeyDown(Keys.W))
+            //    playerPosition.Y--;
+            //if (Keyboard.GetState().IsKeyDown(Keys.A))
+            //    playerPosition.X--;
+            //if (Keyboard.GetState().IsKeyDown(Keys.S))
+            //    playerPosition.Y++;
+            //if (Keyboard.GetState().IsKeyDown(Keys.D))
+            //    playerPosition.X++;
 
             lights[0].Position = playerPosition;
 

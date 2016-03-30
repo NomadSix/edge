@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Final.Input {
+namespace Edge.Hyperion.Backing {
 	public class Keyboard : GameComponent {
 		KeyboardState current;
 		KeyboardState last;

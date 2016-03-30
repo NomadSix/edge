@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Final.Input;
+using Edge.Hyperion.Backing;
 
 namespace Edge.Hyperion.UI.Components {
 	public class Slider:UIComponent {
@@ -16,9 +16,9 @@ namespace Edge.Hyperion.UI.Components {
 		}
 
 		public override void Update(GameTime gameTime) {
-			if(that.mouse.IsButtonDown(Mouse.MouseButtons.Left) && _position.Contains(that.mouse.Location))
+			if(AssetStore.mouse.IsButtonDown(Mouse.MouseButtons.Left) && _position.Contains(AssetStore.mouse.Location))
 				Value = MathHelper.Clamp(
-					(that.mouse.Location.X - (_knob.Width / 2f) - _position.X) / (_position.Width - _knob.Width),
+					(AssetStore.mouse.Location.X - (_knob.Width / 2f) - _position.X) / (_position.Width - _knob.Width),
 					0, 1);
 			base.Update(gameTime);
 		}

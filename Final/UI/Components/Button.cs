@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.UI.Implementation.Popups;
-using Mouse = Final.Input.Mouse;
 using Edge.Hyperion.Backing;
 
 namespace Edge.Hyperion.UI.Components {
@@ -29,8 +28,8 @@ namespace Edge.Hyperion.UI.Components {
         }
 
         public override void Update(GameTime gameTime) {
-            _hovering = _location.Contains(that.mouse.Location);
-            if (_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
+            _hovering = _location.Contains(AssetStore.mouse.Location);
+            if (_hovering && AssetStore.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
                 _action();
             // I know this is Bad but i dont want to think of how to make it better just took act
             _textLocation = new Vector2(_location.Width / 2f - _measurements.X / 2f + _location.X, _location.Height / 2f - _measurements.Y / 2f + _location.Y);
@@ -38,8 +37,8 @@ namespace Edge.Hyperion.UI.Components {
         }
 
         public void update(Vector2 init, Camera2D cam) {
-            _hovering = _location.Contains(that.mouse.LocationV2);
-            if (_hovering && that.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
+            _hovering = _location.Contains(AssetStore.mouse.LocationV2);
+            if (_hovering && AssetStore.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
                 _action();
             // I know this is Bad but i dont want to think of how to make it better just took act
             _textLocation = new Vector2(_location.Width / 2f - _measurements.X / 2f + _location.X, _location.Height / 2f - _measurements.Y / 2f + _location.Y);

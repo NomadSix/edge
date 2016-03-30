@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Mixed Platforms</Platform>
     <ProjectGuid>{7852AC49-4D47-40F3-BFB2-5C287872F554}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Edge.Hyperion</RootNamespace>
     <AssemblyName>Hyperion</AssemblyName>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <LangVersion>3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -83,8 +86,8 @@
     <Compile Include="Entity.cs" />
     <Compile Include="Final.cs" />
     <Compile Include="Backing\AssetStore.cs" />
-    <Compile Include="Images\Input\Keyboard.cs" />
-    <Compile Include="Images\Input\Mouse.cs" />
+    <Compile Include="Backing\Input\Keyboard.cs" />
+    <Compile Include="Backing\Input\Mouse.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Engine\Town.cs" />
     <Compile Include="UI\Components\Button.cs" />
@@ -139,9 +142,6 @@
     <Content Include="Images\MageArms.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Mouse\placeholder.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Images\Sheets\Player\LinkSheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -180,9 +180,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
-    <Content Include="Images\Mouse\portalunknown.ani">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Images\Sheets\grass.tbin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

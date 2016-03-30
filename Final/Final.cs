@@ -8,8 +8,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Edge.Hyperion.UI.Components;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
-using Keyboard = Final.Input.Keyboard;
-using Mouse = Final.Input.Mouse;
 
 namespace Edge.Hyperion {
     public class Final : Game {
@@ -27,8 +25,6 @@ namespace Edge.Hyperion {
 
         GraphicsDeviceManager graphics;
         internal SpriteBatch batch;
-        internal Keyboard kb;
-        internal Mouse mouse;
 
         internal Matrix viewMatrix;
         internal SamplerState sampleState;
@@ -72,19 +68,15 @@ namespace Edge.Hyperion {
         void LoadLostsOfContent() {
             #region Component Configuration
             batch = new SpriteBatch(GraphicsDevice);
-            kb = new Keyboard(this);
-            mouse = new Mouse(this);
-            Components.Add(kb);
-            Components.Add(mouse);
+            AssetStore.kb = new Backing.Keyboard(this);
+            AssetStore.mouse = new Backing.Mouse(this);
+            Components.Add(AssetStore.kb);
+            Components.Add(AssetStore.mouse);
             AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
             AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
-            AssetStore.Mouse = Content.Load<Texture2D>(@"../Images/Mouse/placeholder.png");
             Popup.backGround = AssetStore.Pixel;
-            var hud = new UI.Implementation.Hud.StatusBar(this, 1.0f);
-            hud.Visible = false;
-            Components.Add(hud);
             SetScreen(new MainMenu(this));
             #endregion
             contentLoaded = true;
@@ -117,8 +109,8 @@ namespace Edge.Hyperion {
         internal void SetScreen(Screen newScreen) {
             viewMatrix = default(Matrix);
             Components.Clear();
-            Components.Add(kb);
-            Components.Add(mouse);
+            Components.Add(AssetStore.kb);
+            Components.Add(AssetStore.mouse);
             Components.Add(newScreen);
         }
     }

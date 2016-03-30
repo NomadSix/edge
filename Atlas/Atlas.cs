@@ -168,7 +168,7 @@ namespace Edge.Atlas {
 				string readLine = Console.ReadLine();
 				#region Parse out the command and arguments
 				//If they didn't say anything, we don't need to do anything
-				if(String.IsNullOrWhiteSpace(readLine)) return;
+				if(string.IsNullOrWhiteSpace(readLine)) return;
 
 				string command;
 				#region Parse out parameterless commands
@@ -182,9 +182,14 @@ namespace Edge.Atlas {
 				}
 				#endregion
 
-				var args = new List<String>();
-				//Take everything between the opening and closing parenthesies
-				String argStr = readLine.Substring(readLine.IndexOf('(') + 1, readLine.IndexOf(')') - (readLine.IndexOf('(') + 1));
+				var args = new List<string>();
+                string argStr = string.Empty;
+                //Take everything between the opening and closing parenthesies
+                try {
+                    argStr = readLine.Substring(readLine.IndexOf('(') + 1, readLine.IndexOf(')') - (readLine.IndexOf('(') + 1));
+                }
+                catch (Exception e) {
+                }
 				try {
 					//Try to split the arguments by commas
 					args = argStr.Split(',').ToList();
@@ -193,7 +198,7 @@ namespace Edge.Atlas {
 					try {
 						//If the split failed, it ether had no arguments (do nothing)
 						//or had only one argument (add that argument)
-						if(!String.IsNullOrWhiteSpace(argStr))
+						if(!string.IsNullOrWhiteSpace(argStr))
 							args.Add(argStr);
 					}
 					// Analysis disable once EmptyGeneralCatchClause
@@ -215,7 +220,7 @@ namespace Edge.Atlas {
 		/// </summary>
 		/// <param name="command">Command to be exected</param>
 		/// <param name="args">Arguments being passed in</param>
-		public void Control(String command, List<String> args) {
+		public void Control(string command, List<string> args) {
 			switch(command.ToUpper()) {
 				case "END":
 				case "STOP":
@@ -233,30 +238,30 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add(long.Parse(args[0]), new ServerEnemy(long.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+						enemys.Add((long)enemys.Count + 1, new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1])));
                     }
                     break;
                 case "ENTS":
                     foreach(var e in enemys)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
+                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})", e.Value.NetID, e.Value.Position.X, e.Value.Position.Y);
                     break;
 				case "PLAYERS":
                     foreach(var e in players)
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
                     break;
 				case "MOVE": {
-						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
+						var location = new Point(int.Parse(args[1]), int.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
-						Int64 ID = Int64.Parse(args[0]);
+						long ID = long.Parse(args[0]);
 						if(players.ContainsKey(ID))
 							players[Convert.ToInt64(args[0])].MovingTo = location;
 						break; 
 					}
 				default:
 					{
-						String argList = String.Empty;
+						string argList = string.Empty;
 						args.ForEach(arg => argList += arg + ",");
-						throw new NotSupportedException(String.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
+						throw new NotSupportedException(string.Format("Unrecognised command\nCommand: {0}\nArgs: {1}", command, argList));
 					}
 			}
 		}

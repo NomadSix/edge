@@ -1,17 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Point = Microsoft.Xna.Framework.Point;
 
 namespace Edge.Atlas
 {
     public class Entity
     {
-        public Vector2 Position;
-        public Vector2 MovingTo;
-        public Vector2 Velocity;
+        public Point Position;
+        public Point MovingTo;
+        public Point Velocity;
         public float Health;
         public int Width;
         public int Height;
-        public Entity(long id, float x, float y) {
-			Position = new Vector2(x, y);
+        public Entity(long id, int x, int y) {
+			Position = new Point(x, y);
 		}
     }
 }

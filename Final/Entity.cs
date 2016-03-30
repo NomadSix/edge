@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework;
 
 namespace Edge.Hyperion {
 	public class Entity {
-        public Entity(Int64 id, Single x, Single y) {
-			Location = new Vector2(x, y);
+        public Entity(long id, int x, int y) {
+            X = x;
+            Y = y;
 		}
 	    public float Health = 1;
-		public Vector2 Location;
+        public int X;
+        public int Y;
         public int Width;
         public int Height;
     }

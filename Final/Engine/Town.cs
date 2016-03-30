@@ -30,12 +30,12 @@ namespace Edge.Hyperion.Engine {
         List<Slider> colorSliders = new List<Slider>();
 
         PauseMenu pMenu;
+        StatusBar statusBar;
 
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Enemy> enemys = new List<Enemy>();
 
         int currentFrame = 0;
-        int totalFrames = 2;
         int framesPerRow = 2;
         int timeSinceLastFrame = 0;
         int millisecondsPerFrame = 200;
@@ -58,6 +58,8 @@ namespace Edge.Hyperion.Engine {
             #endregion
             that.sampleState = SamplerState.PointClamp;
             pMenu = new PauseMenu(that, this);
+            statusBar = new StatusBar(that, 1f);
+            that.Components.Add(statusBar);
             that.Components.Add(pMenu);
             base.Initialize();
         }
@@ -79,7 +81,7 @@ namespace Edge.Hyperion.Engine {
                 playerMovment(gameTime);
             }
 
-            if (that.kb.IsButtonToggledDown(Keys.Space)) {
+            if (AssetStore.kb.IsButtonToggledDown(Keys.Space)) {
                 pColor.R = (byte)AssetStore.rng.Next(0, 255);
                 pColor.G = (byte)AssetStore.rng.Next(0, 255);
                 pColor.B = (byte)AssetStore.rng.Next(0, 255);
@@ -91,10 +93,12 @@ namespace Edge.Hyperion.Engine {
             }
 
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
-                cam.Position = new Vector2(player.Location.X - viewport.Width / 2, player.Location.Y - viewport.Height / 2);
+                cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
                 foreach (var e in enemys) {
                     if (player.HitBox.Intersects(e.hitBox))
                         health -= .005f;
+                    if (e.hitBox.Intersects(player.AttackRec))
+                        e.Health -= .0025f;
                 }
                 player.Health = health;
             }
@@ -112,21 +116,22 @@ namespace Edge.Hyperion.Engine {
                 }
             }
 
-            foreach (var p in players.Where(x => x.entType == DebugPlayer.Type.Player)) {
-                var mouse = Vector2.Transform(that.mouse.LocationV2, cam.Deproject);
+            foreach (var p in players) {
+                var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
-                var location = new Vector2((p.Location.X + 8) - mesurments.X / 2 * scale, p.Location.Y - 8);
+                var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                that.batch.Draw(artDebug, p.Location, new Rectangle((currentFrame % framesPerRow) * 16, mult * 16, 16, 16), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
-                that.batch.Draw(AssetStore.Pixel, p.Location, null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
+                //that.batch.Draw(artDebug, new Vector2(p.X, p.Y), new Rectangle((currentFrame % framesPerRow) * 16, mult * 16, 16, 16), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
+                that.batch.Draw(artDebug, p.HitBox, new Rectangle((currentFrame % framesPerRow) * p.Width, mult * p.Width, p.Width, p.Width), Color.White);
+                that.batch.Draw(AssetStore.Pixel, new Vector2(p.X, p.Y), null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
                 that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
             }
             foreach (var e in enemys) {
                 that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
             }
+            statusBar.draw();
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
-            DrawMouse();
         }
 
         public void serverIO() {
@@ -154,13 +159,13 @@ namespace Edge.Hyperion.Engine {
                                 players.Clear();
                                 ushort numPlayers = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numPlayers; i++)
-                                    players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadSingle(), inMsg.ReadSingle(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString(), inMsg.ReadFloat()));
+                                    players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString(), inMsg.ReadFloat()));
                                 break;
                             case AtlasPackets.DamageEnemy:
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numEnemys; i++)
-                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadFloat(), inMsg.ReadFloat()));
+                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32()));
                                 break; 
                             case AtlasPackets.UpdateMoveVector:
                                 numPlayers = inMsg.ReadUInt16();
@@ -177,28 +182,27 @@ namespace Edge.Hyperion.Engine {
         }
 
         public void playerMovment(GameTime gameTime) {
-
-            if (that.kb.IsButtonDown(Keys.W) || that.kb.IsButtonDown(Keys.Up)) {
+            if (AssetStore.kb.IsButtonDown(Keys.W) || AssetStore.kb.IsButtonDown(Keys.Up)) {
                 mult = 2;
                 MoveVector.Y = -1;
-            } else if (that.kb.IsButtonDown(Keys.S) || that.kb.IsButtonDown(Keys.Down)) {
+            } else if (AssetStore.kb.IsButtonDown(Keys.S) || AssetStore.kb.IsButtonDown(Keys.Down)) {
                 mult = 1;
                 MoveVector.Y = 1;
             } else {
                 MoveVector.Y = 0;
             }
 
-            if (that.kb.IsButtonDown(Keys.A) || that.kb.IsButtonDown(Keys.Left)) {
+            if (AssetStore.kb.IsButtonDown(Keys.A) || AssetStore.kb.IsButtonDown(Keys.Left)) {
                 mult = 0;
                 MoveVector.X = -1;
-            } else if (that.kb.IsButtonDown(Keys.D) || that.kb.IsButtonDown(Keys.Right)) {
+            } else if (AssetStore.kb.IsButtonDown(Keys.D) || AssetStore.kb.IsButtonDown(Keys.Right)) {
                 mult = 3;
                 MoveVector.X = 1;
             } else {
                 MoveVector.X = 0;
             }
-            
-            
+
+
             if (MoveVector != Vector2.Zero) {
                 timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
                 if (timeSinceLastFrame > millisecondsPerFrame) {
@@ -210,12 +214,12 @@ namespace Edge.Hyperion.Engine {
 
         public void cameraControl() {
             var zoomFactor = 0.3f;
-            newer = Mouse.GetState();
+            newer = Microsoft.Xna.Framework.Input.Mouse.GetState();
             if (newer.ScrollWheelValue > old.ScrollWheelValue) {
                 cam.Zoom += cam.Zoom <= 3 ? zoomFactor : 0;
             } else if (newer.ScrollWheelValue < old.ScrollWheelValue) {
                 cam.Zoom -= cam.Zoom >= 2 ? zoomFactor : 0;
-            } else if (that.kb.IsButtonDown(Keys.C) || that.kb.IsButtonDown(Keys.Home)) {
+            } else if (AssetStore.kb.IsButtonDown(Keys.C) || AssetStore.kb.IsButtonDown(Keys.Home)) {
                 cam.Zoom = 1.0f;
             }
             old = newer;

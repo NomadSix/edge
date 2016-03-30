@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Edge.Hyperion.UI.Components;
-using Microsoft.Xna.Framework;
-using Edge.Hyperion.Engine;
-using Microsoft.Xna.Framework.Graphics;
-using Edge.Hyperion.UI.Implementation.Popups;
+
+using Game = Microsoft.Xna.Framework.Game;
+using Point = Microsoft.Xna.Framework.Point;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using GameTime = Microsoft.Xna.Framework.GameTime;
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
+using SpriteEffects = Microsoft.Xna.Framework.Graphics.SpriteEffects;
+
+using TileMap = Edge.Hyperion.Engine.TileMap;
+using Tile = Edge.Hyperion.Engine.Tile;
+using Town = Edge.Hyperion.Engine.Town;
+
 using btn = Edge.Hyperion.UI.Components.Button;
+
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
+
 
 namespace Edge.Hyperion {
     public class MainMenu : Screen {
@@ -64,11 +73,10 @@ namespace Edge.Hyperion {
             for (int i = 0; i < btnList.Count; i++)
                 btnList[i].Draw(gameTime);
             DrawCenter(title);
-            DrawMouse();
             base.Draw(gameTime);
         }
 
-        public void DrawCenter(String text) {
+        public void DrawCenter(string text) {
             var measure = that.Helvetica.MeasureString(text);
             var location = new Vector2(viewport.Width / 2 - measure.X / 2, 50);
             that.batch.DrawString(that.Helvetica, text, location, Color.White);
