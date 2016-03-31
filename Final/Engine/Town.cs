@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Lidgren.Network;
 using Edge.Hyperion.UI.Components;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
+
 using Edge.Hyperion.Backing;
-using Lidgren.Network;
 using Edge.NetCommon;
 using Edge.Hyperion.UI.Implementation.Popups;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
-using Microsoft.Xna.Framework.Input;
 
 namespace Edge.Hyperion.Engine {
     public class Town : Screen {
@@ -26,8 +26,6 @@ namespace Edge.Hyperion.Engine {
         Vector2 MoveVector;
 
         MouseState old, newer;
-
-        List<Slider> colorSliders = new List<Slider>();
 
         PauseMenu pMenu;
         StatusBar statusBar;
@@ -82,19 +80,13 @@ namespace Edge.Hyperion.Engine {
             }
 
             if (AssetStore.kb.IsButtonToggledDown(Keys.Space)) {
-                pColor.R = (byte)AssetStore.rng.Next(0, 255);
-                pColor.G = (byte)AssetStore.rng.Next(0, 255);
-                pColor.B = (byte)AssetStore.rng.Next(0, 255);
+                health = 1f;
             }
+
             serverIO();
-
-            if (pMenu._isActive) {
-                MoveVector = Vector2.Zero;
-            }
-
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
-                foreach (var e in enemys) {
+                foreach (var e in enemys.Where(x => x.isActive == true)) {
                     if (player.HitBox.Intersects(e.hitBox))
                         health -= .005f;
                     if (e.hitBox.Intersects(player.AttackRec))
@@ -102,13 +94,17 @@ namespace Edge.Hyperion.Engine {
                 }
                 player.Health = health;
             }
+
+            if (pMenu._isActive) {
+                MoveVector = Vector2.Zero;
+            }
             pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16), cam);
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime) {
             Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
-            for (int y = 0; y < mapSize.Y; y++) {
+            for (int y = 0; y < mapSize.Y; y++) { // Main loop to draw the tile map .csv to the world
                 for (int x = 0; x < mapSize.X; x++) {
                     Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
                     Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
@@ -116,18 +112,17 @@ namespace Edge.Hyperion.Engine {
                 }
             }
 
-            foreach (var p in players) {
+            foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                //that.batch.Draw(artDebug, new Vector2(p.X, p.Y), new Rectangle((currentFrame % framesPerRow) * 16, mult * 16, 16, 16), Color.White, 0f, Vector2.Zero, new Vector2(1f), SpriteEffects.None, 0);
                 that.batch.Draw(artDebug, p.HitBox, new Rectangle((currentFrame % framesPerRow) * p.Width, mult * p.Width, p.Width, p.Width), Color.White);
-                that.batch.Draw(AssetStore.Pixel, new Vector2(p.X, p.Y), null, Color.Red, (float)Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
+                that.batch.Draw(AssetStore.Pixel, new Vector2(p.X, p.Y), null, Color.Red, (float)System.Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
                 that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
             }
-            foreach (var e in enemys) {
+            foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
             }
             statusBar.draw();
@@ -142,9 +137,17 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write(pColor.R);
             outMsg.Write(pColor.G);
             outMsg.Write(pColor.B);
-            outMsg.Write(Environment.UserName);
+            outMsg.Write(System.Environment.UserName);
             outMsg.Write(health);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
+
+            foreach (Enemy e in enemys) {
+                outMsg = atlasClient.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.RequestMoveVector);
+                outMsg.Write(e.NetID);
+                outMsg.Write(e.Target.X);
+                outMsg.Write(e.Target.Y);
+            }
 
             NetIncomingMessage inMsg;
             while ((inMsg = atlasClient.ReadMessage()) != null) {
@@ -161,17 +164,21 @@ namespace Edge.Hyperion.Engine {
                                 for (ushort i = 0; i < numPlayers; i++)
                                     players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString(), inMsg.ReadFloat()));
                                 break;
+                            case AtlasPackets.UpdateMoveVector:
+                                if (enemys.Count != 0) {
+                                    int ID = inMsg.ReadInt32();
+                                    int X = inMsg.ReadInt32();
+                                    int Y = inMsg.ReadInt32();
+                                    enemys[ID - 1].Target = new Point(X, Y);
+                                }
+                                break;
                             case AtlasPackets.DamageEnemy:
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
-                                for (ushort i = 0; i < numEnemys; i++)
+                                for (ushort i = 0; i < numEnemys; i++) {
                                     enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32()));
+                                }
                                 break; 
-                            case AtlasPackets.UpdateMoveVector:
-                                numPlayers = inMsg.ReadUInt16();
-                                for (ushort i = 0; i < numPlayers; i++)
-                                    players[i].MoveVector = new Vector2(inMsg.ReadSingle(), inMsg.ReadSingle());
-                                break;
                         }
                         break;
                     case NetIncomingMessageType.DiscoveryResponse:

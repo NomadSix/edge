@@ -78,6 +78,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Engine\Circle.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />
@@ -143,15 +144,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Player\LinkSheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Sheets\Player\MageWalkingSprite.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Sheets\Player\MageWalkingSpriteColor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Sheets\Player\Warrior Sprite Sheet Walking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Tiles\DungenSheet.png">

@@ -6,13 +6,7 @@ namespace Edge.Hyperion.Engine {
         public int Y;
         public int RadiusX;
         public int RadiusY;
-
-        public Circle() {
-            X = 0;
-            Y = 0;
-            RadiusX = 0;
-            RadiusY = 0;
-        }
+        
         public Circle(int x, int y, int radius) {
             X = x;
             Y = y;
@@ -26,14 +20,34 @@ namespace Edge.Hyperion.Engine {
             RadiusY = radiusy;
         }
 
-        public bool Intersects(Rectangle rec) {
-            Point p = new Point();
-            p.X = MathHelper.Clamp(getCenter().X, rec.Left, rec.Right);
-            p.Y = MathHelper.Clamp(getCenter().Y, rec.Top, rec.Bottom);
-            Point direction = getCenter() - p;
-            int distanceSquared = (int)direction.ToVector2().LengthSquared();
+        public bool Intersects(Rectangle rectangle) {
+            // the first thing we want to know is if any of the corners intersect
+            var corners = new[]
+            {
+            new Point(rectangle.Top, rectangle.Left),
+            new Point(rectangle.Top, rectangle.Right),
+            new Point(rectangle.Bottom, rectangle.Right),
+            new Point(rectangle.Bottom, rectangle.Left)
+        };
 
-            return ((distanceSquared > 0) && (distanceSquared < RadiusX * RadiusX));
+            foreach (var corner in corners) {
+                if (ContainsPoint(corner))
+                    return true;
+            }
+
+            // next we want to know if the left, top, right or bottom edges overlap
+            if (X - RadiusX > rectangle.Right || X + RadiusX < rectangle.Left)
+                return false;
+
+            if (Y - RadiusY > rectangle.Bottom || Y + RadiusY < rectangle.Top)
+                return false;
+
+            return true;
+        }
+
+        public bool ContainsPoint(Point point) {
+            var vector2 = new Vector2(point.X - X, point.Y - Y);
+            return vector2.Length() <= RadiusX;
         }
 
         public Point getCenter() {

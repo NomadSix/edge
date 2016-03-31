@@ -70,19 +70,26 @@ namespace Edge.Atlas {
 					switch(inMsg.MessageType) {
 						case NetIncomingMessageType.Data:
 							 switch((AtlasPackets)inMsg.ReadByte()) {
-                                 case AtlasPackets.RequestPositionChange:
-                                    short X = inMsg.ReadInt16();
-                                    short Y = inMsg.ReadInt16();
-                                    byte R = inMsg.ReadByte();
-                                    byte G = inMsg.ReadByte();
-                                    byte B = inMsg.ReadByte();
-                                    string Name = inMsg.ReadString();
-                                    float Health = inMsg.ReadFloat();
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].MoveVector = new Vector2(X, Y);
-							        players[inMsg.SenderConnection.RemoteUniqueIdentifier].Name = Name;
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].pColor = new Color(R,G,B);
-                                    players[inMsg.SenderConnection.RemoteUniqueIdentifier].Health = Health;
-                                    break;
+                                 case AtlasPackets.RequestPositionChange: {
+                                        short X = inMsg.ReadInt16();
+                                        short Y = inMsg.ReadInt16();
+                                        byte R = inMsg.ReadByte();
+                                        byte G = inMsg.ReadByte();
+                                        byte B = inMsg.ReadByte();
+                                        string Name = inMsg.ReadString();
+                                        float Health = inMsg.ReadFloat();
+                                        long ID = inMsg.SenderConnection.RemoteUniqueIdentifier;
+                                        players[ID].MoveVector = new Vector2(X, Y);
+                                        players[ID].Name = Name;
+                                        players[ID].pColor = new Color(R, G, B);
+                                        players[ID].Health = Health;
+                                    } break;
+                                case AtlasPackets.RequestMoveVector: {
+                                        int ID = inMsg.ReadInt32();
+                                        int X = inMsg.ReadInt32();
+                                        int Y = inMsg.ReadInt32();
+                                        enemys[ID].Target = new Point(X, Y);
+                                    } break;
 							 }
 							break;
 						case NetIncomingMessageType.StatusChanged:
@@ -141,15 +148,17 @@ namespace Edge.Atlas {
                     outMsg.Write(e.NetID);
                     outMsg.Write(e.Position.X);
                     outMsg.Write(e.Position.Y);
+                    outMsg.Write(e.Target.X);
+                    outMsg.Write(e.Target.Y);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
                 outMsg = server.CreateMessage();
                 outMsg.Write((byte)AtlasPackets.UpdateMoveVector);
-                outMsg.Write((ushort)players.Count);
-			    foreach (var p in players.Values) {
-			        outMsg.Write(p.MoveVector.X);
-                    outMsg.Write(p.MoveVector.Y);
+			    foreach (var e in enemys.Values) {
+			        outMsg.Write(e.NetID);
+                    outMsg.Write(e.Target.Y);
+                    outMsg.Write(e.Target.X);
 			    }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
