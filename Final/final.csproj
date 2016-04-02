@@ -96,6 +96,7 @@
     <Compile Include="UI\Components\Screen.cs" />
     <Compile Include="UI\Components\Slider.cs" />
     <Compile Include="UI\Components\UIComponent.cs" />
+    <Compile Include="UI\Implementation\Hud\Health.cs" />
     <Compile Include="UI\Implementation\Hud\StatusBar.cs" />
     <Compile Include="UI\Implementation\Popups\Alert.cs" />
     <Compile Include="UI\Implementation\Popups\PauseMenu.cs" />

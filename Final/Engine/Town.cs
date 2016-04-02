@@ -74,17 +74,16 @@ namespace Edge.Hyperion.Engine {
                 atlasClient.Shutdown("Shutingdown");
             }
 
-            if (pMenu._isActive == false) {
-                cameraControl();
-                playerMovment(gameTime);
-            }
-
             if (AssetStore.kb.IsButtonToggledDown(Keys.Space)) {
                 health = 1f;
             }
-
             serverIO();
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
+                if (pMenu._isActive == false) {
+                    cameraControl();
+                    playerMovment(gameTime, player);
+                }
+
                 cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
                 foreach (var e in enemys.Where(x => x.isActive == true)) {
                     if (player.HitBox.Intersects(e.hitBox))
@@ -125,7 +124,7 @@ namespace Edge.Hyperion.Engine {
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
             }
-            statusBar.draw();
+            statusBar.draw(health);
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
         }
 
@@ -147,6 +146,7 @@ namespace Edge.Hyperion.Engine {
                 outMsg.Write(e.NetID);
                 outMsg.Write(e.Target.X);
                 outMsg.Write(e.Target.Y);
+                atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
             }
 
             NetIncomingMessage inMsg;
@@ -178,7 +178,7 @@ namespace Edge.Hyperion.Engine {
                                 for (ushort i = 0; i < numEnemys; i++) {
                                     enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32()));
                                 }
-                                break; 
+                                break;
                         }
                         break;
                     case NetIncomingMessageType.DiscoveryResponse:
@@ -188,7 +188,20 @@ namespace Edge.Hyperion.Engine {
             }
         }
 
-        public void playerMovment(GameTime gameTime) {
+        public void cameraControl() {
+            var zoomFactor = 0.3f;
+            newer = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            if (newer.ScrollWheelValue > old.ScrollWheelValue) {
+                cam.Zoom += cam.Zoom <= 3 ? zoomFactor : 0;
+            } else if (newer.ScrollWheelValue < old.ScrollWheelValue) {
+                cam.Zoom -= cam.Zoom >= 2 ? zoomFactor : 0;
+            } else if (AssetStore.kb.IsButtonDown(Keys.C) || AssetStore.kb.IsButtonDown(Keys.Home)) {
+                cam.Zoom = 1.0f;
+            }
+            old = newer;
+        }
+
+        public void playerMovment(GameTime gameTime, DebugPlayer p) {
             if (AssetStore.kb.IsButtonDown(Keys.W) || AssetStore.kb.IsButtonDown(Keys.Up)) {
                 mult = 2;
                 MoveVector.Y = -1;
@@ -209,9 +222,8 @@ namespace Edge.Hyperion.Engine {
                 MoveVector.X = 0;
             }
 
-
             if (MoveVector != Vector2.Zero) {
-                timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+                timeSinceLastFrame += (byte)gameTime.ElapsedGameTime.Milliseconds;
                 if (timeSinceLastFrame > millisecondsPerFrame) {
                     timeSinceLastFrame -= millisecondsPerFrame;
                     currentFrame += 1;
@@ -219,19 +231,6 @@ namespace Edge.Hyperion.Engine {
             } else {
                 currentFrame = 0;
             }
-        }
-
-        public void cameraControl() {
-            var zoomFactor = 0.3f;
-            newer = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            if (newer.ScrollWheelValue > old.ScrollWheelValue) {
-                cam.Zoom += cam.Zoom <= 3 ? zoomFactor : 0;
-            } else if (newer.ScrollWheelValue < old.ScrollWheelValue) {
-                cam.Zoom -= cam.Zoom >= 2 ? zoomFactor : 0;
-            } else if (AssetStore.kb.IsButtonDown(Keys.C) || AssetStore.kb.IsButtonDown(Keys.Home)) {
-                cam.Zoom = 1.0f;
-            }
-            old = newer;
         }
     }
 }

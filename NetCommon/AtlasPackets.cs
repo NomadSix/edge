@@ -6,8 +6,10 @@ namespace Edge.NetCommon {
 		RequestPositionChange,
         RequestJumpChange,
         RequestMoveVector,
+        RequestAnimation,
         UpdateMoveVector,
 		UpdatePositions,
+        UpdateAnimation,
         UpdateName,
 		#endregion
 
