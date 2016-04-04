@@ -16,19 +16,7 @@ namespace Edge.Atlas {
 
         void MoveTo(ServerEnemy ent, float movespeed) {
             float dt = (currentTime - lastUpdates) / (float)TimeSpan.TicksPerSecond;
-            //if (ent.Position == ent.MovingTo)
-            //    ent.MovingTo = new Point(-1, -1);
-            //if (ent.MovingTo == new Point(-1, -1)) return;
-            //var deltaY = ent.MovingTo.Y - ent.Position.Y;
-            //var deltaX2 = ent.MovingTo.X - ent.Position.X ^ 2;
-            //var deltaY2 = deltaY ^ 2;
-            //var deltaLen = (float)Math.Sqrt(deltaX2 + deltaY2);
-            ////Simplified version of cos(arctan(a/b))float y = 0;
-            //float y = (float)(Math.Sign(deltaY) * (movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond > deltaLen ? deltaLen : movespeed * (currentTime - lastTime) / TimeSpan.TicksPerSecond) / Math.Sqrt(1 + (deltaX2 / deltaY2)));
-            ////Simplified version of sin(arctan(a/b))
-            //float x = (ent.MovingTo.X - ent.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
-            //ent.Position += new Point((int)x, (int)y);
-            var range = 32 * 7f;
+            var range = 32 * 7f; // how far the enemy looks for players
             DebugPlayer closePlayer = null;
             var q = Players.Where(x =>
                 Vector2.Distance(
@@ -50,10 +38,12 @@ namespace Edge.Atlas {
                         closePlayer = player;
                     }
                 }
+                //move
                 if (ent.Position.X < closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
                 if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
                 if (ent.Position.X > closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
                 if (ent.Position.Y > closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                //update hitbox
                 ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
             }
         }
