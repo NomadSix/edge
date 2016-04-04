@@ -73,6 +73,9 @@ namespace Edge.Hyperion.Engine {
                 atlasClient.Shutdown("Shutingdown");
             }
 
+            if (AssetStore.kb.IsButtonToggledDown(Keys.F11))
+                setFullScreen();
+
             serverIO();
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 if (pMenu._isActive == false) {
@@ -204,6 +207,14 @@ namespace Edge.Hyperion.Engine {
                 p.MoveVector.X = 1;
             } else {
                 p.MoveVector.X = 0;
+            }
+        }
+
+        public void setFullScreen() {
+            IGraphicsDeviceService graphicsService = (IGraphicsDeviceService)Game.Services.GetService(typeof(IGraphicsDeviceService));
+            if (graphicsService != null && graphicsService is GraphicsDeviceManager) {
+                (graphicsService as GraphicsDeviceManager).IsFullScreen = true;
+                (graphicsService as GraphicsDeviceManager).ApplyChanges();
             }
         }
     }
