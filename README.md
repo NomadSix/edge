@@ -8,7 +8,8 @@
 ### How do I get set up? ###
 
 * If you can't do this yourself, get out now.
-* To disable HTTPS requirement, from your git shell, git config --global http.sslVerify false
+* If you're under a domain that just happens to block HTTPS like usd259 it will need to be disabled it.
+* To disable HTTPS requirement, from your git shell, `git config --global http.sslVerify false`
 
 ### Contribution guidelines ###
 
@@ -18,8 +19,3 @@
 ### Who do I talk to? ###
 
 * NonSix
-
-# Todo List #
-* Better testing
-* Better updates system (flatbuffers, only send changed entities)
-* A GOOD asset management system
