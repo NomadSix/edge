@@ -1,16 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using System;
 
 namespace Edge.Atlas {
     public partial class Atlas {
 
-        void EnemyUpdate(ServerEnemy enemy, DebugPlayer player) {
+        List<DebugPlayer> Players;
+
+        void EnemyUpdate(ServerEnemy enemy, List<DebugPlayer> players) {
+            Players = players;
             //update
-            enemy.MovingTo = new Point(player.Position.X, player.Position.Y);
-            MoveTo(enemy, player, 1);
+            MoveTo(enemy, 100);
         }
         
-        void MoveTo(ServerEnemy ent, DebugPlayer player, int movespeed) {
+        void MoveTo(ServerEnemy ent, float movespeed) {
+            float dt = (currentTime - lastUpdates) / (float)TimeSpan.TicksPerSecond;
             //if (ent.Position == ent.MovingTo)
             //    ent.MovingTo = new Point(-1, -1);
             //if (ent.MovingTo == new Point(-1, -1)) return;
@@ -23,11 +28,25 @@ namespace Edge.Atlas {
             ////Simplified version of sin(arctan(a/b))
             //float x = (ent.MovingTo.X - ent.Position.X) * y / (deltaY == 0 ? 1 : deltaY);
             //ent.Position += new Point((int)x, (int)y);
+            var range = 32 * 7f;
+            DebugPlayer closePlayer = null;
+            var q = Players.Where(x => 
+                Vector2.Distance(
+                    new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2), 
+                    new Vector2(x.Position.X + x.Width / 2, x.Position.Y + x.Height / 2)) 
+                < range
+                );
+            foreach (DebugPlayer player in q) {
+                closePlayer = player;
+            }
 
-            if (ent.Position.X < player.Position.X) { ent.Position.X += movespeed; }
-            if (ent.Position.Y < player.Position.Y) { ent.Position.Y += movespeed; }
-            if (ent.Position.X > player.Position.X) { ent.Position.X -= movespeed; }
-            if (ent.Position.Y > player.Position.Y) { ent.Position.Y -= movespeed; }
+            if (q.Count() != 0) {
+                if (ent.Position.X < closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
+                if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
+                if (ent.Position.X > closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
+                if (ent.Position.Y > closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
+            }
         }
     }
 }

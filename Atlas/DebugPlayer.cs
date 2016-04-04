@@ -4,14 +4,19 @@ namespace Edge.Atlas {
     public class DebugPlayer : Entity {
         public long NetID;
         public string Name;
-        public Vector2 MoveVector;
-        public Vector2 Acceleration = new Vector2(30f);
         public Color pColor;
+        public Rectangle Hitbox;
+        public Point MoveVector;
+        public int mult = 0;
+        public int currentFrame = 0;
+        public float dmgTimer = 0;
 		public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){
 			NetID = id;
-            Position = new Point(x, y);
             Health = health;
-		}
+            Position = new Vector2(x, y);
+            Width = 16;
+            Height = 16;
+        }
 	}
 }
 

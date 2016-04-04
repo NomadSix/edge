@@ -78,7 +78,6 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Enemy.cs" />
-    <Compile Include="Engine\Circle.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />

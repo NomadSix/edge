@@ -42,8 +42,10 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
                 World._isActive = false;
                 that.SetScreen(new MainMenu(that));
             }));
-            foreach (Button button in ButtonList)
+            foreach (Button button in ButtonList) {
+                button.DrawOrder = 1;
                 that.Components.Add(button);
+            }
             base.Initialize();
         }
 
@@ -57,8 +59,8 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
                 _isActive = !_isActive;
                 Kill();
             }
-            for (int i = 0; i < ButtonList.Count; i++)
-                ButtonList[i].update(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix), cam2);
+            //for (int i = 0; i < ButtonList.Count; i++)
+            //    ButtonList[i].update(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix), cam2);
         }
 
         public void draw(Vector2 pos) {
@@ -67,8 +69,8 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             if (_isActive) {
                 that.batch.Draw(backGround, Vector2.Zero, null, new Color(50, 50, 50, 75), 0f, Vector2.Zero, new Vector2(viewport.Width, viewport.Height), SpriteEffects.None, 0f);
                 that.batch.Draw(backGround, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
-                for (int i = 0; i < ButtonList.Count; i++)
-                    ButtonList[i].draw(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix));
+                //for (int i = 0; i < ButtonList.Count; i++)
+                //    ButtonList[i].draw(Vector2.Transform(new Vector2(pos.X, pos.Y + (int)init.Y + i * 45), cam.ViewMatrix));
                 DrawCenter("Paused", pos);
             }
             that.batch.End();

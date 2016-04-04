@@ -12,12 +12,12 @@ namespace Edge.Hyperion.UI.Implementation.Hud {
         List<Rectangle> fullStock = new List<Rectangle>();
 
         public Health(Game game) : base(game) {
-            for (int i = 0; i < 4; i++)
-                fullStock.Add(new Rectangle((88) + i * 8 + i * 24, 16, 24, 32));
         }
 
         public void update(float health) {
             stock.Clear();
+            for (int i = 0; i < (int)(health / .25); i++)
+                fullStock.Add(new Rectangle((88) + i * 8 + i * 24, 16, 24, 32));
             for (int i = 0; i < (int)(health / .25); i++)
                 stock.Add(new Rectangle((88) + i * 8 + i * 24, 16, 24, 32));
         }

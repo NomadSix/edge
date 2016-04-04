@@ -12,7 +12,7 @@ namespace Edge.Hyperion.UI.Components {
         internal Rectangle _location;
         readonly Style _style;
         readonly ButtonAction _action;
-        readonly String _text;
+        readonly string _text;
         readonly Vector2 _measurements;
 
         public delegate void ButtonAction();
@@ -36,23 +36,15 @@ namespace Edge.Hyperion.UI.Components {
             base.Update(gameTime);
         }
 
-        public void update(Vector2 init, Camera2D cam) {
-            _hovering = _location.Contains(AssetStore.mouse.LocationV2);
-            if (_hovering && AssetStore.mouse.IsButtonToggledUp(Mouse.MouseButtons.Left) && _screen._isActive)
-                _action();
-            // I know this is Bad but i dont want to think of how to make it better just took act
-            _textLocation = new Vector2(_location.Width / 2f - _measurements.X / 2f + _location.X, _location.Height / 2f - _measurements.Y / 2f + _location.Y);
-        }
-
         public override void Draw(GameTime gameTime) {
-            that.batch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
-            that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+            if (_screen._isActive) {
+                that.batch.End();
+                that.batch.Begin();
+                that.batch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
+                that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                that.batch.End();
+            }
             base.Draw(gameTime);
-        }
-
-        public void draw(Vector2 init) {
-            that.batch.Draw(_hovering ? _style.Hover : _style.Base, _location, _hovering && _screen._isActive ? _style.HoverColour : _style.BaseColour);
-            that.batch.DrawString(_style.Font, _text, _textLocation, _style.TextColour, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
         }
 
         public class Style {

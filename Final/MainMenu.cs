@@ -48,8 +48,10 @@ namespace Edge.Hyperion {
             }));
             //strip = new MenuStrip(that, this, Vector2.Zero, btnList);
             //that.Components.Add(strip);
-            foreach (btn button in btnList)
+            foreach (btn button in btnList) {
+                button.DrawOrder = 1;
                 that.Components.Add(button);
+            }
 
             base.Initialize();
         }
@@ -70,8 +72,8 @@ namespace Edge.Hyperion {
                 }
             }
             that.batch.Draw(AssetStore.Pixel, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
-            for (int i = 0; i < btnList.Count; i++)
-                btnList[i].Draw(gameTime);
+            //for (int i = 0; i < btnList.Count; i++)
+            //    btnList[i].Draw(gameTime);
             DrawCenter(title);
             base.Draw(gameTime);
         }

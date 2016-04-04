@@ -19,7 +19,6 @@ namespace Edge.Hyperion.Engine {
         string Port, Address;
         string Name;
         Color pColor = Color.Gray;
-        float health = 1;
 
         TileMap Map = new TileMap(@"Map\grassDemo.csv");
         Point mapSize = new Point(AssetStore.TownSize);
@@ -74,24 +73,14 @@ namespace Edge.Hyperion.Engine {
                 atlasClient.Shutdown("Shutingdown");
             }
 
-            if (AssetStore.kb.IsButtonToggledDown(Keys.Space)) {
-                health = 1f;
-            }
             serverIO();
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 if (pMenu._isActive == false) {
                     cameraControl();
                     playerMovment(gameTime, player);
                 }
-
+                PlayerIO(player);
                 cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
-                foreach (var e in enemys.Where(x => x.isActive == true)) {
-                    if (player.HitBox.Intersects(e.hitBox))
-                        health -= .005f;
-                    if (e.hitBox.Intersects(player.AttackRec))
-                        e.Health -= .0025f;
-                }
-                player.Health = health;
             }
 
             if (pMenu._isActive) {
@@ -111,43 +100,25 @@ namespace Edge.Hyperion.Engine {
                 }
             }
 
+            foreach (var e in enemys) { // Main loop to draw each enemy to the world
+                that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
+            }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                that.batch.Draw(artDebug, p.HitBox, new Rectangle((currentFrame % framesPerRow) * p.Width, mult * p.Width, p.Width, p.Width), Color.White);
-                that.batch.Draw(AssetStore.Pixel, new Vector2(p.X, p.Y), null, Color.Red, (float)System.Math.PI, Vector2.Zero, new Vector2(2, 100 * p.Health), SpriteEffects.None, 0f);
+                that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Width), Color.White);
                 that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
             }
-            foreach (var e in enemys) { // Main loop to draw each enemy to the world
-                that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
+            foreach (var p in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
+                statusBar.draw(p.Health);
             }
-            statusBar.draw(health);
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
         }
 
         public void serverIO() {
-            NetOutgoingMessage outMsg = atlasClient.CreateMessage();
-            outMsg.Write((byte)AtlasPackets.RequestPositionChange);
-            outMsg.Write((short)MoveVector.X);
-            outMsg.Write((short)MoveVector.Y);
-            outMsg.Write(pColor.R);
-            outMsg.Write(pColor.G);
-            outMsg.Write(pColor.B);
-            outMsg.Write(System.Environment.UserName);
-            outMsg.Write(health);
-            atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
-
-            foreach (Enemy e in enemys) {
-                outMsg = atlasClient.CreateMessage();
-                outMsg.Write((byte)AtlasPackets.RequestMoveVector);
-                outMsg.Write(e.NetID);
-                outMsg.Write(e.Target.X);
-                outMsg.Write(e.Target.Y);
-                atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
-            }
 
             NetIncomingMessage inMsg;
             while ((inMsg = atlasClient.ReadMessage()) != null) {
@@ -161,8 +132,16 @@ namespace Edge.Hyperion.Engine {
                             case AtlasPackets.UpdatePositions:
                                 players.Clear();
                                 ushort numPlayers = inMsg.ReadUInt16();
-                                for (ushort i = 0; i < numPlayers; i++)
-                                    players.Add(new DebugPlayer(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadByte(), inMsg.ReadString(), inMsg.ReadFloat()));
+                                for (ushort i = 0; i < numPlayers; i++) {
+                                    long NetID = inMsg.ReadInt64();
+                                    int X = inMsg.ReadInt32();
+                                    int Y = inMsg.ReadInt32();
+                                    string Name = inMsg.ReadString();
+                                    float health = inMsg.ReadFloat();
+                                    players.Add(new DebugPlayer(NetID, X, Y, Name, health));
+                                    players[i].mult = inMsg.ReadInt32();
+                                    players[i].currentFrame = inMsg.ReadInt32();
+                                }
                                 break;
                             case AtlasPackets.UpdateMoveVector:
                                 if (enemys.Count != 0) {
@@ -188,6 +167,15 @@ namespace Edge.Hyperion.Engine {
             }
         }
 
+        public void PlayerIO(DebugPlayer p) {
+            NetOutgoingMessage outMsg = atlasClient.CreateMessage();
+            outMsg.Write((byte)AtlasPackets.RequestPositionChange);
+            outMsg.Write((short)p.MoveVector.X);
+            outMsg.Write((short)p.MoveVector.Y);
+            outMsg.Write(System.Environment.UserName);
+            atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
+        }
+
         public void cameraControl() {
             var zoomFactor = 0.3f;
             newer = Microsoft.Xna.Framework.Input.Mouse.GetState();
@@ -203,33 +191,19 @@ namespace Edge.Hyperion.Engine {
 
         public void playerMovment(GameTime gameTime, DebugPlayer p) {
             if (AssetStore.kb.IsButtonDown(Keys.W) || AssetStore.kb.IsButtonDown(Keys.Up)) {
-                mult = 2;
-                MoveVector.Y = -1;
+                p.MoveVector.Y = -1;
             } else if (AssetStore.kb.IsButtonDown(Keys.S) || AssetStore.kb.IsButtonDown(Keys.Down)) {
-                mult = 1;
-                MoveVector.Y = 1;
+                p.MoveVector.Y = 1;
             } else {
-                MoveVector.Y = 0;
+                p.MoveVector.Y = 0;
             }
 
             if (AssetStore.kb.IsButtonDown(Keys.A) || AssetStore.kb.IsButtonDown(Keys.Left)) {
-                mult = 0;
-                MoveVector.X = -1;
+                p.MoveVector.X = -1;
             } else if (AssetStore.kb.IsButtonDown(Keys.D) || AssetStore.kb.IsButtonDown(Keys.Right)) {
-                mult = 3;
-                MoveVector.X = 1;
+                p.MoveVector.X = 1;
             } else {
-                MoveVector.X = 0;
-            }
-
-            if (MoveVector != Vector2.Zero) {
-                timeSinceLastFrame += (byte)gameTime.ElapsedGameTime.Milliseconds;
-                if (timeSinceLastFrame > millisecondsPerFrame) {
-                    timeSinceLastFrame -= millisecondsPerFrame;
-                    currentFrame += 1;
-                }
-            } else {
-                currentFrame = 0;
+                p.MoveVector.X = 0;
             }
         }
     }

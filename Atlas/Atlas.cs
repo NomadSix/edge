@@ -16,7 +16,8 @@ namespace Edge.Atlas {
 		public Dictionary<long, ServerEnemy> enemys = new Dictionary<long, ServerEnemy>();
 
 		public long lastTime;
-		public long currentTime = DateTime.UtcNow.Ticks;
+        public long lastUpdates;
+        public long currentTime = DateTime.UtcNow.Ticks;
 
 
 		/// <summary>
@@ -48,6 +49,7 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
+            enemys.Add(0,new ServerEnemy(0, 0, 0));
 		}
 
 		/// <summary>
@@ -58,7 +60,7 @@ namespace Edge.Atlas {
 				var inputThread = new Thread(InputHandler);
 				inputThread.Start();                
 			}
-			long lastUpdates = 0;
+			lastUpdates = 0;
 			while(!isExiting) {
 				lastTime = currentTime;
 				currentTime = DateTime.UtcNow.Ticks;
@@ -73,16 +75,11 @@ namespace Edge.Atlas {
                                  case AtlasPackets.RequestPositionChange: {
                                         short X = inMsg.ReadInt16();
                                         short Y = inMsg.ReadInt16();
-                                        byte R = inMsg.ReadByte();
-                                        byte G = inMsg.ReadByte();
-                                        byte B = inMsg.ReadByte();
                                         string Name = inMsg.ReadString();
-                                        float Health = inMsg.ReadFloat();
                                         long ID = inMsg.SenderConnection.RemoteUniqueIdentifier;
-                                        players[ID].MoveVector = new Vector2(X, Y);
+                                        players[ID].MoveVector = new Point(X, Y);
                                         players[ID].Name = Name;
-                                        players[ID].pColor = new Color(R, G, B);
-                                        players[ID].Health = Health;
+                                        //players[ID].pColor = new Color(R, G, B);
                                     } break;
                                 case AtlasPackets.RequestMoveVector: {
                                         int ID = inMsg.ReadInt32();
@@ -95,7 +92,7 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 1));
+									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 2));
                                     break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
@@ -118,26 +115,27 @@ namespace Edge.Atlas {
 				#endregion
 
 				//Parallel.ForEach(players.Values, PlayerUpdate);
+                
                 foreach (var p in players) {
-                    PlayerUpdate(p.Value);
-                    foreach (var e in enemys)
-                        EnemyUpdate(e.Value, p.Value);
+                    PlayerUpdate(p.Value, enemys.Values.ToList());
+                }
+                foreach (var e in enemys) {
+                    EnemyUpdate(e.Value, players.Values.ToList());
                 }
 
-				#region Outgoing Updates
-				//TODO: Compute changed frames, keyframes, etc
-				NetOutgoingMessage outMsg = server.CreateMessage();
+                #region Outgoing Updates
+                //TODO: Compute changed frames, keyframes, etc
+                NetOutgoingMessage outMsg = server.CreateMessage();
 				outMsg.Write((byte)AtlasPackets.UpdatePositions);
 				outMsg.Write((ushort)players.Count);
 				foreach (var p in players.Values) {
 					outMsg.Write(p.NetID);
-					outMsg.Write(p.Position.X);
-					outMsg.Write(p.Position.Y);
-                    outMsg.Write(p.pColor.R);
-                    outMsg.Write(p.pColor.G);
-                    outMsg.Write(p.pColor.B);
+					outMsg.Write((int)p.Position.X);
+					outMsg.Write((int)p.Position.Y);
                     outMsg.Write(p.Name);
                     outMsg.Write(p.Health);
+                    outMsg.Write(p.mult);
+                    outMsg.Write(p.currentFrame);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
@@ -146,20 +144,9 @@ namespace Edge.Atlas {
                 outMsg.Write((ushort)enemys.Count);
                 foreach (var e in enemys.Values) {
                     outMsg.Write(e.NetID);
-                    outMsg.Write(e.Position.X);
-                    outMsg.Write(e.Position.Y);
-                    outMsg.Write(e.Target.X);
-                    outMsg.Write(e.Target.Y);
+                    outMsg.Write((int)e.Position.X);
+                    outMsg.Write((int)e.Position.Y);
                 }
-                server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
-
-                outMsg = server.CreateMessage();
-                outMsg.Write((byte)AtlasPackets.UpdateMoveVector);
-			    foreach (var e in enemys.Values) {
-			        outMsg.Write(e.NetID);
-                    outMsg.Write(e.Target.Y);
-                    outMsg.Write(e.Target.X);
-			    }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
 				lastUpdates = currentTime;
@@ -259,7 +246,7 @@ namespace Edge.Atlas {
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");
                     break;
 				case "MOVE": {
-						var location = new Point(int.Parse(args[1]), int.Parse(args[2]));
+						var location = new Vector2(float.Parse(args[1]), float.Parse(args[2]));
 						Console.WriteLine("moving to " + location);
 						long ID = long.Parse(args[0]);
 						if(players.ContainsKey(ID))

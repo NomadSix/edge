@@ -1,4 +1,4 @@
-﻿using Point = Microsoft.Xna.Framework.Point;
+﻿using Point = Microsoft.Xna.Framework.Vector2;
 
 namespace Edge.Atlas
 {
