@@ -73,6 +73,7 @@ namespace Edge.Hyperion {
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
             AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
+            AssetStore.Sword = Content.Load<Texture2D>(@"../Images/sword.png");
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion

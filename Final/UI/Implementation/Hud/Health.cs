@@ -10,28 +10,31 @@ namespace Edge.Hyperion.UI.Implementation.Hud {
 
         List<Rectangle> stock = new List<Rectangle>();
         List<Rectangle> fullStock = new List<Rectangle>();
+        int X = 88;
+        int Y = 32;
+        int Width = 24;
+        int Height = 32;
+        private int gap = 2;
 
         public Health(Game game) : base(game) {
+            for (int i = 0; i < (int)(2 / .25); i++)
+                fullStock.Add(new Rectangle(X + i * gap + i * Width, Y, Width, Height));
         }
 
         public void update(float health) {
             stock.Clear();
             for (int i = 0; i < (int)(health / .25); i++)
-                fullStock.Add(new Rectangle((88) + i * 8 + i * 24, 16, 24, 32));
-            for (int i = 0; i < (int)(health / .25); i++)
-                stock.Add(new Rectangle((88) + i * 8 + i * 24, 16, 24, 32));
+                stock.Add(new Rectangle(X + i * gap + i * Width, Y, Width, Height));
         }
 
         public void draw(float health) {
             update(health);
-            that.batch.End();
-            that.batch.Begin();
             //health stock
             foreach (Rectangle rec in stock) {
                 that.batch.Draw(Backing.AssetStore.Pixel, rec, Color.SpringGreen);
-            }
-            foreach (Rectangle rec in fullStock) {
-                DrawBorder(rec, 3, Color.Black);
+                foreach (Rectangle rect in fullStock) {
+                    DrawBorder(rect, 3, new Color(50, 50, 50));
+                }
             }
             that.batch.End();
         }
