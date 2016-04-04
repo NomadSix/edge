@@ -49,7 +49,7 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
-            enemys.Add(0,new ServerEnemy(0, 0, 0));
+            enemys.Add(0,new ServerEnemy(32*8, 64, 0, ServerEnemy.Type.Minion));
 		}
 
 		/// <summary>
@@ -234,7 +234,7 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add((long)enemys.Count + 1, new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1])));
+						enemys.Add((long)enemys.Count + 1, new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), ServerEnemy.Type.Debug));
                     }
                     break;
                 case "ENTS":

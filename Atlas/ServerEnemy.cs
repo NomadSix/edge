@@ -6,11 +6,19 @@ namespace Edge.Atlas {
         public Point Target;
         public Color pColor;
         public Rectangle Hitbox;
-        public ServerEnemy(long id, int x, int y) : base(id, x, y) {
+        public Type entType;
+        public ServerEnemy(long id, int x, int y, Type enttype) : base(id, x, y) {
             NetID = id;
             Hitbox = new Rectangle(x, y, Width, Height);
             Width = 32;
             Height = 32;
+            entType = enttype;
+        }
+
+        public enum Type {
+            Mage,
+            Minion,
+            Debug
         }
     }
 }

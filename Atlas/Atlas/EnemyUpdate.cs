@@ -11,7 +11,7 @@ namespace Edge.Atlas {
         void EnemyUpdate(ServerEnemy enemy, List<DebugPlayer> players) {
             Players = players;
             //update
-            MoveTo(enemy, 100);
+            MoveTo(enemy, 60);
         }
 
         void MoveTo(ServerEnemy ent, float movespeed) {
@@ -38,11 +38,25 @@ namespace Edge.Atlas {
                         closePlayer = player;
                     }
                 }
+
                 //move
-                if (ent.Position.X < closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
-                if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
-                if (ent.Position.X > closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
-                if (ent.Position.Y > closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                switch (ent.entType) {
+                    case ServerEnemy.Type.Mage: {
+                            if (ent.Position.X < closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
+                            if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                            if (ent.Position.X > closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
+                            if (ent.Position.Y > closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
+
+                            //action
+                            //rng number to make a minions
+                        } break;
+                    default: {
+                            if (ent.Position.X < closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
+                            if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
+                            if (ent.Position.X > closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
+                            if (ent.Position.Y > closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                        } break;
+                }
                 //update hitbox
                 ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
             }

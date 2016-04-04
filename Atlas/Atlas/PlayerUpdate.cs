@@ -64,13 +64,29 @@ namespace Edge.Atlas {
             }
 
             //colition
-            foreach (ServerEnemy ent in ent) {
-                if (player.Hitbox.Intersects(ent.Hitbox) && player.dmgTimer > .5) {
-                    player.dmgTimer = 0;
-                    player.Health -= .25f;
+            for (int i = 0; i < ent.Count; i++)
+                switch (ent[i].entType) {
+                    case ServerEnemy.Type.Debug: {
+                            if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                player.dmgTimer = 0;
+                                player.Health -= .15f;
+                            }
+                            player.dmgTimer += dt;
+                        } break;
+                    case ServerEnemy.Type.Mage: {
+
+                        } break;
+                    case ServerEnemy.Type.Minion: {
+                            if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                player.dmgTimer = 0;
+                                player.Health -= .25f;
+                                ent.Remove(ent[i]);
+                                Console.WriteLine(true);
+                            }
+                        //mightbe the 
+                            player.dmgTimer += dt;
+                        } break;
                 }
-                player.dmgTimer += dt;
-            }
         }
 
     }
