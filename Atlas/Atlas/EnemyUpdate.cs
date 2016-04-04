@@ -13,7 +13,7 @@ namespace Edge.Atlas {
             //update
             MoveTo(enemy, 100);
         }
-        
+
         void MoveTo(ServerEnemy ent, float movespeed) {
             float dt = (currentTime - lastUpdates) / (float)TimeSpan.TicksPerSecond;
             //if (ent.Position == ent.MovingTo)
@@ -30,17 +30,26 @@ namespace Edge.Atlas {
             //ent.Position += new Point((int)x, (int)y);
             var range = 32 * 7f;
             DebugPlayer closePlayer = null;
-            var q = Players.Where(x => 
+            var q = Players.Where(x =>
                 Vector2.Distance(
-                    new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2), 
-                    new Vector2(x.Position.X + x.Width / 2, x.Position.Y + x.Height / 2)) 
+                    new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
+                    new Vector2(x.Position.X + x.Width / 2, x.Position.Y + x.Height / 2))
                 < range
                 );
-            foreach (DebugPlayer player in q) {
-                closePlayer = player;
-            }
 
             if (q.Count() != 0) {
+                closePlayer = q.First();
+                foreach (DebugPlayer player in q) {
+                    if (Vector2.Distance(
+                        new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
+                        new Vector2(player.Position.X + player.Width / 2, player.Position.Y + player.Height / 2))
+                        < Vector2.Distance(
+                        new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
+                        new Vector2(closePlayer.Position.X + closePlayer.Width / 2, closePlayer.Position.Y + closePlayer.Height / 2))
+                        ) {
+                        closePlayer = player;
+                    }
+                }
                 if (ent.Position.X < closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
                 if (ent.Position.Y < closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
                 if (ent.Position.X > closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
