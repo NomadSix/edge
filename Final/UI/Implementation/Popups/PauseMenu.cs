@@ -27,9 +27,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 6 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.basic], "Resume", () => {
                 _isActive = false;
                 that.sampleState = SamplerState.PointClamp;
-                foreach (var btn in ButtonList)
-                    that.Components.Remove(btn);
-                Kill();
+                that.Components.Remove(this);
             })); 
             ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 7 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.disabled], "Options", () =>
             {
