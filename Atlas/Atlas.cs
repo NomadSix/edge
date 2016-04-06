@@ -13,9 +13,11 @@ namespace Edge.Atlas {
         bool runningHeadless;
         public bool isExiting;
 		public Dictionary<long, DebugPlayer> players = new Dictionary<long, DebugPlayer>();
-		public Dictionary<long, ServerEnemy> enemys = new Dictionary<long, ServerEnemy>();
+		public List<ServerEnemy> enemys = new List<ServerEnemy>();
 
-		public long lastTime;
+        public List<ServerEnemy> removeEnemys = new List<ServerEnemy>();
+
+        public long lastTime;
         public long lastUpdates;
         public long currentTime = DateTime.UtcNow.Ticks;
 
@@ -49,7 +51,7 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
-            enemys.Add(0,new ServerEnemy(32*8, 64, 0, ServerEnemy.Type.Minion));
+            enemys.Add(new ServerEnemy(32*8, 64, 0, ServerEnemy.Type.Minion));
 		}
 
 		/// <summary>
@@ -117,11 +119,16 @@ namespace Edge.Atlas {
 				//Parallel.ForEach(players.Values, PlayerUpdate);
                 
                 foreach (var p in players) {
-                    PlayerUpdate(p.Value, enemys.Values.ToList());
+                    PlayerUpdate(p.Value, enemys.ToList());
                 }
                 foreach (var e in enemys) {
-                    EnemyUpdate(e.Value, players.Values.ToList());
+                    if (e.remove == true)
+                        removeEnemys.Add(e);
+                    else
+                        EnemyUpdate(e, players.Values.ToList());
                 }
+                enemys.RemoveRange(0, removeEnemys.Count());
+                removeEnemys.Clear();
 
                 #region Outgoing Updates
                 //TODO: Compute changed frames, keyframes, etc
@@ -142,7 +149,7 @@ namespace Edge.Atlas {
                 outMsg = server.CreateMessage();
                 outMsg.Write((byte)AtlasPackets.DamageEnemy);
                 outMsg.Write((ushort)enemys.Count);
-                foreach (var e in enemys.Values) {
+                foreach (var e in enemys) {
                     outMsg.Write(e.NetID);
                     outMsg.Write((int)e.Position.X);
                     outMsg.Write((int)e.Position.Y);
@@ -234,12 +241,12 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add((long)enemys.Count + 1, new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), ServerEnemy.Type.Debug));
+						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), ServerEnemy.Type.Debug));
                     }
                     break;
                 case "ENTS":
                     foreach(var e in enemys)
-                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})", e.Value.NetID, e.Value.Position.X, e.Value.Position.Y);
+                        Console.WriteLine("ID: {0}\n\tPosition:({1},{2})", e.NetID, e.Position.X, e.Position.Y);
                     break;
 				case "PLAYERS":
                     foreach(var e in players)

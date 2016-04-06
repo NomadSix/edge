@@ -10,6 +10,7 @@ namespace Edge.Atlas
         public float Health;
         public int Width;
         public int Height;
+        public bool remove;
         public Entity(long id, int x, int y) {
 			Position = new Point(x, y);
 		}

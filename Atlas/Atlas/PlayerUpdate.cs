@@ -78,10 +78,9 @@ namespace Edge.Atlas {
                         } break;
                     case ServerEnemy.Type.Minion: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                ent[i].remove = true;
                                 player.dmgTimer = 0;
-                                player.Health -= .25f;
-                                ent.Remove(ent[i]);
-                                Console.WriteLine(true);
+                                player.Health -= .5f;
                             }
                         //mightbe the 
                             player.dmgTimer += dt;
