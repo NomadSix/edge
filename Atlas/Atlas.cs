@@ -15,7 +15,8 @@ namespace Edge.Atlas {
 		public Dictionary<long, DebugPlayer> players = new Dictionary<long, DebugPlayer>();
 		public List<ServerEnemy> enemys = new List<ServerEnemy>();
 
-        public List<ServerEnemy> removeEnemys = new List<ServerEnemy>();
+        public List<ServerEnemy> addEnemys = new List<ServerEnemy>();
+        public List<int> removeEnemys = new List<int>();
 
         public long lastTime;
         public long lastUpdates;
@@ -51,7 +52,7 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
-            enemys.Add(new ServerEnemy(32*8, 64, 0, ServerEnemy.Type.Minion));
+            enemys.Add(new ServerEnemy(0, 128, 32 * 2, ServerEnemy.Type.Mage));
 		}
 
 		/// <summary>
@@ -94,7 +95,7 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 2));
+									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 10));
                                     break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
@@ -122,13 +123,10 @@ namespace Edge.Atlas {
                     PlayerUpdate(p.Value, enemys.ToList());
                 }
                 foreach (var e in enemys) {
-                    if (e.remove == true)
-                        removeEnemys.Add(e);
-                    else
-                        EnemyUpdate(e, players.Values.ToList());
+                    EnemyUpdate(e, players.Values.ToList());
                 }
-                enemys.RemoveRange(0, removeEnemys.Count());
-                removeEnemys.Clear();
+                enemys.AddRange(addEnemys);
+                addEnemys.Clear();
 
                 #region Outgoing Updates
                 //TODO: Compute changed frames, keyframes, etc
@@ -147,12 +145,16 @@ namespace Edge.Atlas {
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
                 outMsg = server.CreateMessage();
-                outMsg.Write((byte)AtlasPackets.DamageEnemy);
+                outMsg.Write((byte)AtlasPackets.UpdateEnemy);
                 outMsg.Write((ushort)enemys.Count);
                 foreach (var e in enemys) {
                     outMsg.Write(e.NetID);
                     outMsg.Write((int)e.Position.X);
                     outMsg.Write((int)e.Position.Y);
+                    outMsg.Write((int)e.MoveVector.X);
+                    outMsg.Write((int)e.MoveVector.Y);
+                    outMsg.Write(e.currentFrame);
+                    outMsg.Write(e.mult);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 

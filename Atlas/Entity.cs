@@ -7,6 +7,7 @@ namespace Edge.Atlas
         public Point Position;
         public Point MovingTo;
         public Point Velocity;
+        public Point MoveVector;
         public float Health;
         public int Width;
         public int Height;

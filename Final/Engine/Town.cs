@@ -104,7 +104,8 @@ namespace Edge.Hyperion.Engine {
             }
 
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
-                that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
+                //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
+                that.batch.Draw(that.Content.Load<Texture2D>(@"..\Images\Sheets\MageMinnion.png"), e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Width), Color.White);
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
@@ -128,10 +129,6 @@ namespace Edge.Hyperion.Engine {
                 switch (inMsg.MessageType) {
                     case NetIncomingMessageType.Data:
                         switch ((AtlasPackets)inMsg.ReadByte()) {
-                            //Would this work? We need a way for the clients to know there own id's
-                            //case AtlasPackets.FirstID:
-                            //    NetID = inMsg.ReadInt64();
-                            //    break;
                             case AtlasPackets.UpdatePositions:
                                 players.Clear();
                                 ushort numPlayers = inMsg.ReadUInt16();
@@ -146,19 +143,13 @@ namespace Edge.Hyperion.Engine {
                                     players[i].currentFrame = inMsg.ReadInt32();
                                 }
                                 break;
-                            case AtlasPackets.UpdateMoveVector:
-                                if (enemys.Count != 0) {
-                                    int ID = inMsg.ReadInt32();
-                                    int X = inMsg.ReadInt32();
-                                    int Y = inMsg.ReadInt32();
-                                    enemys[ID - 1].Target = new Point(X, Y);
-                                }
-                                break;
-                            case AtlasPackets.DamageEnemy:
+                            case AtlasPackets.UpdateEnemy:
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numEnemys; i++) {
-                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32()));
+                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadInt32()));
+                                    enemys[i].currentframe = inMsg.ReadInt32();
+                                    enemys[i].mult = inMsg.ReadInt32();
                                 }
                                 break;
                         }

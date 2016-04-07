@@ -69,7 +69,7 @@ namespace Edge.Atlas {
                     case ServerEnemy.Type.Debug: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 player.dmgTimer = 0;
-                                player.Health -= .15f;
+                                player.Health -= .125f;
                             }
                             player.dmgTimer += dt;
                         } break;
@@ -78,14 +78,16 @@ namespace Edge.Atlas {
                         } break;
                     case ServerEnemy.Type.Minion: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
-                                ent[i].remove = true;
+                                removeEnemys.Add(i);
                                 player.dmgTimer = 0;
-                                player.Health -= .5f;
+                                player.Health -= .125f;
                             }
-                        //mightbe the 
                             player.dmgTimer += dt;
                         } break;
                 }
+            foreach (var i in removeEnemys)
+                enemys.RemoveAt(i);
+            removeEnemys.Clear();
         }
 
     }

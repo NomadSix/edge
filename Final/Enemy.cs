@@ -9,7 +9,11 @@ namespace Edge.Hyperion {
         public Rectangle hitBox;
         public bool isActive = true;
         public Point Target;
-        public Enemy(long id, int x, int y)
+        public Point MoveVector;
+        public int currentframe = 0;
+        public int mult = 0;
+
+        public Enemy(long id, int x, int y, int mx, int my)
             : base(id, x, y) {
             NetID = id;
             entType = Type.minion;
@@ -18,6 +22,7 @@ namespace Edge.Hyperion {
             Width = 32;
             Height = 32;
             hitBox = new Rectangle(x, y, Width, Height);
+            MoveVector = new Point(mx, my);
         }
 
         public enum Type:byte {
