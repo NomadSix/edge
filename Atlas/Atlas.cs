@@ -151,8 +151,7 @@ namespace Edge.Atlas {
                     outMsg.Write(e.NetID);
                     outMsg.Write((int)e.Position.X);
                     outMsg.Write((int)e.Position.Y);
-                    outMsg.Write((int)e.MoveVector.X);
-                    outMsg.Write((int)e.MoveVector.Y);
+                    outMsg.Write((int)e.entType);
                     outMsg.Write(e.currentFrame);
                     outMsg.Write(e.mult);
                 }

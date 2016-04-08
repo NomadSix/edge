@@ -10,6 +10,7 @@ namespace Edge.Atlas {
         public int mult = 0;
         public int currentFrame = 0;
         public float dmgTimer = 0;
+        public float animationTimer = 0;
 		public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){
 			NetID = id;
             Health = health;

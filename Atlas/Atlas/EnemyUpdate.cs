@@ -57,7 +57,8 @@ namespace Edge.Atlas {
                             if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
                             if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
                             if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
-                        } break;
+                        }
+                        break;
                     default: {
                             movespeed = 120;
                             ent.Range = 32 * 6;
@@ -81,31 +82,26 @@ namespace Edge.Atlas {
                             }
                             if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
                                 ent.Position.Y -= movespeed * dt;
-                                ent.MoveVector.Y = 1;
+                                ent.MoveVector.Y = -1;
                             }
 
                             //animation
                             if (ent.MoveVector != Vector2.Zero) {
-                                timer += dt;
-                                if (timer > .25) {
-                                    timer = 0;
+                                ent.animationTimer += dt;
+                                if (ent.animationTimer > .15) {
+                                    ent.animationTimer = 0;
                                     ent.currentFrame += 1;
                                 }
                             } else {
                                 ent.currentFrame = 0;
                             }
-                            if (ent.MoveVector.Y == -1) {
-                                ent.mult = 2;
-                            } else if (ent.MoveVector.Y == 1) {
-                                ent.mult = 0;
-                            }
-
                             if (ent.MoveVector.X == -1) {
                                 ent.mult = 1;
                             } else if (ent.MoveVector.X == 1) {
                                 ent.mult = 3;
-                            } break;
-                }
+                            }
+                            break;
+                        }
                 }
             }
 

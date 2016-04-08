@@ -69,11 +69,14 @@ namespace Edge.Hyperion {
             AssetStore.mouse = new Backing.Mouse(this);
             Components.Add(AssetStore.kb);
             Components.Add(AssetStore.mouse);
-            AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
-            AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
-            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
             AssetStore.Sword = Content.Load<Texture2D>(@"../Images/sword.png");
+            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
+            AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
+            AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Minion, new Enemy.Style(Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Mage, new Enemy.Style(Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSprite"), null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Debug, new Enemy.Style(AssetStore.Pixel, null, null));
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion

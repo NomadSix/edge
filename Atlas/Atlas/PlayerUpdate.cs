@@ -54,9 +54,9 @@ namespace Edge.Atlas {
             }
 
             if (player.MoveVector != Point.Zero) {
-                timer += dt;
-                if (timer > .25) {
-                    timer = 0;
+                player.animationTimer += dt;
+                if (player.animationTimer > .25) {
+                    player.animationTimer = 0;
                     player.currentFrame += 1;
                 }
             } else {

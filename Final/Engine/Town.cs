@@ -105,7 +105,7 @@ namespace Edge.Hyperion.Engine {
 
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
-                that.batch.Draw(that.Content.Load<Texture2D>(@"..\Images\Sheets\MageMinnion.png"), e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Width), Color.White);
+                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Width), e.Type.BaseColour);
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
@@ -147,7 +147,7 @@ namespace Edge.Hyperion.Engine {
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numEnemys; i++) {
-                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadInt32(), inMsg.ReadInt32()));
+                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
                                     enemys[i].currentframe = inMsg.ReadInt32();
                                     enemys[i].mult = inMsg.ReadInt32();
                                 }
