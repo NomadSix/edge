@@ -78,6 +78,7 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Engine\Item.cs" />
     <Compile Include="Engine\MapCell.cs" />
     <Compile Include="Engine\Portal.cs" />
     <Compile Include="Engine\TileMap.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Backing\Input\Mouse.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Engine\Town.cs" />
+    <Compile Include="SongEffect.cs" />
     <Compile Include="UI\Components\Button.cs" />
     <Compile Include="UI\Components\Popup.cs" />
     <Compile Include="UI\Components\Screen.cs" />
@@ -116,6 +118,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Audio\Damage01.wav" />
+    <Content Include="Audio\song.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -124,6 +130,9 @@
     </Content>
     <Content Include="Images\Button\TitleButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Items\HealthPot.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\layers\back-trees.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -179,6 +188,9 @@
     </Content>
     <Content Include="Font\Helvetica.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\song.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Images\layers\Thumbs.db" />
     <Content Include="Images\Sheets\grass.tbin">
@@ -241,6 +253,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Audio\Player\" />
     <Folder Include="Images\Menu\" />
   </ItemGroup>
 </Project>

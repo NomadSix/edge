@@ -6,12 +6,15 @@ namespace Edge.Atlas {
         public string Name;
         public Color pColor;
         public Rectangle Hitbox;
+        public Rectangle Atkbox;
         public Point MoveVector;
         public int mult = 0;
         public int currentFrame = 0;
         public float dmgTimer = 0;
         public float animationTimer = 0;
-		public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){
+        public bool isAttacking;
+        public bool isDamaged;
+        public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){
 			NetID = id;
             Health = health;
             Position = new Vector2(x, y);

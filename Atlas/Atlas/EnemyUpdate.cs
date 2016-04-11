@@ -36,16 +36,18 @@ namespace Edge.Atlas {
                 switch (ent.entType) {
                     case ServerEnemy.Type.Mage: {
                             var rng = new Random();
-                            if (ent.summonTimer >= 1) {
+                            if (ent.summonTimer >= .5) {
                                 ent.summonTimer = 0;
                                 addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, ServerEnemy.Type.Minion));
                             }
                             ent.summonTimer += dt;
-                        }
-                        break;
-                    default: {
-                        }
-                        break;
+                        } break;
+                    case ServerEnemy.Type.FireMage: {
+
+                        } break;
+                    case ServerEnemy.Type.Minion: {
+
+                        } break;
                 }
 
                 //move
@@ -60,7 +62,7 @@ namespace Edge.Atlas {
                         }
                         break;
                     default: {
-                            movespeed = 120;
+                            movespeed = 90;
                             ent.Range = 32 * 6;
                             //ent.MovingTo = 
                             //    new Vector2(
@@ -103,8 +105,17 @@ namespace Edge.Atlas {
                             break;
                         }
                 }
+                
+                if (ent.Health < 0) {
+                    removeEnemys.Add(ent);
+                }
             }
 
+            if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
+                ent.lifeTimer = 0;
+                removeEnemys.Add(ent);
+            }
+            ent.lifeTimer += dt;
             //update hitbox
             ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
         }

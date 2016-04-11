@@ -2,11 +2,13 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 using ThreadStart = System.Threading.ThreadStart;
 using Thread = System.Threading.Thread;
 
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
+using Edge.Hyperion.Engine;
 using Edge.Hyperion.UI.Components;
 
 namespace Edge.Hyperion {
@@ -74,9 +76,13 @@ namespace Edge.Hyperion {
             AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
             AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
-            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Minion, new Enemy.Style(Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
-            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Mage, new Enemy.Style(Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSprite"), null, null));
-            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Debug, new Enemy.Style(AssetStore.Pixel, null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Minion, new Enemy.Style(Enemy.Style.Type.Minion, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Mage, new Enemy.Style(Enemy.Style.Type.Mage, Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSprite"), null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Slime, new Enemy.Style(Enemy.Style.Type.Slime, AssetStore.Pixel, null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.FireMage, new Enemy.Style(Enemy.Style.Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
+            AssetStore.EnemyTypes.Add(Enemy.Style.Type.Debug, new Enemy.Style(Enemy.Style.Type.Debug, AssetStore.Pixel, null, null));
+            AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
+            AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion

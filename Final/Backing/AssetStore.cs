@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
+using Edge.Hyperion.Engine;
 using Button = Edge.Hyperion.UI.Components.Button;
 
 namespace Edge.Hyperion.Backing {
@@ -10,6 +12,8 @@ namespace Edge.Hyperion.Backing {
 		//TODO: Storage and retrieval list/dictionaries
 		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
         public static Dictionary<Enemy.Style.Type, Enemy.Style> EnemyTypes = new Dictionary<Enemy.Style.Type, Enemy.Style>();
+        public static Dictionary<Item.Style.Type, Item.Style> ItemTypes = new Dictionary<Item.Style.Type, Item.Style>();
+        public static SoundEffect MainmenuSong;
         public static Texture2D PlayerTexture, Pixel, Mouse;
         public static Texture2D Sword, Bow, Wand;
         public static float MasterVolume = 1f;

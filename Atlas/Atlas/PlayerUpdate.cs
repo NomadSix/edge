@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -20,14 +21,14 @@ namespace Edge.Atlas {
             DebugMove(player);
             //MoveTo(player, 200);
 		}
-		/// <summary>
-		/// Execute the movement logic for the player+		enemys[0].Target	'enemys[0].Target' threw an exception of type 'System.Collections.Generic.KeyNotFoundException'	Microsoft.Xna.Framework.Point {System.Collections.Generic.KeyNotFoundException}
+        /// <summary>
+        /// Execute the movement logic for the player+		enemys[0].Target	'enemys[0].Target' threw an exception of type 'System.Collections.Generic.KeyNotFoundException'	Microsoft.Xna.Framework.Point {System.Collections.Generic.KeyNotFoundException}
 
-		/// Note: This is the old debug logic, and will likely be removed eventually
-		/// </summary>
-		/// <param name="player">Reference to the player this is being run on</param>
-		void DebugMove(DebugPlayer player) {
-		    float dt = (currentTime - lastUpdates)/(float)TimeSpan.TicksPerSecond;
+        /// Note: This is the old debug logic, and will likely be removed eventually
+        /// </summary>
+        /// <param name="player">Reference to the player this is being run on</param>
+        void DebugMove(DebugPlayer player) {
+            float dt = (currentTime - lastUpdates) / (float)TimeSpan.TicksPerSecond;
             if (player.MoveVector.Y >= 0)
                 player.Velocity.Y = (maxVel.Y * player.MoveVector.Y * dt);
             if (player.MoveVector.Y <= 0)
@@ -38,7 +39,16 @@ namespace Edge.Atlas {
             if (player.MoveVector.X <= 0)
                 player.Velocity.X = (maxVel.X * player.MoveVector.X * dt);
             player.Position += player.Velocity;
-            player.Hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
+            var hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
+            player.Hitbox = hitbox;
+            if (player.isAttacking) {
+                player.Atkbox = player.mult == 0 ? new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height) : hitbox;
+                player.Atkbox = player.mult == 1 ? new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height) : hitbox;
+                player.Atkbox = player.mult == 2 ? new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height) : hitbox;
+                player.Atkbox = player.mult == 3 ? new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height) : hitbox;
+            } else {
+                player.Atkbox = new Rectangle();
+            }
 
             //animation
             if (player.MoveVector.Y == -1) {
@@ -70,26 +80,52 @@ namespace Edge.Atlas {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 player.dmgTimer = 0;
                                 player.Health -= .125f;
+                                player.isDamaged = true;
                             }
                             player.dmgTimer += dt;
-                        } break;
+                        }
+                        break;
                     case ServerEnemy.Type.Mage: {
-
-                        } break;
+                            if (player.Atkbox.Intersects(ent[i].Hitbox)) {
+                                ent[i].Health -= 1f;
+                            }
+                        }
+                        break;
                     case ServerEnemy.Type.Minion: {
+                            if (player.Atkbox.Intersects(ent[i].Hitbox)) {
+                                ent[i].Health -= 1f;
+                            }
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
-                                removeEnemys.Add(i);
+                                removeEnemys.Add(ent[i]);
                                 player.dmgTimer = 0;
-                                player.Health -= .125f;
+                                player.Health -= .25f;
+                                player.isDamaged = true;
                             }
                             player.dmgTimer += dt;
-                        } break;
+                        }
+                        break;
                 }
-            foreach (var i in removeEnemys)
-                enemys.RemoveAt(i);
-            removeEnemys.Clear();
-        }
+            foreach (Item i in items) { 
+            var q = GetQ(i);
+                if (q.Count() != 0) {
+                    if (player.Hitbox.Intersects(i.Hitbox))
+                        player.Health = 2f;
+                    }
+                }
 
+                if (player.Health <= 0) {
+                    addPlayers.Add(player);
+                    removePlayers.Add(player.NetID);
+                }
+        }
+        public IEnumerable<Item> GetQ(Item i) {
+            return items.Where(x =>
+                Vector2.Distance(
+                    new Vector2(i.Position.X + i.Width / 2, i.Position.Y + i.Height / 2),
+                    new Vector2(x.Position.X + x.Width / 2, x.Position.Y + x.Height / 2))
+                < 1f
+                );
+        }
     }
 }
 

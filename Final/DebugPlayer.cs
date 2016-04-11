@@ -15,6 +15,8 @@ namespace Edge.Hyperion {
         public Type entType;
         public int mult = 0;
         public int currentFrame = 0;
+        public bool isAttacking;
+        public bool isDamaged;
 
         public DebugPlayer(long id, int x, int y, string name, float health)
             : base(id, x, y) {

@@ -6,6 +6,7 @@ using Edge.Hyperion.UI.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 using Edge.Hyperion.Backing;
@@ -31,28 +32,26 @@ namespace Edge.Hyperion.Engine {
 
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Enemy> enemys = new List<Enemy>();
-
-        int currentFrame = 0;
+        List<Item> items = new List<Item>();
+        
         int framesPerRow = 2;
-        int timeSinceLastFrame = 0;
-        int millisecondsPerFrame = 200;
-        int mult = 0;
 
         public Town(Game game, string address, string port) : base(game) {
             Port = port;
             Address = address;
             cam.Zoom = 2f;
+            #region Atlas Configuration
+            var Config = new NetPeerConfiguration("Atlas");
+            Config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
+            Config.Port = 2347;
+            atlasClient = new NetClient(Config);
+            atlasClient.Start();
+            ////maestroConfig.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
+            atlasClient.Connect(Address, int.Parse(Port));
+            #endregion
         }
 
         public override void Initialize() {
-            #region Atlas Configuration
-            var atlasConfig = new NetPeerConfiguration("Atlas");
-            //maestroConfig.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
-            atlasConfig.Port = 2347;
-            atlasClient = new NetClient(atlasConfig);
-            atlasClient.Start();
-            atlasClient.Connect(Address, int.Parse(Port));
-            #endregion
             that.sampleState = SamplerState.PointClamp;
             pMenu = new PauseMenu(that, this);
             statusBar = new StatusBar(that, 1f);
@@ -94,6 +93,7 @@ namespace Edge.Hyperion.Engine {
         }
 
         public override void Draw(GameTime gameTime) {
+            that.GraphicsDevice.Clear(new Color(79, 154, 73));
             Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
             for (int y = 0; y < mapSize.Y; y++) { // Main loop to draw the tile map .csv to the world
                 for (int x = 0; x < mapSize.X; x++) {
@@ -103,9 +103,13 @@ namespace Edge.Hyperion.Engine {
                 }
             }
 
+            foreach (var i in items) {
+                that.batch.Draw(i.type.Base, i.Hitbox, Color.White);
+            }
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
-                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Width), e.Type.BaseColour);
+                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Height), e.Type.BaseColour);
+                that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
@@ -115,6 +119,17 @@ namespace Edge.Hyperion.Engine {
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
                 that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Width), Color.White);
                 that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
+
+                if (p.isAttacking) {
+                    p.AttackRec = p.mult == 0 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 2 ? new Rectangle(p.HitBox.X, p.HitBox.Y - p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X + p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                } else {
+                    p.AttackRec = new Rectangle();
+                }
+                that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
+
             }
             foreach (var p in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 statusBar.draw(p.Health);
@@ -123,7 +138,6 @@ namespace Edge.Hyperion.Engine {
         }
 
         public void serverIO() {
-
             NetIncomingMessage inMsg;
             while ((inMsg = atlasClient.ReadMessage()) != null) {
                 switch (inMsg.MessageType) {
@@ -141,6 +155,7 @@ namespace Edge.Hyperion.Engine {
                                     players.Add(new DebugPlayer(NetID, X, Y, Name, health));
                                     players[i].mult = inMsg.ReadInt32();
                                     players[i].currentFrame = inMsg.ReadInt32();
+                                    players[i].isAttacking = inMsg.ReadBoolean();
                                 }
                                 break;
                             case AtlasPackets.UpdateEnemy:
@@ -150,6 +165,13 @@ namespace Edge.Hyperion.Engine {
                                     enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
                                     enemys[i].currentframe = inMsg.ReadInt32();
                                     enemys[i].mult = inMsg.ReadInt32();
+                                }
+                                break;
+                            case AtlasPackets.UpdateItem:
+                                items.Clear();
+                                ushort numItems = inMsg.ReadUInt16();
+                                for (ushort i = 0; i < numItems; i++) {
+                                    items.Add(new Item(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.ItemTypes[(Item.Style.Type)inMsg.ReadInt32()]));
                                 }
                                 break;
                         }
@@ -167,6 +189,7 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write((short)p.MoveVector.X);
             outMsg.Write((short)p.MoveVector.Y);
             outMsg.Write(System.Environment.UserName);
+            outMsg.Write(p.isAttacking);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
         }
 
@@ -198,6 +221,12 @@ namespace Edge.Hyperion.Engine {
                 p.MoveVector.X = 1;
             } else {
                 p.MoveVector.X = 0;
+            }
+
+            if (AssetStore.kb.IsButtonToggledDown(Keys.Space) || AssetStore.mouse.IsButtonToggledDown(Backing.Mouse.MouseButtons.Left)) {
+                p.isAttacking = true;
+            } else {
+                p.isAttacking = false;
             }
         }
 

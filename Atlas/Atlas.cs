@@ -14,9 +14,15 @@ namespace Edge.Atlas {
         public bool isExiting;
 		public Dictionary<long, DebugPlayer> players = new Dictionary<long, DebugPlayer>();
 		public List<ServerEnemy> enemys = new List<ServerEnemy>();
+        public List<Item> items = new List<Item>();
 
+        public List<DebugPlayer> addPlayers = new List<DebugPlayer>();
         public List<ServerEnemy> addEnemys = new List<ServerEnemy>();
-        public List<int> removeEnemys = new List<int>();
+        public List<Item> addItem = new List<Item>();
+
+        public List<ServerEnemy> removeEnemys = new List<ServerEnemy>();
+        public List<long> removePlayers = new List<long>();
+        public List<Item> removeItems = new List<Item>();
 
         public long lastTime;
         public long lastUpdates;
@@ -53,7 +59,8 @@ namespace Edge.Atlas {
 			server = new NetServer(config);
 			server.Start();
             enemys.Add(new ServerEnemy(0, 128, 32 * 2, ServerEnemy.Type.Mage));
-		}
+            items.Add(new Item(0, 32, 32, Item.Type.Health));
+        }
 
 		/// <summary>
 		/// Start the main server loop
@@ -73,15 +80,21 @@ namespace Edge.Atlas {
 				NetIncomingMessage inMsg;
 				while((inMsg = server.ReadMessage()) != null) {
 					switch(inMsg.MessageType) {
-						case NetIncomingMessageType.Data:
+                        case NetIncomingMessageType.DiscoveryRequest:
+                            //TODO: FIX DIS
+                            server.SendDiscoveryResponse(null, inMsg.SenderEndPoint);
+                            break;
+                        case NetIncomingMessageType.Data:
 							 switch((AtlasPackets)inMsg.ReadByte()) {
                                  case AtlasPackets.RequestPositionChange: {
                                         short X = inMsg.ReadInt16();
                                         short Y = inMsg.ReadInt16();
                                         string Name = inMsg.ReadString();
+                                        bool Attack = inMsg.ReadBoolean();
                                         long ID = inMsg.SenderConnection.RemoteUniqueIdentifier;
                                         players[ID].MoveVector = new Point(X, Y);
                                         players[ID].Name = Name;
+                                        players[ID].isAttacking = Attack;
                                         //players[ID].pColor = new Color(R, G, B);
                                     } break;
                                 case AtlasPackets.RequestMoveVector: {
@@ -90,22 +103,23 @@ namespace Edge.Atlas {
                                         int Y = inMsg.ReadInt32();
                                         enemys[ID].Target = new Point(X, Y);
                                     } break;
+                                case AtlasPackets.RequestItem: {
+                                        int ID = inMsg.ReadInt32();
+                                        int X = inMsg.ReadInt32();
+                                        int Y = inMsg.ReadInt32();
+                                        items[ID].Hitbox = new Rectangle(X, Y, 16, 16);
+                                    } break;
 							 }
 							break;
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 10));
+									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 2));
                                     break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);
 									break;
 							}
-							break;
-						case NetIncomingMessageType.DiscoveryRequest:
-							//TODO: FIX DIS
-							NetOutgoingMessage response = server.CreateMessage();
-							server.SendDiscoveryResponse(response, inMsg.SenderEndPoint);
 							break;
 						case NetIncomingMessageType.DebugMessage:
 						case NetIncomingMessageType.VerboseDebugMessage:
@@ -115,16 +129,28 @@ namespace Edge.Atlas {
 							break;
 					}
 				}
-				#endregion
+                #endregion
 
-				//Parallel.ForEach(players.Values, PlayerUpdate);
-                
+                //Parallel.ForEach(players.Values, PlayerUpdate);
+
                 foreach (var p in players) {
                     PlayerUpdate(p.Value, enemys.ToList());
                 }
                 foreach (var e in enemys) {
                     EnemyUpdate(e, players.Values.ToList());
                 }
+                foreach (var p in removePlayers) {
+                    players.Remove(p);
+                }
+                foreach (var e in removeEnemys) {
+                    enemys.Remove(e);
+                }
+                foreach (var p in addPlayers) {
+                    players.Add(p.NetID, new DebugPlayer(p.NetID, 0, 0, 2f));
+                }
+                addPlayers.Clear();
+                removeEnemys.Clear();
+                removePlayers.Clear();
                 enemys.AddRange(addEnemys);
                 addEnemys.Clear();
 
@@ -141,6 +167,7 @@ namespace Edge.Atlas {
                     outMsg.Write(p.Health);
                     outMsg.Write(p.mult);
                     outMsg.Write(p.currentFrame);
+                    outMsg.Write(p.isAttacking);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
@@ -157,7 +184,18 @@ namespace Edge.Atlas {
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
-				lastUpdates = currentTime;
+                outMsg = server.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.UpdateItem);
+                outMsg.Write((ushort)items.Count);
+                foreach (var i in items) {
+                    outMsg.Write(i.ID);
+                    outMsg.Write((int)i.Position.X);
+                    outMsg.Write((int)i.Position.Y);
+                    outMsg.Write((int)i.type);
+                }
+                server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+
+                lastUpdates = currentTime;
 				#endregion
 			}
 			server.Shutdown("Bye!");
