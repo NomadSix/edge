@@ -29,8 +29,7 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
                 that.sampleState = SamplerState.PointClamp;
                 that.Components.Remove(this);
             })); 
-            ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 7 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.disabled], "Options", () =>
-            {
+            ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 7 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.disabled], "Options", () =>{
                 that.sampleState = SamplerState.LinearWrap;
                 World._isActive = false;
                 that.SetScreen(new MainMenu(that));

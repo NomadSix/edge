@@ -134,19 +134,20 @@ namespace Edge.Atlas {
                 //Parallel.ForEach(players.Values, PlayerUpdate);
 
                 foreach (var p in players) {
-                    PlayerUpdate(p.Value, enemys.ToList());
+                    PlayerUpdate(p.Value, enemys);
                 }
-                foreach (var e in enemys) {
-                    EnemyUpdate(e, players.Values.ToList());
+                for (int e = 0; e < enemys.Count; e++) {
+                    EnemyUpdate(enemys[e], players.Values.ToList());
                 }
-                foreach (var p in removePlayers) {
-                    players.Remove(p);
+                for (int p = 0; p < removePlayers.Count; p++) {
+                    players.Remove(removePlayers[p]);
                 }
-                foreach (var e in removeEnemys) {
-                    enemys.Remove(e);
+                for (int e = 0; e < removeEnemys.Count; e++) {
+                    enemys.Remove(removeEnemys[e]);
                 }
-                foreach (var p in addPlayers) {
-                    players.Add(p.NetID, new DebugPlayer(p.NetID, 0, 0, 2f));
+                for (int p = 0; p < addPlayers.Count; p++) {
+                    var ID = addPlayers[p].NetID;
+                    players.Add(ID, new DebugPlayer(ID, 0, 0, 2f));
                 }
                 addPlayers.Clear();
                 removeEnemys.Clear();
@@ -280,7 +281,7 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), ServerEnemy.Type.Debug));
+						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), (ServerEnemy.Type)int.Parse(args[2])));
                     }
                     break;
                 case "ENTS":

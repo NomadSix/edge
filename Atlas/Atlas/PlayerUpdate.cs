@@ -42,10 +42,14 @@ namespace Edge.Atlas {
             var hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
             player.Hitbox = hitbox;
             if (player.isAttacking) {
-                player.Atkbox = player.mult == 0 ? new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height) : hitbox;
-                player.Atkbox = player.mult == 1 ? new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height) : hitbox;
-                player.Atkbox = player.mult == 2 ? new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height) : hitbox;
-                player.Atkbox = player.mult == 3 ? new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height) : hitbox;
+                if (player.mult == 0)
+                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+                if (player.mult == 1)
+                    player.Atkbox =  new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height);
+                if (player.mult == 2)
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height);
+                if (player.mult == 3)
+                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
             } else {
                 player.Atkbox = new Rectangle();
             }
@@ -74,7 +78,7 @@ namespace Edge.Atlas {
             }
 
             //colition
-            for (int i = 0; i < ent.Count; i++)
+            for (int i = 0; i < ent.Count; i++) {
                 switch (ent[i].entType) {
                     case ServerEnemy.Type.Debug: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
@@ -86,15 +90,9 @@ namespace Edge.Atlas {
                         }
                         break;
                     case ServerEnemy.Type.Mage: {
-                            if (player.Atkbox.Intersects(ent[i].Hitbox)) {
-                                ent[i].Health -= 1f;
-                            }
                         }
                         break;
                     case ServerEnemy.Type.Minion: {
-                            if (player.Atkbox.Intersects(ent[i].Hitbox)) {
-                                ent[i].Health -= 1f;
-                            }
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 removeEnemys.Add(ent[i]);
                                 player.dmgTimer = 0;
@@ -105,6 +103,11 @@ namespace Edge.Atlas {
                         }
                         break;
                 }
+                if (player.Atkbox.Intersects(ent[i].Hitbox)) {
+                    ent[i].Health -= 1f;
+                }
+            }
+
             foreach (Item i in items) { 
             var q = GetQ(i);
                 if (q.Count() != 0) {

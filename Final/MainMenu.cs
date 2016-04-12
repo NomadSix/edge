@@ -75,13 +75,13 @@ namespace Edge.Hyperion {
             var dt = gameTime.ElapsedGameTime;
             if (timer < opening &&(music.Volume + .5f / (60 * opening)) < 1)
                 music.Volume += .5f / (60 * opening);
-            cam.Position = Vector2.Lerp(AssetStore.mouse.LocationV2, cam.Position/4, .9f);
+            cam.Position = Vector2.Lerp(AssetStore.mouse.LocationV2, cam.Position/100, .95f);
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime) {
             //strip.Update();
-            Point firstPos = new Point(AssetStore.TileSize * 20);
+            Point firstPos = new Point(AssetStore.TileSize);
             for (int y = 0; y < mapSize.Y; y++) {
                 for (int x = 0; x < mapSize.X; x++) {
                     Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);

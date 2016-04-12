@@ -10,6 +10,7 @@ using Thread = System.Threading.Thread;
 using AssetStore = Edge.Hyperion.Backing.AssetStore;
 using Edge.Hyperion.Engine;
 using Edge.Hyperion.UI.Components;
+using System;
 
 namespace Edge.Hyperion {
     public class Final : Game {
@@ -57,14 +58,14 @@ namespace Edge.Hyperion {
         }
 
         protected override void Initialize() {
-            ContentThread = new Thread(new ThreadStart(LoadLostsOfContent));
+            ContentThread = new Thread(new ThreadStart(LoadLotsOfContent));
             ContentThread.Name = "Content Loading Thread";
             ContentThread.Start();
 
             base.Initialize();
         }
 
-        void LoadLostsOfContent() {
+        void LoadLotsOfContent() {
             #region Component Configuration
             batch = new SpriteBatch(GraphicsDevice);
             AssetStore.kb = new Backing.Keyboard(this);
@@ -86,6 +87,7 @@ namespace Edge.Hyperion {
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion
+            Thread.Sleep(5000);
             contentLoaded = true;
         }
 
@@ -96,20 +98,30 @@ namespace Edge.Hyperion {
         }
 
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.TransparentBlack);
+            GraphicsDevice.Clear(new Color(79, 154, 73));
             batch.Begin(SpriteSortMode.Deferred, null, sampleState, null, null, null, viewMatrix);
             if (contentLoaded) {
                 base.Draw(gameTime);
             } else {
                 //draw loading screen
-                DrawCenter("Loading ...");
+                DrawCenter("Loading Lots of Content ...");
             }
             batch.End();
         }
 
+        protected override void OnExiting(object sender, EventArgs args) {
+            foreach (var screen in Components) {
+                if (screen.GetType() != typeof(Town)) continue;
+                var atlasClient = ((Town)screen).atlasClient;
+                atlasClient.Disconnect("Disconnecting");
+                atlasClient.Shutdown("Shutingdown");
+            }
+            base.OnExiting(sender, args);
+        }
+
         void DrawCenter(string text) {
             var measure = Helvetica.MeasureString(text);
-            var location = new Vector2(GraphicsDevice.Viewport.Width / 2 - measure.X / 2, 50);
+            var location = new Vector2(GraphicsDevice.Viewport.Width / 1.75f - measure.X / 2, GraphicsDevice.Viewport.Height / 1.75f - measure.Y / 2);
             batch.DrawString(Helvetica, text, location, Color.White);
         }
 

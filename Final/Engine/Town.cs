@@ -16,7 +16,7 @@ using Edge.Hyperion.UI.Implementation.Popups;
 namespace Edge.Hyperion.Engine {
     public class Town : Screen {
         Texture2D pixel, artDebug;
-        NetClient atlasClient;
+        internal NetClient atlasClient;
         string Port, Address;
         string Name;
         Color pColor = Color.Gray;
@@ -93,7 +93,6 @@ namespace Edge.Hyperion.Engine {
         }
 
         public override void Draw(GameTime gameTime) {
-            that.GraphicsDevice.Clear(new Color(79, 154, 73));
             Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
             for (int y = 0; y < mapSize.Y; y++) { // Main loop to draw the tile map .csv to the world
                 for (int x = 0; x < mapSize.X; x++) {
@@ -162,9 +161,13 @@ namespace Edge.Hyperion.Engine {
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numEnemys; i++) {
-                                    enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
-                                    enemys[i].currentframe = inMsg.ReadInt32();
-                                    enemys[i].mult = inMsg.ReadInt32();
+                                    try {
+                                        enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
+                                        enemys[i].currentframe = inMsg.ReadInt32();
+                                        enemys[i].mult = inMsg.ReadInt32();
+                                    } catch (KeyNotFoundException e) {
+                                        System.Console.WriteLine("No ent with ID " + e.Data);
+                                    }
                                 }
                                 break;
                             case AtlasPackets.UpdateItem:

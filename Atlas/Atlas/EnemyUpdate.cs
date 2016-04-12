@@ -20,7 +20,8 @@ namespace Edge.Atlas {
             var q = GetQ(ent);
             if (q.Count() != 0) {
                 closePlayer = q.First();
-                foreach (DebugPlayer player in q) {
+                for (int i = 0; i < players.Count; i++) {
+                    var player = q[i];
                     if (Vector2.Distance(
                         new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
                         new Vector2(player.Position.X + player.Width / 2, player.Position.Y + player.Height / 2))
@@ -63,7 +64,7 @@ namespace Edge.Atlas {
                         break;
                     default: {
                             movespeed = 90;
-                            ent.Range = 32 * 6;
+                            ent.Range = 32 * 4;
                             //ent.MovingTo = 
                             //    new Vector2(
                             //        closePlayer.Position.X - closePlayer.Width / 2,
@@ -109,23 +110,31 @@ namespace Edge.Atlas {
                 if (ent.Health < 0) {
                     removeEnemys.Add(ent);
                 }
-            }
 
-            if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
-                ent.lifeTimer = 0;
-                removeEnemys.Add(ent);
+            } else {
+                ent.currentFrame = 0;
+                if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
+                    ent.lifeTimer = 0;
+                    removeEnemys.Add(ent);
+                }
             }
             ent.lifeTimer += dt;
             //update hitbox
             ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
         }
-        public IEnumerable<DebugPlayer> GetQ(ServerEnemy ent) {
-            return Players.Where(x =>
-                Vector2.Distance(
+
+        public List<DebugPlayer> GetQ(ServerEnemy ent) {
+            var results = new List<DebugPlayer>();
+            for (int i = 0; i < Players.Count; i++) {
+                var x = Players[i];
+                if (Vector2.Distance(
                     new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
                     new Vector2(x.Position.X + x.Width / 2, x.Position.Y + x.Height / 2))
-                < ent.Range
-                );
+                < ent.Range) {
+                    results.Add(x);
+                }
+            }
+            return results;
         }
         void MoveTo(ServerEnemy ent, DebugPlayer player, float movespeed) {
             if (ent.Position == ent.MovingTo)
