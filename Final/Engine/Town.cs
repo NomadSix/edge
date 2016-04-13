@@ -105,11 +105,6 @@ namespace Edge.Hyperion.Engine {
             foreach (var i in items) {
                 that.batch.Draw(i.type.Base, i.Hitbox, Color.White);
             }
-            foreach (var e in enemys) { // Main loop to draw each enemy to the world
-                //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
-                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Height), e.Type.BaseColour);
-                that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
-            }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
@@ -117,7 +112,7 @@ namespace Edge.Hyperion.Engine {
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
                 that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Width), Color.White);
-                that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
+                //that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
 
                 if (p.isAttacking) {
                     p.AttackRec = p.mult == 0 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
@@ -129,6 +124,13 @@ namespace Edge.Hyperion.Engine {
                 }
                 that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
 
+                foreach (var e in enemys) { // Main loop to draw each enemy to the world
+                    if (p.world == e.world) {
+                        //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
+                        that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Height), e.Type.BaseColour);
+                        that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
+                    }
+                }
             }
             foreach (var p in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 statusBar.draw(p.Health);
@@ -155,6 +157,7 @@ namespace Edge.Hyperion.Engine {
                                     players[i].mult = inMsg.ReadInt32();
                                     players[i].currentFrame = inMsg.ReadInt32();
                                     players[i].isAttacking = inMsg.ReadBoolean();
+                                    players[i].world = (Entity.World)inMsg.ReadByte();
                                 }
                                 break;
                             case AtlasPackets.UpdateEnemy:
@@ -165,6 +168,7 @@ namespace Edge.Hyperion.Engine {
                                         enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
                                         enemys[i].currentframe = inMsg.ReadInt32();
                                         enemys[i].mult = inMsg.ReadInt32();
+                                        enemys[i].world = (Enemy.World)inMsg.ReadByte();
                                     } catch (KeyNotFoundException e) {
                                         System.Console.WriteLine("No ent with ID " + e.Data);
                                     }
@@ -193,6 +197,7 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write((short)p.MoveVector.Y);
             outMsg.Write(System.Environment.UserName);
             outMsg.Write(p.isAttacking);
+            outMsg.Write((byte)p.world);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
         }
 
@@ -238,6 +243,7 @@ namespace Edge.Hyperion.Engine {
             if (graphicsService != null && graphicsService is GraphicsDeviceManager) {
                 (graphicsService as GraphicsDeviceManager).IsFullScreen = true;
                 (graphicsService as GraphicsDeviceManager).ApplyChanges();
+                throw new System.Exception();
             }
         }
     }

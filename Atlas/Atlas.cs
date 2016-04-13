@@ -137,7 +137,7 @@ namespace Edge.Atlas {
                     PlayerUpdate(p.Value, enemys);
                 }
                 for (int e = 0; e < enemys.Count; e++) {
-                    EnemyUpdate(enemys[e], players.Values.ToList());
+                    EnemyUpdate(enemys[e]);
                 }
                 for (int p = 0; p < removePlayers.Count; p++) {
                     players.Remove(removePlayers[p]);
@@ -169,6 +169,7 @@ namespace Edge.Atlas {
                     outMsg.Write(p.mult);
                     outMsg.Write(p.currentFrame);
                     outMsg.Write(p.isAttacking);
+                    outMsg.Write((byte)p.world);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
@@ -182,6 +183,7 @@ namespace Edge.Atlas {
                     outMsg.Write((int)e.entType);
                     outMsg.Write(e.currentFrame);
                     outMsg.Write(e.mult);
+                    outMsg.Write((byte)e.mult);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
@@ -285,9 +287,10 @@ namespace Edge.Atlas {
                     }
                     break;
                 case "ENTS":
-                    foreach(var e in enemys)
+                    for (int i = 0; i < enemys.Count; i++) {
+                        ServerEnemy e = enemys[i];
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})", e.NetID, e.Position.X, e.Position.Y);
-                    break;
+                    } break;
 				case "PLAYERS":
                     foreach(var e in players)
                         Console.WriteLine("ID: {0}\n\tPosition:({1},{2})\n\tMoving To:({3},{4})");

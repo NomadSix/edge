@@ -22,6 +22,7 @@ namespace Edge.Atlas {
             Width = 32;
             Height = 32;
             entType = etype;
+            world = World.overworld;
             if (entType == Type.Mage) {
                 Health = 2f;
             }

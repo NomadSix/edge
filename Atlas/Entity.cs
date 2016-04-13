@@ -12,8 +12,13 @@ namespace Edge.Atlas
         public int Width;
         public int Height;
         public bool remove;
+        public World world;
         public Entity(long id, int x, int y) {
 			Position = new Point(x, y);
 		}
+        public enum World : byte{
+            overworld,
+            debug
+        }
     }
 }

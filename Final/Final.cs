@@ -121,7 +121,7 @@ namespace Edge.Hyperion {
 
         void DrawCenter(string text) {
             var measure = Helvetica.MeasureString(text);
-            var location = new Vector2(GraphicsDevice.Viewport.Width / 1.75f - measure.X / 2, GraphicsDevice.Viewport.Height / 1.75f - measure.Y / 2);
+            var location = new Vector2(GraphicsDevice.Viewport.Width / 1.8f - measure.X / 2, GraphicsDevice.Viewport.Height / 1.8f - measure.Y / 2);
             batch.DrawString(Helvetica, text, location, Color.White);
         }
 
