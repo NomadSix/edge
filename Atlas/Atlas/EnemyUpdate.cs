@@ -8,8 +8,8 @@ namespace Edge.Atlas {
 
         List<DebugPlayer> Players;
 
-        void EnemyUpdate(ServerEnemy enemy, List<DebugPlayer> players) {
-            Players = players;
+        void EnemyUpdate(ServerEnemy enemy) {
+            Players = players.Values.ToList();
             //update
             Update(enemy, 60);
         }
@@ -34,93 +34,98 @@ namespace Edge.Atlas {
                 }
 
                 //Update
-                switch (ent.entType) {
-                    case ServerEnemy.Type.Mage: {
-                            var rng = new Random();
-                            if (ent.summonTimer >= .5) {
-                                ent.summonTimer = 0;
-                                addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, ServerEnemy.Type.Minion));
-                            }
-                            ent.summonTimer += dt;
-                        } break;
-                    case ServerEnemy.Type.FireMage: {
-
-                        } break;
-                    case ServerEnemy.Type.Minion: {
-
-                        } break;
-                }
-
-                //move
-                switch (ent.entType) {
-                    case ServerEnemy.Type.Mage: {
-                            movespeed = 30;
-                            ent.Range = 32 * 4;
-                            if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
-                            if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
-                            if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
-                            if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
-                        }
-                        break;
-                    default: {
-                            movespeed = 90;
-                            ent.Range = 32 * 4;
-                            //ent.MovingTo = 
-                            //    new Vector2(
-                            //        closePlayer.Position.X - closePlayer.Width / 2,
-                            //        closePlayer.Position.Y - closePlayer.Height / 2
-                            //    );
-                            //MoveTo(ent, closePlayer, movespeed);
-                            if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
-                                ent.Position.X += movespeed * dt;
-                                ent.MoveVector.X = 1;
-                            }
-                            if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
-                                ent.Position.Y += movespeed * dt;
-                                ent.MoveVector.Y = 1;
-                            }
-                            if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
-                                ent.Position.X -= movespeed * dt;
-                                ent.MoveVector.X = -1;
-                            }
-                            if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
-                                ent.Position.Y -= movespeed * dt;
-                                ent.MoveVector.Y = -1;
-                            }
-
-                            //animation
-                            if (ent.MoveVector != Vector2.Zero) {
-                                ent.animationTimer += dt;
-                                if (ent.animationTimer > .15) {
-                                    ent.animationTimer = 0;
-                                    ent.currentFrame += 1;
+                if (ent.world == closePlayer.world) {
+                    switch (ent.entType) {
+                        case ServerEnemy.Type.Mage: {
+                                var rng = new Random();
+                                if (ent.summonTimer >= .5) {
+                                    ent.summonTimer = 0;
+                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, ServerEnemy.Type.Minion));
                                 }
-                            } else {
-                                ent.currentFrame = 0;
-                            }
-                            if (ent.MoveVector.X == -1) {
-                                ent.mult = 1;
-                            } else if (ent.MoveVector.X == 1) {
-                                ent.mult = 3;
+                                ent.summonTimer += dt;
+                            } break;
+                        case ServerEnemy.Type.FireMage: {
+
+                            } break;
+                        case ServerEnemy.Type.Minion: {
+
+                            } break;
+                    }
+
+                    //move
+                    switch (ent.entType) {
+                        case ServerEnemy.Type.Mage: {
+                                movespeed = 30;
+                                ent.Range = 32 * 4;
+                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
+                                if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
+                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
+                                if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
                             }
                             break;
-                        }
-                }
-                
-                if (ent.Health < 0) {
-                    removeEnemys.Add(ent);
-                }
+                        default: {
+                                movespeed = 90;
+                                ent.Range = 32 * 4;
+                                //ent.MovingTo = 
+                                //    new Vector2(
+                                //        closePlayer.Position.X - closePlayer.Width / 2,
+                                //        closePlayer.Position.Y - closePlayer.Height / 2
+                                //    );
+                                //MoveTo(ent, closePlayer, movespeed);
+                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
+                                    ent.Position.X += movespeed * dt;
+                                    ent.MoveVector.X = 1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
+                                    ent.Position.Y += movespeed * dt;
+                                    ent.MoveVector.Y = 1;
+                                }
+                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
+                                    ent.Position.X -= movespeed * dt;
+                                    ent.MoveVector.X = -1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
+                                    ent.Position.Y -= movespeed * dt;
+                                    ent.MoveVector.Y = -1;
+                                }
 
-            } else {
-                ent.currentFrame = 0;
-                if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
-                    ent.lifeTimer = 0;
-                    removeEnemys.Add(ent);
+                                //animation
+                                if (ent.MoveVector != Vector2.Zero) {
+                                    ent.animationTimer += dt;
+                                    if (ent.animationTimer > .15) {
+                                        ent.animationTimer = 0;
+                                        ent.currentFrame += 1;
+                                    }
+                                }
+                                else {
+                                    ent.currentFrame = 0;
+                                }
+                                if (ent.MoveVector.X == -1) {
+                                    ent.mult = 1;
+                                }
+                                else if (ent.MoveVector.X == 1) {
+                                    ent.mult = 3;
+                                }
+                                break;
+                            }
+                    }
+
+                    if (ent.Health < 0) {
+                        removeEnemys.Add(ent);
+                    }
+
                 }
+                else {
+                    ent.currentFrame = 0;
+                    if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
+                        ent.lifeTimer = 0;
+                        removeEnemys.Add(ent);
+                    }
+                }
+                ent.lifeTimer += dt;
+                //update hitbox
+                ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
             }
-            ent.lifeTimer += dt;
-            //update hitbox
-            ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
         }
 
         public List<DebugPlayer> GetQ(ServerEnemy ent) {

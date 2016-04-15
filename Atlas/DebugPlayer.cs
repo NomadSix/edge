@@ -20,6 +20,7 @@ namespace Edge.Atlas {
             Position = new Vector2(x, y);
             Width = 16;
             Height = 16;
+            world = World.debug;
         }
 	}
 }

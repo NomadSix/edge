@@ -12,5 +12,10 @@ namespace Edge.Hyperion {
         public int Y;
         public int Width;
         public int Height;
+        public World world;
+        public enum World : byte {
+            overworld,
+            debug
+        }
     }
 }
