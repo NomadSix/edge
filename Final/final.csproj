@@ -89,6 +89,7 @@
     <Compile Include="Backing\AssetStore.cs" />
     <Compile Include="Backing\Input\Keyboard.cs" />
     <Compile Include="Backing\Input\Mouse.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Engine\Town.cs" />
     <Compile Include="SongEffect.cs" />
@@ -145,6 +146,9 @@
     </Content>
     <Content Include="Images\layers\middle-trees.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\layers\Town_layer1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -72,9 +72,6 @@ namespace Edge.Hyperion.Engine {
                 atlasClient.Shutdown("Shutingdown");
             }
 
-            if (AssetStore.kb.IsButtonToggledDown(Keys.F11))
-                setFullScreen();
-
             serverIO();
             foreach (var player in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 if (pMenu._isActive == false) {
@@ -93,14 +90,16 @@ namespace Edge.Hyperion.Engine {
         }
 
         public override void Draw(GameTime gameTime) {
-            Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
-            for (int y = 0; y < mapSize.Y; y++) { // Main loop to draw the tile map .csv to the world
-                for (int x = 0; x < mapSize.X; x++) {
-                    Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
-                    Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
-                    that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
-                }
-            }
+            //Point firstPos = new Point(mapSize.X / 2 * AssetStore.TileSize);
+            //for (int y = 0; y < mapSize.Y; y++) { // Main loop to draw the tile map .csv to the world
+            //    for (int x = 0; x < mapSize.X; x++) {
+            //        //Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
+            //        //Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
+            //        //that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
+            //    }
+            //}
+            that.batch.Draw(AssetStore.Ground, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(2f), SpriteEffects.None, 0f);
+
 
             foreach (var i in items) {
                 that.batch.Draw(i.type.Base, i.Hitbox, Color.White);
@@ -230,14 +229,6 @@ namespace Edge.Hyperion.Engine {
                 p.isAttacking = true;
             } else {
                 p.isAttacking = false;
-            }
-        }
-
-        public void setFullScreen() {
-            IGraphicsDeviceService graphicsService = (IGraphicsDeviceService)Game.Services.GetService(typeof(IGraphicsDeviceService));
-            if (graphicsService != null && graphicsService is GraphicsDeviceManager) {
-                (graphicsService as GraphicsDeviceManager).IsFullScreen = true;
-                (graphicsService as GraphicsDeviceManager).ApplyChanges();
             }
         }
     }

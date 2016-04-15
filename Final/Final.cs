@@ -83,6 +83,7 @@ namespace Edge.Hyperion {
             AssetStore.EnemyTypes.Add(Enemy.Style.Type.FireMage, new Enemy.Style(Enemy.Style.Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
             AssetStore.EnemyTypes.Add(Enemy.Style.Type.Debug, new Enemy.Style(Enemy.Style.Type.Debug, AssetStore.Pixel, null, null));
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
+            AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/Town_layer1.png");
             AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
@@ -121,7 +122,7 @@ namespace Edge.Hyperion {
 
         void DrawCenter(string text) {
             var measure = Helvetica.MeasureString(text);
-            var location = new Vector2(GraphicsDevice.Viewport.Width / 1.75f - measure.X / 2, GraphicsDevice.Viewport.Height / 1.75f - measure.Y / 2);
+            var location = new Vector2(GraphicsDevice.Viewport.Width / 2f - measure.X / 2, GraphicsDevice.Viewport.Height / 2f - measure.Y / 2);
             batch.DrawString(Helvetica, text, location, Color.White);
         }
 
@@ -131,6 +132,7 @@ namespace Edge.Hyperion {
             Components.Add(AssetStore.kb);
             Components.Add(AssetStore.mouse);
             Components.Add(newScreen);
+            Components.Add(new Functions(this));
         }
     }
 }

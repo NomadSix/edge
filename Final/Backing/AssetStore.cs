@@ -16,6 +16,7 @@ namespace Edge.Hyperion.Backing {
         public static SoundEffect MainmenuSong;
         public static Texture2D PlayerTexture, Pixel, Mouse;
         public static Texture2D Sword, Bow, Wand;
+        public static Texture2D Ground;
         public static float MasterVolume = 1f;
         public readonly static byte TileSize = 32;
         public readonly static short TownSize = 50;
