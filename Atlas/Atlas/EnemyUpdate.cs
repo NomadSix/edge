@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+using Type = Edge.NetCommon.Type;
+
 namespace Edge.Atlas {
     public partial class Atlas {
 
@@ -35,26 +37,27 @@ namespace Edge.Atlas {
 
                 //Update
                 if (ent.world == closePlayer.world) {
+                    Console.WriteLine(ent.entType);
                     switch (ent.entType) {
-                        case ServerEnemy.Type.Mage: {
+                        case Type.Mage: {
                                 var rng = new Random();
                                 if (ent.summonTimer >= .5) {
                                     ent.summonTimer = 0;
-                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, ServerEnemy.Type.Minion));
+                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
                                 }
                                 ent.summonTimer += dt;
                             } break;
-                        case ServerEnemy.Type.FireMage: {
+                        case Type.FireMage: {
 
                             } break;
-                        case ServerEnemy.Type.Minion: {
+                        case Type.Minion: {
 
                             } break;
                     }
 
                     //move
                     switch (ent.entType) {
-                        case ServerEnemy.Type.Mage: {
+                        case Type.Mage: {
                                 movespeed = 30;
                                 ent.Range = 32 * 4;
                                 if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
@@ -117,7 +120,7 @@ namespace Edge.Atlas {
                 }
                 else {
                     ent.currentFrame = 0;
-                    if (ent.lifeTimer > 2 && ent.entType == ServerEnemy.Type.Minion) {
+                    if (ent.lifeTimer > 2 && ent.entType == Type.Minion) {
                         ent.lifeTimer = 0;
                         removeEnemys.Add(ent);
                     }

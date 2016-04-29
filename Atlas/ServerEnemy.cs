@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Type = Edge.NetCommon.Type;
 
 namespace Edge.Atlas {
     public class ServerEnemy : Entity {
@@ -17,25 +18,19 @@ namespace Edge.Atlas {
         public bool isDamaged;
 
         public ServerEnemy(long id, int x, int y, Type etype) : base(id, x, y) {
+            NetID = id;
             Hitbox = new Rectangle(x, y, Width, Height);
             Health = 1;
             Width = 32;
             Height = 32;
             entType = etype;
-            world = World.overworld;
+            world = World.debug;
             if (entType == Type.Mage) {
                 Health = 2f;
             }
             else if (entType == Type.Minion) {
                 Health = 1f;
             }
-        }
-
-        public enum Type {
-            Mage,
-            Minion,
-            Debug,
-            FireMage,
         }
     }
 }

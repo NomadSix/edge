@@ -1,8 +1,9 @@
-using System;
-
 namespace Edge.NetCommon {
-    public enum EnemyType : byte {
-        minion,
-        mage
+    public enum Type : int {
+        Mage,
+        Minion,
+        Debug,
+        Slime,
+        FireMage
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Type = Edge.NetCommon.Type;
 
 
 // Analysis disable once CheckNamespace
@@ -80,7 +81,7 @@ namespace Edge.Atlas {
             //colition
             for (int i = 0; i < ent.Count; i++) {
                 switch (ent[i].entType) {
-                    case ServerEnemy.Type.Debug: {
+                    case Type.Debug: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 player.dmgTimer = 0;
                                 player.Health -= .125f;
@@ -89,10 +90,10 @@ namespace Edge.Atlas {
                             player.dmgTimer += dt;
                         }
                         break;
-                    case ServerEnemy.Type.Mage: {
+                    case Type.Mage: {
                         }
                         break;
-                    case ServerEnemy.Type.Minion: {
+                    case Type.Minion: {
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 removeEnemys.Add(ent[i]);
                                 player.dmgTimer = 0;

@@ -7,6 +7,8 @@ using Edge.NetCommon;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 
+using Type = Edge.NetCommon.Type;
+
 namespace Edge.Atlas {
 	public partial class Atlas {
 		NetServer server;
@@ -23,6 +25,13 @@ namespace Edge.Atlas {
         public List<ServerEnemy> removeEnemys = new List<ServerEnemy>();
         public List<long> removePlayers = new List<long>();
         public List<Item> removeItems = new List<Item>();
+
+        public Rectangle[] walls = new Rectangle[] {
+            new Rectangle(),
+            new Rectangle(),
+            new Rectangle(),
+            new Rectangle()
+    };
 
         public long lastTime;
         public long lastUpdates;
@@ -58,7 +67,6 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
-            enemys.Add(new ServerEnemy(0, 128, 32 * 2, ServerEnemy.Type.Mage));
             items.Add(new Item(0, 32, 32, Item.Type.Health));
         }
 
@@ -149,11 +157,12 @@ namespace Edge.Atlas {
                     var ID = addPlayers[p].NetID;
                     players.Add(ID, new DebugPlayer(ID, 0, 0, 2f));
                 }
+                enemys.AddRange(addEnemys);
+
+                addEnemys.Clear();
                 addPlayers.Clear();
                 removeEnemys.Clear();
                 removePlayers.Clear();
-                enemys.AddRange(addEnemys);
-                addEnemys.Clear();
 
                 #region Outgoing Updates
                 //TODO: Compute changed frames, keyframes, etc
@@ -183,7 +192,6 @@ namespace Edge.Atlas {
                     outMsg.Write((int)e.entType);
                     outMsg.Write(e.currentFrame);
                     outMsg.Write(e.mult);
-                    outMsg.Write((byte)e.mult);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 
@@ -283,7 +291,7 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), (ServerEnemy.Type)int.Parse(args[2])));
+						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), (Type)int.Parse(args[2])));
                     }
                     break;
                 case "ENTS":

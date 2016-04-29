@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
+
 using Lidgren.Network;
-using Edge.Hyperion.UI.Components;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,8 +10,10 @@ using Microsoft.Xna.Framework.Audio;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 using Edge.Hyperion.Backing;
-using Edge.NetCommon;
+using Edge.Hyperion.UI.Components;
 using Edge.Hyperion.UI.Implementation.Popups;
+
+using Edge.NetCommon;
 
 namespace Edge.Hyperion.Engine {
     public class Town : Screen {
@@ -160,13 +162,16 @@ namespace Edge.Hyperion.Engine {
                                 enemys.Clear();
                                 ushort numEnemys = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numEnemys; i++) {
-                                    try {
-                                        enemys.Add(new Enemy(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.EnemyTypes[(Enemy.Style.Type)inMsg.ReadInt32()]));
-                                        enemys[i].currentframe = inMsg.ReadInt32();
-                                        enemys[i].mult = inMsg.ReadInt32();
-                                    } catch (KeyNotFoundException e) {
-                                        System.Console.WriteLine("No ent with ID " + e.Data);
-                                    }
+                                    long ID = inMsg.ReadInt64();
+                                    int x = inMsg.ReadInt32();
+                                    int y = inMsg.ReadInt32();
+                                    int type = inMsg.ReadInt32();
+                                    int current = inMsg.ReadInt32();
+                                    int mult = inMsg.ReadInt32();
+                                    enemys.Add(new Enemy(ID, x, y, AssetStore.EnemyTypes[(Type)type]));
+                                    enemys[i].currentframe = current;
+                                    enemys[i].mult = mult;
+
                                 }
                                 break;
                             case AtlasPackets.UpdateItem:

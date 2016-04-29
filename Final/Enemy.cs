@@ -1,7 +1,12 @@
 ﻿using System;
+
+using Edge.Hyperion.Engine;
+
+using Type = Edge.NetCommon.Type;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Edge.Hyperion.Engine;
+
 
 namespace Edge.Hyperion {
     public class Enemy : Entity {
@@ -26,13 +31,6 @@ namespace Edge.Hyperion {
         }
 
         public class Style {
-            public enum Type : int {
-                Mage,
-                Minion,
-                Debug,
-                Slime,
-                FireMage
-            }
 
             public Type type;
             public Texture2D Base;
