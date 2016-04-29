@@ -27,10 +27,7 @@ namespace Edge.Atlas {
         public List<Item> removeItems = new List<Item>();
 
         public Rectangle[] walls = new Rectangle[] {
-            new Rectangle(),
-            new Rectangle(),
-            new Rectangle(),
-            new Rectangle()
+            new Rectangle(64, 0, 32, 32)
     };
 
         public long lastTime;
@@ -203,6 +200,17 @@ namespace Edge.Atlas {
                     outMsg.Write((int)i.Position.X);
                     outMsg.Write((int)i.Position.Y);
                     outMsg.Write((int)i.type);
+                }
+                server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+
+                outMsg = server.CreateMessage();
+                outMsg.Write((byte)AtlasPackets.UpdateWall);
+                outMsg.Write(walls.Length);
+                foreach (var i in walls) {
+                    outMsg.Write(i.X);
+                    outMsg.Write(i.Y);
+                    outMsg.Write(i.Width);
+                    outMsg.Write(i.Height);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 

@@ -7,21 +7,21 @@ using Type = Edge.NetCommon.Type;
 
 // Analysis disable once CheckNamespace
 namespace Edge.Atlas {
-	public partial class Atlas {
+    public partial class Atlas {
         private Vector2 maxVel = new Vector2(150f);
         private List<ServerEnemy> ent;
         private float timer = 0;
 
-		/// <summary>
-		///  Updates a player
-		/// </summary>
-		/// <param name="player">The player to update</param>
-		void PlayerUpdate(DebugPlayer player, List<ServerEnemy> enemy) {
+        /// <summary>
+        ///  Updates a player
+        /// </summary>
+        /// <param name="player">The player to update</param>
+        void PlayerUpdate(DebugPlayer player, List<ServerEnemy> enemy) {
             ent = enemy;
             //Gravity(player);
             DebugMove(player);
             //MoveTo(player, 200);
-		}
+        }
         /// <summary>
         /// Execute the movement logic for the player+		enemys[0].Target	'enemys[0].Target' threw an exception of type 'System.Collections.Generic.KeyNotFoundException'	Microsoft.Xna.Framework.Point {System.Collections.Generic.KeyNotFoundException}
 
@@ -39,6 +39,15 @@ namespace Edge.Atlas {
                 player.Velocity.X = (maxVel.X * player.MoveVector.X * dt);
             if (player.MoveVector.X <= 0)
                 player.Velocity.X = (maxVel.X * player.MoveVector.X * dt);
+
+            for (int i = 0; i < walls.Length; i++) {
+                if (player.Hitbox.Intersects(walls[i])) {
+                    player.Position += player.Velocity * -1;
+                    player.Velocity = new Vector2();
+                    player.MoveVector = new Point();
+                }
+            }
+
             player.Position += player.Velocity;
             var hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
             player.Hitbox = hitbox;
@@ -46,25 +55,28 @@ namespace Edge.Atlas {
                 if (player.mult == 0)
                     player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 1)
-                    player.Atkbox =  new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height);
                 if (player.mult == 2)
                     player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height);
                 if (player.mult == 3)
                     player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
-            } else {
+            }
+            else {
                 player.Atkbox = new Rectangle();
             }
 
             //animation
             if (player.MoveVector.Y == -1) {
                 player.mult = 2;
-            } else if (player.MoveVector.Y == 1) {
+            }
+            else if (player.MoveVector.Y == 1) {
                 player.mult = 1;
             }
 
             if (player.MoveVector.X == -1) {
                 player.mult = 0;
-            } else if (player.MoveVector.X == 1) {
+            }
+            else if (player.MoveVector.X == 1) {
                 player.mult = 3;
             }
 
@@ -74,11 +86,13 @@ namespace Edge.Atlas {
                     player.animationTimer = 0;
                     player.currentFrame += 1;
                 }
-            } else {
+            }
+            else {
                 player.currentFrame = 0;
             }
 
             //colition
+
             for (int i = 0; i < ent.Count; i++) {
                 switch (ent[i].entType) {
                     case Type.Debug: {
@@ -109,18 +123,18 @@ namespace Edge.Atlas {
                 }
             }
 
-            foreach (Item i in items) { 
-            var q = GetQ(i);
+            foreach (Item i in items) {
+                var q = GetQ(i);
                 if (q.Count() != 0) {
                     if (player.Hitbox.Intersects(i.Hitbox))
                         player.Health = 2f;
-                    }
                 }
+            }
 
-                if (player.Health <= 0) {
-                    addPlayers.Add(player);
-                    removePlayers.Add(player.NetID);
-                }
+            if (player.Health <= 0) {
+                addPlayers.Add(player);
+                removePlayers.Add(player.NetID);
+            }
         }
         public IEnumerable<Item> GetQ(Item i) {
             return items.Where(x =>

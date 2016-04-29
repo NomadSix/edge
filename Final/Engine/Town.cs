@@ -33,6 +33,7 @@ namespace Edge.Hyperion.Engine {
         StatusBar statusBar;
 
         List<DebugPlayer> players = new List<DebugPlayer>();
+        List<Rectangle> walls = new List<Rectangle>();
         List<Enemy> enemys = new List<Enemy>();
         List<Item> items = new List<Item>();
         
@@ -179,6 +180,17 @@ namespace Edge.Hyperion.Engine {
                                 ushort numItems = inMsg.ReadUInt16();
                                 for (ushort i = 0; i < numItems; i++) {
                                     items.Add(new Item(inMsg.ReadInt64(), inMsg.ReadInt32(), inMsg.ReadInt32(), AssetStore.ItemTypes[(Item.Style.Type)inMsg.ReadInt32()]));
+                                }
+                                break;
+                            case AtlasPackets.UpdateWall:
+                                walls.Clear();
+                                int num = inMsg.ReadInt32();
+                                int wx = inMsg.ReadInt32();
+                                int wy = inMsg.ReadInt32();
+                                int width = inMsg.ReadInt32();
+                                int height = inMsg.ReadInt32();
+                                for (int i = 0; i < num; i++) {
+                                    walls.Add(new Rectangle());
                                 }
                                 break;
                         }
