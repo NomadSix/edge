@@ -60,10 +60,10 @@ namespace Edge.Atlas {
                         case Type.Mage: {
                                 movespeed = 30;
                                 ent.Range = 32 * 4;
-                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Position.X -= movespeed * dt; }
-                                if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Position.Y -= movespeed * dt; }
-                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Position.X += movespeed * dt; }
-                                if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Position.Y += movespeed * dt; }
+                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Velocity.X -= movespeed * dt; }
+                                if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Velocity.Y -= movespeed * dt; }
+                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Velocity.X += movespeed * dt; }
+                                if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Velocity.Y += movespeed * dt; }
                             }
                             break;
                         default: {
@@ -112,6 +112,22 @@ namespace Edge.Atlas {
                                 break;
                             }
                     }
+
+                    for (int i = 0; i < walls.Length; i++) {
+                        var wall = walls[i];
+                        if (ent.Hitbox.Intersects(wall)) {
+                            if (ent.Hitbox.Top - (maxVel.Y * ent.MoveVector.Y * dt) <= wall.Bottom && ent.Hitbox.Top >= wall.Bottom - 5)
+                                ent.Position.Y = wall.Bottom;
+                            if (ent.Hitbox.Right + (maxVel.X * ent.MoveVector.X * dt) >= wall.Left && ent.Hitbox.Right <= wall.Left + 5)
+                                ent.Position.X = wall.Left - ent.Hitbox.Width;
+                            if (ent.Hitbox.Left - (maxVel.X * ent.MoveVector.X * dt) <= wall.Right && ent.Hitbox.Left >= wall.Right - 5)
+                                ent.Position.X = wall.Right;
+                            if (ent.Hitbox.Bottom + (maxVel.Y * ent.MoveVector.Y * dt) >= wall.Top && ent.Hitbox.Bottom <= wall.Top + 5)
+                                ent.Position.Y = wall.Top - ent.Hitbox.Height;
+                        }
+                    }
+
+                    ent.Position += ent.Velocity;
 
                     if (ent.Health < 0) {
                         removeEnemys.Add(ent);

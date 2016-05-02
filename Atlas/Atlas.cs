@@ -27,7 +27,8 @@ namespace Edge.Atlas {
         public List<Item> removeItems = new List<Item>();
 
         public Rectangle[] walls = new Rectangle[] {
-            new Rectangle(64, 0, 32, 32)
+            new Rectangle(64, 0, 64, 16),
+            new Rectangle(0,80, 16, 64)
     };
 
         public long lastTime;

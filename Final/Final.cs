@@ -97,7 +97,7 @@ namespace Edge.Hyperion {
         }
 
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(new Color(79, 154, 73));
+            GraphicsDevice.Clear(new Color(39, 155, 116));
             batch.Begin(SpriteSortMode.Deferred, null, sampleState, null, null, null, viewMatrix);
             if (contentLoaded) {
                 base.Draw(gameTime);

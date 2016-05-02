@@ -41,10 +41,16 @@ namespace Edge.Atlas {
                 player.Velocity.X = (maxVel.X * player.MoveVector.X * dt);
 
             for (int i = 0; i < walls.Length; i++) {
-                if (player.Hitbox.Intersects(walls[i])) {
-                    player.Position += player.Velocity * -1;
-                    player.Velocity = new Vector2();
-                    player.MoveVector = new Point();
+                var wall = walls[i];
+                if (player.Hitbox.Intersects(wall)) {
+                    if (player.Hitbox.Top - (maxVel.Y * player.MoveVector.Y * dt) <= wall.Bottom && player.Hitbox.Top >= wall.Bottom - 5)
+                        player.Position.Y = wall.Bottom;
+                    if (player.Hitbox.Right + (maxVel.X * player.MoveVector.X * dt) >= wall.Left && player.Hitbox.Right <= wall.Left + 5)
+                        player.Position.X = wall.Left - player.Hitbox.Width;
+                    if (player.Hitbox.Left - (maxVel.X * player.MoveVector.X * dt) <= wall.Right && player.Hitbox.Left >= wall.Right - 5)
+                        player.Position.X = wall.Right;
+                    if (player.Hitbox.Bottom + (maxVel.Y * player.MoveVector.Y * dt) >= wall.Top && player.Hitbox.Bottom <= wall.Top + 5)
+                        player.Position.Y = wall.Top - player.Hitbox.Height;
                 }
             }
 

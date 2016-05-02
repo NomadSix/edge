@@ -101,7 +101,7 @@ namespace Edge.Hyperion.Engine {
             //        //that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
             //    }
             //}
-            that.batch.Draw(AssetStore.Ground, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(2f), SpriteEffects.None, 0f);
+            that.batch.Draw(AssetStore.Ground, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(1.5f), SpriteEffects.None, 0f);
 
 
             foreach (var i in items) {
@@ -117,7 +117,7 @@ namespace Edge.Hyperion.Engine {
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
-                that.batch.DrawString(that.Helvetica, pMenu._isActive ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+                that.batch.DrawString(that.Helvetica, pMenu._isActive || p.NetID == atlasClient.UniqueIdentifier ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
                 that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Width), Color.White);
                 that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
 
@@ -131,6 +131,9 @@ namespace Edge.Hyperion.Engine {
                 }
                 that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
 
+            }
+            foreach(var wall in walls) {
+                that.batch.Draw(AssetStore.Pixel, wall, Color.Black);
             }
             foreach (var p in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 statusBar.draw(p.Health);
@@ -185,12 +188,12 @@ namespace Edge.Hyperion.Engine {
                             case AtlasPackets.UpdateWall:
                                 walls.Clear();
                                 int num = inMsg.ReadInt32();
-                                int wx = inMsg.ReadInt32();
-                                int wy = inMsg.ReadInt32();
-                                int width = inMsg.ReadInt32();
-                                int height = inMsg.ReadInt32();
                                 for (int i = 0; i < num; i++) {
-                                    walls.Add(new Rectangle());
+                                    int wx = inMsg.ReadInt32();
+                                    int wy = inMsg.ReadInt32();
+                                    int width = inMsg.ReadInt32();
+                                    int height = inMsg.ReadInt32();
+                                    walls.Add(new Rectangle(wx, wy, width, height));
                                 }
                                 break;
                         }
