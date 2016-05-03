@@ -113,7 +113,7 @@ namespace Edge.Atlas {
                                         int ID = inMsg.ReadInt32();
                                         int X = inMsg.ReadInt32();
                                         int Y = inMsg.ReadInt32();
-                                        items[ID].Hitbox = new Rectangle(X, Y, 16, 16);
+                                        items[ID].Hitbox = new Rectangle(X, Y, 8, 8);
                                     } break;
 							 }
 							break;

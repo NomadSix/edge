@@ -18,7 +18,7 @@ namespace Edge.Atlas {
 			NetID = id;
             Health = health;
             Position = new Vector2(x, y);
-            Width = 16;
+            Width = 14;
             Height = 16;
             world = World.debug;
         }

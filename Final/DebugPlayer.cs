@@ -25,7 +25,7 @@ namespace Edge.Hyperion {
             Name = name.Split(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' })[0];
             X = x;
             Y = y;
-            Width = 16;
+            Width = 14;
             Height = 16;
             Health = health;
             HitBox = new Rectangle(X, Y, Width, Height);

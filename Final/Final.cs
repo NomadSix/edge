@@ -86,7 +86,7 @@ namespace Edge.Hyperion {
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
             contentLoaded = true;
         }
 
