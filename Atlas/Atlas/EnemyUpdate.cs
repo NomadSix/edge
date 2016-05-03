@@ -46,13 +46,16 @@ namespace Edge.Atlas {
                                     addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
                                 }
                                 ent.summonTimer += dt;
-                            } break;
+                            }
+                            break;
                         case Type.FireMage: {
 
-                            } break;
+                            }
+                            break;
                         case Type.Minion: {
 
-                            } break;
+                            }
+                            break;
                     }
 
                     //move
@@ -60,10 +63,23 @@ namespace Edge.Atlas {
                         case Type.Mage: {
                                 movespeed = 30;
                                 ent.Range = 32 * 4;
-                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) { ent.Velocity.X -= movespeed * dt; }
-                                if (ent.Position.Y + ent.Health / 4 < closePlayer.Position.Y) { ent.Velocity.Y -= movespeed * dt; }
-                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) { ent.Velocity.X += movespeed * dt; }
-                                if (ent.Position.Y + ent.Health / 4 > closePlayer.Position.Y) { ent.Velocity.Y += movespeed * dt; }
+
+                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
+                                    ent.Position.X -= movespeed * dt;
+                                    ent.MoveVector.X = 1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
+                                    ent.Position.Y -= movespeed * dt;
+                                    ent.MoveVector.Y = 1;
+                                }
+                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
+                                    ent.Position.X += movespeed * dt;
+                                    ent.MoveVector.X = -1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
+                                    ent.Position.Y += movespeed * dt;
+                                    ent.MoveVector.Y = -1;
+                                }
                             }
                             break;
                         default: {
@@ -99,14 +115,12 @@ namespace Edge.Atlas {
                                         ent.animationTimer = 0;
                                         ent.currentFrame += 1;
                                     }
-                                }
-                                else {
+                                } else {
                                     ent.currentFrame = 0;
                                 }
                                 if (ent.MoveVector.X == -1) {
                                     ent.mult = 1;
-                                }
-                                else if (ent.MoveVector.X == 1) {
+                                } else if (ent.MoveVector.X == 1) {
                                     ent.mult = 3;
                                 }
                                 break;
@@ -127,14 +141,11 @@ namespace Edge.Atlas {
                         }
                     }
 
-                    ent.Position += ent.Velocity;
-
                     if (ent.Health < 0) {
                         removeEnemys.Add(ent);
                     }
 
-                }
-                else {
+                } else {
                     ent.currentFrame = 0;
                     if (ent.lifeTimer > 2 && ent.entType == Type.Minion) {
                         ent.lifeTimer = 0;

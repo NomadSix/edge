@@ -28,7 +28,7 @@ namespace Edge.Hyperion {
             Width = 16;
             Height = 16;
             Health = health;
-            HitBox = new Rectangle(new Point(X, Y), new Point(Width));
+            HitBox = new Rectangle(X, Y, Width, Height);
         }
 
         public enum Type : byte {

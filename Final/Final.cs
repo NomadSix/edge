@@ -72,7 +72,7 @@ namespace Edge.Hyperion {
             Components.Add(AssetStore.mouse);
             AssetStore.Pixel = Content.Load<Texture2D>(@"../Images/Grey.png");
             AssetStore.Sword = Content.Load<Texture2D>(@"../Images/sword.png");
-            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/LinkSheet.png");
+            AssetStore.PlayerTexture = Content.Load<Texture2D>(@"../Images/Sheets/Player/player.png");
             AssetStore.ButtonTypes.Add(Button.Style.Type.basic, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.SkyBlue, Color.White));
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
             AssetStore.EnemyTypes.Add(Type.Minion, new Enemy.Style(Type.Minion, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));

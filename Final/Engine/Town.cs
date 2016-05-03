@@ -37,7 +37,7 @@ namespace Edge.Hyperion.Engine {
         List<Enemy> enemys = new List<Enemy>();
         List<Item> items = new List<Item>();
         
-        int framesPerRow = 2;
+        int framesPerRow = 3;
 
         public Town(Game game, string address, string port) : base(game) {
             Port = port;
@@ -109,7 +109,7 @@ namespace Edge.Hyperion.Engine {
             }
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
-                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Width, e.Width, e.Height), e.Type.BaseColour);
+                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Height, e.Width, e.Height), e.Type.BaseColour);
                 that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server
@@ -118,14 +118,14 @@ namespace Edge.Hyperion.Engine {
                 var mesurments = that.Helvetica.MeasureString(p.Name);
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive || p.NetID == atlasClient.UniqueIdentifier ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Width), Color.White);
-                that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
+                that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Width, p.Width, p.Height), Color.White);
+                //that.batch.Draw(AssetStore.Pixel, p.HitBox, new Color(Color.Red, 100));
 
                 if (p.isAttacking) {
-                    p.AttackRec = p.mult == 0 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
-                    p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
-                    p.AttackRec = p.mult == 2 ? new Rectangle(p.HitBox.X, p.HitBox.Y - p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
-                    p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X + p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 2 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X, p.HitBox.Y - p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 4 ? new Rectangle(p.HitBox.X + p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                 } else {
                     p.AttackRec = new Rectangle();
                 }

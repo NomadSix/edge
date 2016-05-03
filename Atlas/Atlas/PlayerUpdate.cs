@@ -58,15 +58,17 @@ namespace Edge.Atlas {
             var hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
             player.Hitbox = hitbox;
             if (player.isAttacking) {
-                if (player.mult == 0)
-                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 1)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 2)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Width, hitbox.Width, hitbox.Height);
                 if (player.mult == 3)
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Width, hitbox.Width, hitbox.Height);
+                if (player.mult == 4)
                     player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+                player.mult = 5;
             }
+
             else {
                 player.Atkbox = new Rectangle();
             }
@@ -76,14 +78,18 @@ namespace Edge.Atlas {
                 player.mult = 2;
             }
             else if (player.MoveVector.Y == 1) {
-                player.mult = 1;
+                player.mult = 3;
             }
 
             if (player.MoveVector.X == -1) {
-                player.mult = 0;
+                player.mult = 1;
             }
             else if (player.MoveVector.X == 1) {
-                player.mult = 3;
+                player.mult = 4;
+            }
+
+            if (player.MoveVector == Point.Zero) {
+                player.mult = 0;
             }
 
             if (player.MoveVector != Point.Zero) {

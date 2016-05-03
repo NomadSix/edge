@@ -300,7 +300,7 @@ namespace Edge.Atlas {
 					break;
 				case "ADDENT":
 					if(args.Capacity > 0) {
-						enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), (Type)int.Parse(args[2])));
+						 enemys.Add(new ServerEnemy((long)enemys.Count + 1, int.Parse(args[0]), int.Parse(args[1]), (Type)int.Parse(args[2])));
                     }
                     break;
                 case "ENTS":
