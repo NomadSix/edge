@@ -128,13 +128,14 @@ namespace Edge.Hyperion.Engine {
                 } else {
                     p.AttackRec = new Rectangle();
                 }
+                System.Console.WriteLine(p.AttackRec);
                 if (p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(3 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 if (!p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
                 that.batch.Draw(artDebug, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
             }
             foreach(var wall in walls) {
-                that.batch.Draw(AssetStore.Pixel, wall, Color.Black);
+                //that.batch.Draw(AssetStore.Pixel, wall, Color.Black);
             }
             foreach (var p in players.Where(x => x.NetID == atlasClient.UniqueIdentifier)) {
                 statusBar.draw(p.Health);

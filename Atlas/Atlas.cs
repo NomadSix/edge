@@ -27,8 +27,10 @@ namespace Edge.Atlas {
         public List<Item> removeItems = new List<Item>();
 
         public Rectangle[] walls = new Rectangle[] {
-            new Rectangle(64, 0, 64, 16),
-            new Rectangle(0,80, 16, 64)
+            new Rectangle(0, 72, 1536, 16),
+            new Rectangle(34, 0, 16, 1536),
+            new Rectangle(1487, 0, 16, 1536),
+            new Rectangle(0, 1438, 1536, 16)
     };
 
         public long lastTime;
@@ -122,7 +124,7 @@ namespace Edge.Atlas {
 						case NetIncomingMessageType.StatusChanged:
 							switch(inMsg.SenderConnection.Status) {
 								case NetConnectionStatus.Connected:
-									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 0, 0, 2));
+									players.Add(inMsg.SenderConnection.RemoteUniqueIdentifier, new DebugPlayer(inMsg.SenderConnection.RemoteUniqueIdentifier, 100, 100, 2));
                                     break;
 								case NetConnectionStatus.Disconnected:
 									players.Remove(inMsg.SenderConnection.RemoteUniqueIdentifier);

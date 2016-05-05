@@ -135,7 +135,7 @@
     <Content Include="Images\Items\HealthPot.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\layers\newground.png">
+    <Content Include="Images\layers\Background2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Logo.png">
