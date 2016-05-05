@@ -57,20 +57,6 @@ namespace Edge.Atlas {
             player.Position += player.Velocity;
             var hitbox = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
             player.Hitbox = hitbox;
-            if (player.isAttacking) {
-                if (player.mult == 0)
-                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
-                if (player.mult == 1)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, hitbox.Height);
-                if (player.mult == 2)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height, hitbox.Width, hitbox.Height);
-                if (player.mult == 3)
-                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
-            }
-
-            else {
-                player.Atkbox = new Rectangle();
-            }
 
             //animation
             if (player.MoveVector.Y == -1) {
@@ -91,17 +77,35 @@ namespace Edge.Atlas {
                 //player.mult = 0;
             }
 
-            if (player.MoveVector != Point.Zero) {
+            if (player.isAttacking) {
+                if (player.mult == 1)
+                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+                if (player.mult == 2)
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, hitbox.Height);
+                if (player.mult == 3)
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height, hitbox.Width, hitbox.Height);
+                if (player.mult == 4)
+                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+            } else {
+                player.Atkbox = new Rectangle();
+            }
+
+            if (player.MoveVector == Point.Zero) {
+                player.currentFrame = 0;
+            } else {
                 player.animationTimer += dt;
                 if (player.animationTimer > .25) {
                     player.animationTimer = 0;
                     player.currentFrame += 1;
-                    Console.WriteLine(player.currentFrame);
                 }
             }
             if (player.isAttacking) {
-                player.animationTimer = 0;
-                player.currentFrame = 4;
+                player.animationTimer += dt;
+                if (player.animationTimer > .1) {
+                    player.animationTimer = 0;
+                    player.currentFrame = 3;
+                    player.isAttacking = false;
+                }
             }
 
             //colition
@@ -140,7 +144,15 @@ namespace Edge.Atlas {
                 var q = GetQ(i);
                 if (q.Count() != 0) {
                     if (player.Hitbox.Intersects(i.Hitbox))
-                        player.Health = 2f;
+                        switch (i.type) {
+                            case Item.Type.Health:
+                                player.Health = 2f;
+                                break;
+                            case Item.Type.Gold:
+                                player.gold += 1;
+                                removeItems.Add(i);
+                                break;
+                        }
                 }
             }
 

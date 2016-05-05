@@ -15,6 +15,7 @@ namespace Edge.Hyperion {
         public Type entType;
         public int mult = 0;
         public int currentFrame = 0;
+        public int gold = 0;
         public bool isAttacking;
         public bool isDamaged;
 

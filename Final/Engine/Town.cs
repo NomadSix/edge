@@ -38,7 +38,7 @@ namespace Edge.Hyperion.Engine {
         List<Enemy> enemys = new List<Enemy>();
         List<Item> items = new List<Item>();
         
-        int framesPerRow = 2;
+        readonly int framesPerRow = 2;
 
         public Town(Game game, string address, string port) : base(game) {
             Port = port;
@@ -113,13 +113,13 @@ namespace Edge.Hyperion.Engine {
                 that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Height, e.Width, e.Height), e.Type.BaseColour);
                 that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
             }
-            foreach (var p in players) { // Main loop to draw every player that is connected to the server
+            foreach (var p in players) { // Main loop to draw every player that is connected to the server.world
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive || p.NetID == atlasClient.UniqueIdentifier ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                
+                that.batch.DrawString(that.Helvetica, p.gold.ToString(), new Vector2(200,0), Color.White);
                 if (p.isAttacking) {
                     p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                     p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
@@ -129,8 +129,8 @@ namespace Edge.Hyperion.Engine {
                     p.AttackRec = new Rectangle();
                 }
                 if (p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(3 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
-                if (!p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle((p.currentFrame % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
-                that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
+                if (!p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
+                //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
                 that.batch.Draw(artDebug, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
             }
             foreach(var wall in walls) {
@@ -161,6 +161,7 @@ namespace Edge.Hyperion.Engine {
                                     players[i].mult = inMsg.ReadInt32();
                                     players[i].currentFrame = inMsg.ReadInt32();
                                     players[i].isAttacking = inMsg.ReadBoolean();
+                                    players[i].gold = inMsg.ReadInt32();
                                 }
                                 break;
                             case AtlasPackets.UpdateEnemy:
@@ -230,15 +231,9 @@ namespace Edge.Hyperion.Engine {
         }
 
         public void playerMovment(GameTime gameTime, DebugPlayer p) {
-            var timer = 0f;
             if (AssetStore.kb.IsButtonToggledDown(Keys.Space) || AssetStore.mouse.IsButtonToggledDown(Backing.Mouse.MouseButtons.Left)) {
-                timer = 0;
                 p.isAttacking = true;
             }
-            else if (timer > .5f) {
-                p.isAttacking = false;
-            }
-            timer+=(float)gameTime.ElapsedGameTime.Seconds;
             if (AssetStore.kb.IsButtonDown(Keys.W) || AssetStore.kb.IsButtonDown(Keys.Up)) {
                 p.MoveVector.Y = -1;
             } else if (AssetStore.kb.IsButtonDown(Keys.S) || AssetStore.kb.IsButtonDown(Keys.Down)) {

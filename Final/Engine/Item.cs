@@ -26,7 +26,8 @@ namespace Edge.Hyperion.Engine {
         public class Style {
 
             public enum Type {
-                Health
+                Health,
+                Gold
             }
             public Texture2D Base;
 

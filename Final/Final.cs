@@ -81,7 +81,8 @@ namespace Edge.Hyperion {
             AssetStore.EnemyTypes.Add(Type.FireMage, new Enemy.Style(Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
             AssetStore.EnemyTypes.Add(Type.Debug, new Enemy.Style(Type.Debug, AssetStore.Pixel, null, null));
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
-            AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/Town_layer1.png");
+            AssetStore.ItemTypes.Add(Item.Style.Type.Gold, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Gold.png")));
+            AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/newground.png");
             AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));

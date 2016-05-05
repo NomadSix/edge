@@ -35,6 +35,8 @@ namespace Edge.Atlas {
         public long lastUpdates;
         public long currentTime = DateTime.UtcNow.Ticks;
 
+        readonly int MAX_ENEMYS = 50;
+
 
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.
@@ -151,7 +153,11 @@ namespace Edge.Atlas {
                 for (int e = 0; e < removeEnemys.Count; e++) {
                     enemys.Remove(removeEnemys[e]);
                 }
+                for (int i = 0; i < removeItems.Count; i++) {
+                    items.Remove(removeItems[i]);
+                }
                 for (int p = 0; p < addPlayers.Count; p++) {
+                    if (players.Count >= MAX_ENEMYS) break;
                     var ID = addPlayers[p].NetID;
                     players.Add(ID, new DebugPlayer(ID, 0, 0, 2f));
                 }
@@ -161,6 +167,7 @@ namespace Edge.Atlas {
                 addPlayers.Clear();
                 removeEnemys.Clear();
                 removePlayers.Clear();
+                removeItems.Clear();
 
                 #region Outgoing Updates
                 //TODO: Compute changed frames, keyframes, etc
@@ -176,7 +183,7 @@ namespace Edge.Atlas {
                     outMsg.Write(p.mult);
                     outMsg.Write(p.currentFrame);
                     outMsg.Write(p.isAttacking);
-                    outMsg.Write((byte)p.world);
+                    outMsg.Write(p.gold);
 				}
 				server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 

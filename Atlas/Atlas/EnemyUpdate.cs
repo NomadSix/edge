@@ -142,6 +142,7 @@ namespace Edge.Atlas {
                     }
 
                     if (ent.Health < 0) {
+                        items.Add(new Item(items.Count + 1, (int)ent.Position.X, (int)ent.Position.Y, Item.Type.Gold));
                         removeEnemys.Add(ent);
                     }
 
