@@ -48,8 +48,13 @@ namespace Edge.Atlas {
                                 ent.summonTimer += dt;
                             }
                             break;
-                        case Type.FireMage: {
-
+                        case Type.Slime: {
+                                if (ent.Health <= 0)
+                                {
+                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X - ent.Width, ent.Hitbox.Y - ent.Height, Type.Slime));
+                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X + ent.Width, ent.Hitbox.Y + ent.Height, Type.Slime));
+                                    removeEnemys.Add(ent);
+                                }
                             }
                             break;
                         case Type.Minion: {

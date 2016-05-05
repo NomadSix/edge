@@ -37,7 +37,7 @@ namespace Edge.Atlas {
         public long lastUpdates;
         public long currentTime = DateTime.UtcNow.Ticks;
 
-        readonly int MAX_ENEMYS = 50;
+        readonly int MAX_ENEMYS = 4;
 
 
 		/// <summary>
@@ -159,11 +159,14 @@ namespace Edge.Atlas {
                     items.Remove(removeItems[i]);
                 }
                 for (int p = 0; p < addPlayers.Count; p++) {
-                    if (players.Count >= MAX_ENEMYS) break;
                     var ID = addPlayers[p].NetID;
                     players.Add(ID, new DebugPlayer(ID, 0, 0, 2f));
                 }
-                enemys.AddRange(addEnemys);
+                for (int e = 0; e < addEnemys.Count; e++)
+                {
+                    if (enemys.Count >= MAX_ENEMYS) break;
+                    enemys.Add(addEnemys[e]);
+                }
 
                 addEnemys.Clear();
                 addPlayers.Clear();
