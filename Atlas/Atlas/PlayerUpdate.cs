@@ -81,9 +81,9 @@ namespace Edge.Atlas {
                 if (player.mult == 1)
                     player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 2)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, hitbox.Height);
-                if (player.mult == 3)
                     player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height, hitbox.Width, hitbox.Height);
+                if (player.mult == 3)
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, hitbox.Height);
                 if (player.mult == 4)
                     player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
             } else {
@@ -147,7 +147,7 @@ namespace Edge.Atlas {
                         switch (i.type) {
                             case Item.Type.Health:
                                 if (player.Health >= 2.0f) break;
-                                player.Health += 1.0f;
+                                player.Health += .25f;
                                 removeItems.Add(i);
                                 if (player.Health > 2.0) player.Health = 2.0f;
                                 break;

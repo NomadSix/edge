@@ -131,7 +131,7 @@ namespace Edge.Hyperion.Engine {
                 if (p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(3 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 if (!p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 that.batch.Draw(artDebug, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
-                that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
+                //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
                 if (p.NetID == atlasClient.UniqueIdentifier) statusBar.draw(p.Health);
             }
             //pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));

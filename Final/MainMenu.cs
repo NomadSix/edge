@@ -81,14 +81,14 @@ namespace Edge.Hyperion {
 
         public override void Draw(GameTime gameTime) {
             //strip.Update();
-            Point firstPos = new Point(AssetStore.TileSize);
-            for (int y = 0; y < mapSize.Y; y++) {
-                for (int x = 0; x < mapSize.X; x++) {
-                    Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
-                    Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
-                    that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
-                }
-            }
+            //Point firstPos = new Point(AssetStore.TileSize);
+            //for (int y = 0; y < mapSize.Y; y++) {
+            //    for (int x = 0; x < mapSize.X; x++) {
+            //        Rectangle rec = new Rectangle((x * AssetStore.TileSize) - firstPos.X, (y * AssetStore.TileSize) - firstPos.Y, AssetStore.TileSize, AssetStore.TileSize);
+            //        Rectangle sourceRec = Tile.GetScorceRectangle(int.Parse(Map.Rows[y][x]));
+            //        that.batch.Draw(Tile.TileSetTexture, rec, sourceRec, Color.White);
+            //    }
+            //}
             that.batch.End();
             that.batch.Begin();
             base.Draw(gameTime);
