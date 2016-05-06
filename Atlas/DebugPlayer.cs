@@ -8,11 +8,12 @@ namespace Edge.Atlas {
         public Rectangle Hitbox;
         public Rectangle Atkbox;
         public Point MoveVector;
-        public int   mult = 0;
-        public int   currentFrame = 0;
-        public int   gold = 0;
-        public float dmgTimer = 0;
-        public float animationTimer = 0;
+        public int   mult;
+        public int   currentFrame;
+        public int   gold;
+        public float dmgTimer;
+        public float animationTimer;
+        public float attackTimer;
         public bool  isAttacking;
         public bool  isDamaged;
         public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){

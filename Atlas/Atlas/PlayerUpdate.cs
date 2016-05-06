@@ -100,9 +100,9 @@ namespace Edge.Atlas {
                 }
             }
             if (player.isAttacking) {
-                player.animationTimer += dt;
-                if (player.animationTimer > .1) {
-                    player.animationTimer = 0;
+                player.attackTimer += dt;
+                if (player.attackTimer > .1) {
+                    player.attackTimer = 0;
                     player.currentFrame = 3;
                     player.isAttacking = false;
                 }
@@ -146,10 +146,13 @@ namespace Edge.Atlas {
                     if (player.Hitbox.Intersects(i.Hitbox))
                         switch (i.type) {
                             case Item.Type.Health:
-                                player.Health = 2f;
+                                if (player.Health >= 2.0f) break;
+                                player.Health += 1.0f;
+                                removeItems.Add(i);
+                                if (player.Health > 2.0) player.Health = 2.0f;
                                 break;
                             case Item.Type.Gold:
-                                player.gold += 1;
+                                player.gold += new Random().Next(5);
                                 removeItems.Add(i);
                                 break;
                         }

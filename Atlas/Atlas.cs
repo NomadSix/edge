@@ -69,7 +69,7 @@ namespace Edge.Atlas {
 			config.Port = port;
 			server = new NetServer(config);
 			server.Start();
-            items.Add(new Item(0, 32, 32, Item.Type.Health));
+            items.Add(new Item(0, 100, 100, Item.Type.Health));
         }
 
 		/// <summary>

@@ -48,15 +48,6 @@ namespace Edge.Atlas {
                                 ent.summonTimer += dt;
                             }
                             break;
-                        case Type.Slime: {
-                                if (ent.Health <= 0)
-                                {
-                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X - ent.Width, ent.Hitbox.Y - ent.Height, Type.Slime));
-                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X + ent.Width, ent.Hitbox.Y + ent.Height, Type.Slime));
-                                    removeEnemys.Add(ent);
-                                }
-                            }
-                            break;
                         case Type.Minion: {
 
                             }
@@ -147,7 +138,7 @@ namespace Edge.Atlas {
                     }
 
                     if (ent.Health < 0) {
-                        items.Add(new Item(items.Count + 1, (int)ent.Position.X, (int)ent.Position.Y, Item.Type.Gold));
+                        items.Add(new Item(items.Count + 1, (int)ent.Position.X, (int)ent.Position.Y, (Item.Type)new Random().Next(2)));
                         removeEnemys.Add(ent);
                     }
 
