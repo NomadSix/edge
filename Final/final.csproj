@@ -119,8 +119,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Audio\Damage01.wav" />
-    <Content Include="Audio\song.wav">
+    <Content Include="Images\Button\controls.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Button\newbtn.jpg">
@@ -128,6 +127,9 @@
     </Content>
     <Content Include="Images\Button\TitleButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Items\Dust.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Items\Gold.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -189,6 +191,15 @@
     </Content>
     <Content Include="Images\Sheets\grass.tbin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\battle.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\Damage01.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\Randomize.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Map\dungenDemo.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

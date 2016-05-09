@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atlas\EnemyUpdate.cs" />
+    <Compile Include="Atlas\ItemUpdate.cs" />
     <Compile Include="Circle.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Item.cs" />

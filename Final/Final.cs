@@ -59,7 +59,6 @@ namespace Edge.Hyperion {
             ContentThread = new Thread(new ThreadStart(LoadLotsOfContent));
             ContentThread.Name = "Content Loading Thread";
             ContentThread.Start();
-
             base.Initialize();
         }
 
@@ -83,7 +82,11 @@ namespace Edge.Hyperion {
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
             AssetStore.ItemTypes.Add(Item.Style.Type.Gold, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Gold.png")));
             AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/Background2.png");
+            AssetStore.Controls = Content.Load<Texture2D>(@"../Images/Button/controls.png");
             AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");
+            AssetStore.BattleSong = Content.Load<SoundEffect>(@"../Audio/battle");
+            AssetStore.Damage = Content.Load<SoundEffect>(@"../Audio/Randomize");
+            AssetStore.FontMain = Helvetica;
             Popup.backGround = AssetStore.Pixel;
             SetScreen(new MainMenu(this));
             #endregion

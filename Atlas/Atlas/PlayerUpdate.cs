@@ -10,7 +10,6 @@ namespace Edge.Atlas {
     public partial class Atlas {
         private Vector2 maxVel = new Vector2(150f);
         private List<ServerEnemy> ent;
-        private float timer = 0;
 
         /// <summary>
         ///  Updates a player
@@ -79,13 +78,13 @@ namespace Edge.Atlas {
 
             if (player.isAttacking) {
                 if (player.mult == 1)
-                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X - hitbox.Width - 4, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 2)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height - 4, hitbox.Width, hitbox.Height);
                 if (player.mult == 3)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height + 4, hitbox.Width, hitbox.Height);
                 if (player.mult == 4)
-                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width + 4, hitbox.Y, hitbox.Width, hitbox.Height);
             } else {
                 player.Atkbox = new Rectangle();
             }
@@ -110,33 +109,35 @@ namespace Edge.Atlas {
 
             //colition
 
-            for (int i = 0; i < ent.Count; i++) {
-                switch (ent[i].entType) {
-                    case Type.Debug: {
-                            if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
-                                player.dmgTimer = 0;
-                                player.Health -= .125f;
-                                player.isDamaged = true;
+            if (player.lifeTimer >= 5) {
+                for (int i = 0; i < ent.Count; i++) {
+                    switch (ent[i].entType) {
+                        case Type.Debug: {
+                                if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                    player.dmgTimer = 0;
+                                    player.Health -= .125f;
+                                    player.isDamaged = true;
+                                }
+                                player.dmgTimer += dt;
                             }
-                            player.dmgTimer += dt;
-                        }
-                        break;
-                    case Type.Mage: {
-                        }
-                        break;
-                    case Type.Minion: {
-                            if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
-                                removeEnemys.Add(ent[i]);
-                                player.dmgTimer = 0;
-                                player.Health -= .25f;
-                                player.isDamaged = true;
+                            break;
+                        case Type.Mage: {
                             }
-                            player.dmgTimer += dt;
-                        }
-                        break;
-                }
-                if (player.Atkbox.Intersects(ent[i].Hitbox)) {
-                    ent[i].Health -= 1f;
+                            break;
+                        case Type.Minion: {
+                                if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                    removeEnemys.Add(ent[i]);
+                                    player.dmgTimer = 0;
+                                    player.Health -= .25f;
+                                    player.isDamaged = true;
+                                }
+                                player.dmgTimer += dt;
+                            }
+                            break;
+                    }
+                    if (player.Atkbox.Intersects(ent[i].Hitbox)) {
+                        ent[i].Health -= .125f;
+                    }
                 }
             }
 
@@ -163,6 +164,7 @@ namespace Edge.Atlas {
                 addPlayers.Add(player);
                 removePlayers.Add(player.NetID);
             }
+            player.lifeTimer += dt;
         }
         public IEnumerable<Item> GetQ(Item i) {
             return items.Where(x =>

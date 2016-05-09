@@ -22,137 +22,152 @@ namespace Edge.Atlas {
             var q = GetQ(ent);
             if (q.Count() != 0) {
                 closePlayer = q.First();
-                for (int i = 0; i < players.Count; i++) {
-                    var player = q[i];
-                    if (Vector2.Distance(
-                        new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
-                        new Vector2(player.Position.X + player.Width / 2, player.Position.Y + player.Height / 2))
-                        < Vector2.Distance(
-                        new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
-                        new Vector2(closePlayer.Position.X + closePlayer.Width / 2, closePlayer.Position.Y + closePlayer.Height / 2))
-                        ) {
-                        closePlayer = player;
-                    }
-                }
-
-                //Update
-                if (ent.world == closePlayer.world) {
-                    Console.WriteLine(ent.entType);
-                    switch (ent.entType) {
-                        case Type.Mage: {
-                                var rng = new Random();
-                                if (ent.summonTimer >= .5) {
-                                    ent.summonTimer = 0;
-                                    addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
-                                }
-                                ent.summonTimer += dt;
-                            }
-                            break;
-                        case Type.Minion: {
-
-                            }
-                            break;
-                    }
-
-                    //move
-                    switch (ent.entType) {
-                        case Type.Mage: {
-                                movespeed = 30;
-                                ent.Range = 32 * 4;
-
-                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
-                                    ent.Position.X -= movespeed * dt;
-                                    ent.MoveVector.X = 1;
-                                }
-                                if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
-                                    ent.Position.Y -= movespeed * dt;
-                                    ent.MoveVector.Y = 1;
-                                }
-                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
-                                    ent.Position.X += movespeed * dt;
-                                    ent.MoveVector.X = -1;
-                                }
-                                if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
-                                    ent.Position.Y += movespeed * dt;
-                                    ent.MoveVector.Y = -1;
-                                }
-                            }
-                            break;
-                        default: {
-                                movespeed = 90;
-                                ent.Range = 32 * 4;
-                                //ent.MovingTo = 
-                                //    new Vector2(
-                                //        closePlayer.Position.X - closePlayer.Width / 2,
-                                //        closePlayer.Position.Y - closePlayer.Height / 2
-                                //    );
-                                //MoveTo(ent, closePlayer, movespeed);
-                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
-                                    ent.Position.X += movespeed * dt;
-                                    ent.MoveVector.X = 1;
-                                }
-                                if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
-                                    ent.Position.Y += movespeed * dt;
-                                    ent.MoveVector.Y = 1;
-                                }
-                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
-                                    ent.Position.X -= movespeed * dt;
-                                    ent.MoveVector.X = -1;
-                                }
-                                if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
-                                    ent.Position.Y -= movespeed * dt;
-                                    ent.MoveVector.Y = -1;
-                                }
-
-                                //animation
-                                if (ent.MoveVector != Vector2.Zero) {
-                                    ent.animationTimer += dt;
-                                    if (ent.animationTimer > .15) {
-                                        ent.animationTimer = 0;
-                                        ent.currentFrame += 1;
-                                    }
-                                } else {
-                                    ent.currentFrame = 0;
-                                }
-                                if (ent.MoveVector.X == -1) {
-                                    ent.mult = 1;
-                                } else if (ent.MoveVector.X == 1) {
-                                    ent.mult = 3;
-                                }
-                                break;
-                            }
-                    }
-
-                    for (int i = 0; i < walls.Length; i++) {
-                        var wall = walls[i];
-                        if (ent.Hitbox.Intersects(wall)) {
-                            if (ent.Hitbox.Top - (maxVel.Y * ent.MoveVector.Y * dt) <= wall.Bottom && ent.Hitbox.Top >= wall.Bottom - 5)
-                                ent.Position.Y = wall.Bottom;
-                            if (ent.Hitbox.Right + (maxVel.X * ent.MoveVector.X * dt) >= wall.Left && ent.Hitbox.Right <= wall.Left + 5)
-                                ent.Position.X = wall.Left - ent.Hitbox.Width;
-                            if (ent.Hitbox.Left - (maxVel.X * ent.MoveVector.X * dt) <= wall.Right && ent.Hitbox.Left >= wall.Right - 5)
-                                ent.Position.X = wall.Right;
-                            if (ent.Hitbox.Bottom + (maxVel.Y * ent.MoveVector.Y * dt) >= wall.Top && ent.Hitbox.Bottom <= wall.Top + 5)
-                                ent.Position.Y = wall.Top - ent.Hitbox.Height;
+                if (closePlayer.lifeTimer > 5) {
+                    for (int i = 0; i < players.Count; i++) {
+                        var player = q[i];
+                        if (Vector2.Distance(
+                            new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
+                            new Vector2(player.Position.X + player.Width / 2, player.Position.Y + player.Height / 2))
+                            < Vector2.Distance(
+                            new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
+                            new Vector2(closePlayer.Position.X + closePlayer.Width / 2, closePlayer.Position.Y + closePlayer.Height / 2))
+                            ) {
+                            closePlayer = player;
                         }
                     }
 
-                    if (ent.Health < 0) {
-                        items.Add(new Item(items.Count + 1, (int)ent.Position.X, (int)ent.Position.Y, (Item.Type)new Random().Next(2)));
-                        removeEnemys.Add(ent);
-                    }
+                    //Update
+                    if (ent.world == closePlayer.world) {
+                        Console.WriteLine(ent.entType);
+                        switch (ent.entType) {
+                            case Type.Mage: {
+                                    var rng = new Random();
+                                    if (ent.summonTimer >= .5) {
+                                        ent.summonTimer = 0;
+                                        addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
+                                    }
+                                    ent.summonTimer += dt;
+                                }
+                                break;
+                            case Type.Minion: {
 
-                } else {
-                    ent.currentFrame = 0;
-                    if (ent.lifeTimer > 2 && ent.entType == Type.Minion) {
-                        ent.lifeTimer = 0;
-                        removeEnemys.Add(ent);
+                                }
+                                break;
+                        }
+
+                        //move
+                        switch (ent.entType) {
+                            case Type.Mage: {
+                                    movespeed = 30;
+                                    ent.Range = 32 * 4;
+
+                                    if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
+                                        ent.Position.X -= movespeed * dt;
+                                        ent.MoveVector.X = 1;
+                                    }
+                                    if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
+                                        ent.Position.Y -= movespeed * dt;
+                                        ent.MoveVector.Y = 1;
+                                    }
+                                    if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
+                                        ent.Position.X += movespeed * dt;
+                                        ent.MoveVector.X = -1;
+                                    }
+                                    if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
+                                        ent.Position.Y += movespeed * dt;
+                                        ent.MoveVector.Y = -1;
+                                    }
+
+                                    if (ent.MoveVector.X == -1) {
+                                        ent.mult = 1;
+                                    } else if (ent.MoveVector.X == 1) {
+                                        ent.mult = 2;
+                                    }
+                                }
+                                break;
+                            default: {
+                                    movespeed = 90;
+                                    ent.Range = 32 * 4;
+                                    //ent.MovingTo = 
+                                    //    new Vector2(
+                                    //        closePlayer.Position.X - closePlayer.Width / 2,
+                                    //        closePlayer.Position.Y - closePlayer.Height / 2
+                                    //    );
+                                    //MoveTo(ent, closePlayer, movespeed);
+                                    if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
+                                        ent.Position.X += movespeed * dt;
+                                        ent.MoveVector.X = 1;
+                                    }
+                                    if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
+                                        ent.Position.Y += movespeed * dt;
+                                        ent.MoveVector.Y = 1;
+                                    }
+                                    if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
+                                        ent.Position.X -= movespeed * dt;
+                                        ent.MoveVector.X = -1;
+                                    }
+                                    if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
+                                        ent.Position.Y -= movespeed * dt;
+                                        ent.MoveVector.Y = -1;
+                                    }
+
+                                    if (ent.MoveVector.X == -1) {
+                                        ent.mult = 1;
+                                    } else if (ent.MoveVector.X == 1) {
+                                        ent.mult = 3;
+                                    }
+                                    break;
+                                }
+                        }
+
+                        //animation
+                        if (ent.MoveVector != Vector2.Zero) {
+                            ent.animationTimer += dt;
+                            if (ent.animationTimer > .15) {
+                                ent.animationTimer = 0;
+                                ent.currentFrame += 1;
+                            }
+                        } else {
+                            ent.currentFrame = 0;
+                        }
+
+                        for (int i = 0; i < walls.Length; i++) {
+                            var wall = walls[i];
+                            if (ent.Hitbox.Intersects(wall)) {
+                                if (ent.Hitbox.Top - (maxVel.Y * ent.MoveVector.Y * dt) <= wall.Bottom && ent.Hitbox.Top >= wall.Bottom - 5)
+                                    ent.Position.Y = wall.Bottom;
+                                if (ent.Hitbox.Right + (maxVel.X * ent.MoveVector.X * dt) >= wall.Left && ent.Hitbox.Right <= wall.Left + 5)
+                                    ent.Position.X = wall.Left - ent.Hitbox.Width;
+                                if (ent.Hitbox.Left - (maxVel.X * ent.MoveVector.X * dt) <= wall.Right && ent.Hitbox.Left >= wall.Right - 5)
+                                    ent.Position.X = wall.Right;
+                                if (ent.Hitbox.Bottom + (maxVel.Y * ent.MoveVector.Y * dt) >= wall.Top && ent.Hitbox.Bottom <= wall.Top + 5)
+                                    ent.Position.Y = wall.Top - ent.Hitbox.Height;
+                            }
+                        }
+
+                        if (ent.Health < 0) { 
+                            die(ent);
+                        }
+
+                    } else {
+                        ent.currentFrame = 0;
                     }
                 }
-                ent.lifeTimer += dt;
                 //update hitbox
                 ent.Hitbox = new Rectangle((int)ent.Position.X, (int)ent.Position.Y, ent.Width, ent.Height);
             }
+            ent.lifeTimer += dt;
+
+            //despawn
+            if (ent.lifeTimer > 2 && ent.entType == Type.Minion) {
+                ent.lifeTimer = 0;
+                die(ent);
+            }
+        }
+
+        void die(ServerEnemy ent) {
+            items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 4, (Item.Type)new Random().Next(2)));
+            removeEnemys.Add(ent);
         }
 
         public List<DebugPlayer> GetQ(ServerEnemy ent) {

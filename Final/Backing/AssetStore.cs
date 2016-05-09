@@ -14,10 +14,11 @@ namespace Edge.Hyperion.Backing {
 		public static Dictionary<Button.Style.Type, Button.Style> ButtonTypes = new Dictionary<Button.Style.Type, Button.Style>();
         public static Dictionary<Type, Enemy.Style> EnemyTypes = new Dictionary<Type, Enemy.Style>();
         public static Dictionary<Item.Style.Type, Item.Style> ItemTypes = new Dictionary<Item.Style.Type, Item.Style>();
-        public static SoundEffect MainmenuSong;
+        public static SoundEffect MainmenuSong, BattleSong, Damage;
         public static Texture2D PlayerTexture, Pixel, Mouse;
         public static Texture2D Sword, Bow, Wand;
         public static Texture2D Ground;
+        public static Texture2D Controls;
         public static float MasterVolume = 1f;
         public readonly static byte TileSize = 32;
         public readonly static short TownSize = 50;
@@ -31,4 +32,3 @@ namespace Edge.Hyperion.Backing {
         //public static ContentManager Content = new ContentManager(Game);
     }
 }
-

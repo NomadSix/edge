@@ -27,8 +27,7 @@ namespace Edge.Atlas {
             world = World.debug;
             if (entType == Type.Mage) {
                 Health = 2f;
-            }
-            else if (entType == Type.Minion) {
+            } else if (entType == Type.Minion) {
                 Health = 1f;
             }
         }

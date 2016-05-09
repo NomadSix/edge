@@ -10,6 +10,7 @@ namespace Edge.Atlas {
         public bool remove;
         public Rectangle Hitbox;
         public Type type;
+        public float life = 30;
         public Item(long id, int x, int y, Type type) {
             ID = id;
             this.type = type;
@@ -21,7 +22,8 @@ namespace Edge.Atlas {
 
         public enum Type {
             Health,
-            Gold
+            Gold,
+            Dust
         }
     }
 }

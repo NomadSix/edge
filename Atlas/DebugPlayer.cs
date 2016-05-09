@@ -14,6 +14,7 @@ namespace Edge.Atlas {
         public float dmgTimer;
         public float animationTimer;
         public float attackTimer;
+        public float lifeTimer;
         public bool  isAttacking;
         public bool  isDamaged;
         public DebugPlayer(long id, int x, int y, float health) : base(id, x, y){

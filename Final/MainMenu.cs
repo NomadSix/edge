@@ -39,18 +39,13 @@ namespace Edge.Hyperion {
             var Height = 45;
             var Width = 100;
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 2 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Play", () => {
-                music.Volume = 1f;
-                music.Volume = music.Volume / 4;
+                music.Stop();
                 that.SetScreen(new Town(that, "127.0.0.1", "2348"));
             }));
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 3 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.disabled], "Options", () =>
-            {
-
-            }));
+            { }));
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 4 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.disabled], "Credits", () =>
-            {
-
-            }));
+            { }));
             btnList.Add(new btn(that, this, new Rectangle(viewport.Width / 2 - Width / 2, init.Y + 5 * Height, Width, Height), AssetStore.ButtonTypes[btn.Style.Type.basic], "Exit", () => {
                 that.Exit();
             }));

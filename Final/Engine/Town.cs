@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Audio;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 using Edge.Hyperion.Backing;
@@ -33,6 +34,9 @@ namespace Edge.Hyperion.Engine {
         PauseMenu pMenu;
         StatusBar statusBar;
 
+        SoundEffectInstance music;
+        SoundEffectInstance damage;
+
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Rectangle> walls = new List<Rectangle>();
         List<Enemy> enemys = new List<Enemy>();
@@ -56,16 +60,21 @@ namespace Edge.Hyperion.Engine {
         }
 
         public override void Initialize() {
+            music = AssetStore.MainmenuSong.CreateInstance();
+            damage = AssetStore.Damage.CreateInstance();
             that.sampleState = SamplerState.PointClamp;
             pMenu = new PauseMenu(that, this);
             statusBar = new StatusBar(that, 1f);
             that.Components.Add(statusBar);
             that.Components.Add(pMenu);
             base.Initialize();
+            music.IsLooped = true;
+            music.Volume = 0.5f;
+            damage.Volume = 0.25f;
+            music.Play();
         }
 
         protected override void LoadContent() {
-            artDebug = AssetStore.PlayerTexture;
             Tile.TileSetTexture = that.Content.Load<Texture2D>(@"..\Images\Sheets\Tiles\GrassSheet");
             base.LoadContent();
         }
@@ -89,7 +98,11 @@ namespace Edge.Hyperion.Engine {
             if (pMenu._isActive) {
                 MoveVector = Vector2.Zero;
             }
-            pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16), cam);
+            pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 8, cam.Position.Y - 50f + viewport.Height / 2.0f + 8), cam);
+            if (AssetStore.kb.IsButtonToggledDown(Keys.Space) || AssetStore.mouse.IsButtonToggledDown(Backing.Mouse.MouseButtons.Left)){
+                damage.Stop();
+                damage.Play();
+            }
             base.Update(gameTime);
         }
 
@@ -111,15 +124,14 @@ namespace Edge.Hyperion.Engine {
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
                 that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Height, e.Width, e.Height), e.Type.BaseColour);
-                that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
+                //that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server.world
                 var mouse = Vector2.Transform(AssetStore.mouse.LocationV2, cam.Deproject);
                 var scale = 0.25f;
                 var mesurments = that.Helvetica.MeasureString(p.Name);
-                var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2);
+                var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2 - 8);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive || p.NetID == atlasClient.UniqueIdentifier ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-                that.batch.DrawString(that.Helvetica, p.gold.ToString(), new Vector2(200,0), Color.White);
                 if (p.isAttacking) {
                     p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                     p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
@@ -128,13 +140,13 @@ namespace Edge.Hyperion.Engine {
                 } else {
                     p.AttackRec = new Rectangle();
                 }
-                if (p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(3 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
-                if (!p.isAttacking) that.batch.Draw(artDebug, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
-                that.batch.Draw(artDebug, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
+                if (p.isAttacking) that.batch.Draw(AssetStore.PlayerTexture, p.HitBox, new Rectangle(3 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
+                if (!p.isAttacking) that.batch.Draw(AssetStore.PlayerTexture, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
+                that.batch.Draw(AssetStore.PlayerTexture, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
-                if (p.NetID == atlasClient.UniqueIdentifier) statusBar.draw(p.Health);
+                if (p.NetID == atlasClient.UniqueIdentifier) statusBar.draw(p, gameTime);
             }
-            //pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
+            pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
         }
 
         public void serverIO() {
