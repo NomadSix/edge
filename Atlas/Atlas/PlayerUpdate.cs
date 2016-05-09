@@ -69,7 +69,7 @@ namespace Edge.Atlas {
                 player.mult = 1;
             }
             else if (player.MoveVector.X == 1) {
-                player.mult = 4;
+                player.mult = 0;
             }
 
             if (player.MoveVector == Point.Zero) {
@@ -77,14 +77,14 @@ namespace Edge.Atlas {
             }
 
             if (player.isAttacking) {
+                if (player.mult == 0)
+                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width - 4, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 1)
                     player.Atkbox = new Rectangle(hitbox.X - hitbox.Width - 4, hitbox.Y, hitbox.Width, hitbox.Height);
                 if (player.mult == 2)
-                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height - 4, hitbox.Width, hitbox.Height);
+                    player.Atkbox = new Rectangle(hitbox.X, hitbox.Y - hitbox.Height + 4, hitbox.Width, hitbox.Height);
                 if (player.mult == 3)
                     player.Atkbox = new Rectangle(hitbox.X, hitbox.Y + hitbox.Height + 4, hitbox.Width, hitbox.Height);
-                if (player.mult == 4)
-                    player.Atkbox = new Rectangle(hitbox.X + hitbox.Width + 4, hitbox.Y, hitbox.Width, hitbox.Height);
             } else {
                 player.Atkbox = new Rectangle();
             }

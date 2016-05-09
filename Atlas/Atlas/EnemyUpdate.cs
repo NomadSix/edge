@@ -79,9 +79,9 @@ namespace Edge.Atlas {
                                     }
 
                                     if (ent.MoveVector.X == -1) {
-                                        ent.mult = 1;
+                                        ent.mult = 0;
                                     } else if (ent.MoveVector.X == 1) {
-                                        ent.mult = 2;
+                                        ent.mult = 1;
                                     }
                                 }
                                 break;

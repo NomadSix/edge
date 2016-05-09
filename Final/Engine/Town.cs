@@ -133,10 +133,10 @@ namespace Edge.Hyperion.Engine {
                 var location = new Vector2((p.X + p.Width / 2) - mesurments.X / 2 * scale, p.Y - p.Width / 2 - 8);
                 that.batch.DrawString(that.Helvetica, pMenu._isActive || p.NetID == atlasClient.UniqueIdentifier ? string.Empty : p.Name, location, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
                 if (p.isAttacking) {
+                    p.AttackRec = p.mult == 0 ? new Rectangle(p.HitBox.X + p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                     p.AttackRec = p.mult == 1 ? new Rectangle(p.HitBox.X - p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
-                    p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                     p.AttackRec = p.mult == 2 ? new Rectangle(p.HitBox.X, p.HitBox.Y - p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
-                    p.AttackRec = p.mult == 4 ? new Rectangle(p.HitBox.X + p.HitBox.Width, p.HitBox.Y, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
+                    p.AttackRec = p.mult == 3 ? new Rectangle(p.HitBox.X, p.HitBox.Y + p.HitBox.Width, p.HitBox.Width, p.HitBox.Height) : p.AttackRec;
                 } else {
                     p.AttackRec = new Rectangle();
                 }

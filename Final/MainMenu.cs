@@ -67,6 +67,10 @@ namespace Edge.Hyperion {
         }
 
         public override void Update(GameTime gameTime) {
+            foreach (var btn in btnList) {
+                var width = 100;
+                btn._location.X = viewport.Width / 2 - width / 2;
+            }
             var dt = gameTime.ElapsedGameTime;
             if (timer < opening &&(music.Volume + .5f / (60 * opening)) < 1)
                 music.Volume += .5f / (60 * opening);
