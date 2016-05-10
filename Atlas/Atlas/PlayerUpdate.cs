@@ -135,7 +135,7 @@ namespace Edge.Atlas {
                             break;
                     }
                     if (player.Atkbox.Intersects(ent[i].Hitbox)) {
-                        ent[i].Health -= .125f;
+                        ent[i].Health -= .1f;
                     }
                 }
             }
@@ -162,7 +162,8 @@ namespace Edge.Atlas {
                 }
             }
 
-            if (player.Health <= 0) {
+            if (player.Health <= 0)
+            {
                 addPlayers.Add(player);
                 removePlayers.Add(player.NetID);
             }

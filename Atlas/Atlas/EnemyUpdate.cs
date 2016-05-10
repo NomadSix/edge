@@ -194,7 +194,7 @@ namespace Edge.Atlas {
         }
 
         void die(ServerEnemy ent) {
-            items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 5, Item.Type.Dust));
+            if (ent.Health <= 0)
             items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 4, (Item.Type)new Random().Next(2)));
             if (ent.entType == Type.Slime) {
                 addEnemys.Add(new ServerEnemy(enemys.Count + 1, (int)ent.Position.X + ent.Width / 2, (int)ent.Position.Y + ent.Height / 2, Type.SlimeSmall));

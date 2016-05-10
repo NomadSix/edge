@@ -39,7 +39,7 @@ namespace Edge.Hyperion.UI.Components {
             that.batch.Begin();
             ControlTimer += gametime.ElapsedGameTime.Milliseconds;
             if (ControlTimer <= 5000) {
-                DrawCenter("INVINCABLE", 50, Color.Cyan);
+                DrawCenter("INVINCIBLE", 50, Color.Cyan);
                 DrawCenter("Controls", 100, Color.White);
                 that.batch.Draw(AssetStore.Controls,
                                 new Vector2(GraphicsDevice.Viewport.Width / 2 - AssetStore.Controls.Width / 2f * scale,

@@ -155,8 +155,13 @@ namespace Edge.Atlas {
                 for (int i = 0; i < items.Count; i++) {
                     ItemUpdate(items[i]);
                 }
-                for (int p = 0; p < removePlayers.Count; p++) {
+                for (int p = 0; p < removePlayers.Count; p++)
+                {
+                    var player = players[removePlayers[p]];
                     players.Remove(removePlayers[p]);
+                    items.Add(new Item(items.Count + 1, player.Hitbox.X - player.Hitbox.Width / 2, player.Hitbox.Y, Item.Type.Gold));
+                    items.Add(new Item(items.Count + 1, player.Hitbox.X - player.Hitbox.Width / 3, player.Hitbox.Y - player.Hitbox.Height / 2, Item.Type.Gold));
+                    items.Add(new Item(items.Count + 1, player.Hitbox.X, player.Hitbox.Y + player.Hitbox.Width / 2, Item.Type.Gold));
                 }
                 for (int e = 0; e < removeEnemys.Count; e++) {
                     enemys.Remove(removeEnemys[e]);
