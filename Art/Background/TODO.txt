@@ -1,4 +1,10 @@
-1.Create mage minion explosion animation
+1.create slime
 2.Create Fire mage
-3.Create fireball
-4.
+3.fireball
+4.more items
+5.items only dropped by monsters killed by player
+6.let the player choose their name
+7. players drop gold when they die
+8.better main menu
+9. make controlls more clear
+10. invincibilitly timer after respawn send life timer
