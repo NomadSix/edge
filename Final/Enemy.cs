@@ -27,6 +27,10 @@ namespace Edge.Hyperion {
             Type = style;
             Width = 32;
             Height = 32;
+            if (Type.type == NetCommon.Type.SlimeSmall) {
+                Width = 16;
+                Height = 16;
+            }
             hitBox = new Rectangle(x, y, Width, Height);
         }
 

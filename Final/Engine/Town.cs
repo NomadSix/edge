@@ -70,7 +70,7 @@ namespace Edge.Hyperion.Engine {
             base.Initialize();
             music.IsLooped = true;
             music.Volume = 0.5f;
-            damage.Volume = 0.25f;
+            damage.Volume = 0.1f;
             music.Play();
         }
 
@@ -93,16 +93,18 @@ namespace Edge.Hyperion.Engine {
                 }
                 PlayerIO(player);
                 cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
+                if (player.isAttacking) {
+                    damage.Play();
+                }
             }
 
             if (pMenu._isActive) {
                 MoveVector = Vector2.Zero;
+                music.Pause();
+            } else {
+                music.Resume();
             }
             pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 8, cam.Position.Y - 50f + viewport.Height / 2.0f + 8), cam);
-            if (AssetStore.kb.IsButtonToggledDown(Keys.Space) || AssetStore.mouse.IsButtonToggledDown(Backing.Mouse.MouseButtons.Left)){
-                damage.Stop();
-                damage.Play();
-            }
             base.Update(gameTime);
         }
 
@@ -144,8 +146,9 @@ namespace Edge.Hyperion.Engine {
                 if (!p.isAttacking) that.batch.Draw(AssetStore.PlayerTexture, p.HitBox, new Rectangle(((p.currentFrame) % framesPerRow) * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 that.batch.Draw(AssetStore.PlayerTexture, p.AttackRec, new Rectangle(4 * p.Width, p.mult * p.Height, p.Width, p.Height), Color.White);
                 //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
-                if (p.NetID == atlasClient.UniqueIdentifier) statusBar.draw(p, gameTime);
             }
+            foreach(var p in players.Where(x=>x.NetID == atlasClient.UniqueIdentifier))
+                statusBar.draw(p, gameTime);
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
         }
 

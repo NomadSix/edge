@@ -23,7 +23,7 @@ namespace Edge.Atlas {
             if (q.Count() != 0) {
                 closePlayer = q.First();
                 if (closePlayer.lifeTimer > 5) {
-                    for (int i = 0; i < players.Count; i++) {
+                    for (int i = 0; i < players.Count - 1; i++) {
                         var player = q[i];
                         if (Vector2.Distance(
                             new Vector2(ent.Position.X + ent.Width / 2, ent.Position.Y + ent.Height / 2),
@@ -44,7 +44,7 @@ namespace Edge.Atlas {
                                     var rng = new Random();
                                     if (ent.summonTimer >= .5) {
                                         ent.summonTimer = 0;
-                                        addEnemys.Add(new ServerEnemy(0, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
+                                        addEnemys.Add(new ServerEnemy(enemys.Count + 1, ent.Hitbox.X, ent.Hitbox.Y, Type.Minion));
                                     }
                                     ent.summonTimer += dt;
                                 }
@@ -83,6 +83,34 @@ namespace Edge.Atlas {
                                     } else if (ent.MoveVector.X == 1) {
                                         ent.mult = 1;
                                     }
+                                }
+                                break;
+                            case Type.Slime:
+                                movespeed = 60f;
+                                ent.Range = 32 * 5;
+                                if (ent.moveTimer > 2) {
+                                    ent.moveTimer = 0;
+                                } else if (ent.moveTimer > 1) {
+                                    movespeed = 60;
+                                } else if (ent.moveTimer > .5) {
+                                    movespeed = 15;
+                                }
+                                ent.moveTimer += dt;
+                                if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
+                                    ent.Position.X += movespeed * dt;
+                                    ent.MoveVector.X = 1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 < closePlayer.Position.Y) {
+                                    ent.Position.Y += movespeed * dt;
+                                    ent.MoveVector.Y = 1;
+                                }
+                                if (ent.Position.X + ent.Width / 4 > closePlayer.Position.X) {
+                                    ent.Position.X -= movespeed * dt;
+                                    ent.MoveVector.X = -1;
+                                }
+                                if (ent.Position.Y + ent.Height / 4 > closePlayer.Position.Y) {
+                                    ent.Position.Y -= movespeed * dt;
+                                    ent.MoveVector.Y = -1;
                                 }
                                 break;
                             default: {
@@ -166,7 +194,12 @@ namespace Edge.Atlas {
         }
 
         void die(ServerEnemy ent) {
+            items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 5, Item.Type.Dust));
             items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 4, (Item.Type)new Random().Next(2)));
+            if (ent.entType == Type.Slime) {
+                addEnemys.Add(new ServerEnemy(enemys.Count + 1, (int)ent.Position.X + ent.Width / 2, (int)ent.Position.Y + ent.Height / 2, Type.SlimeSmall));
+                addEnemys.Add(new ServerEnemy(enemys.Count + 1, (int)ent.Position.X - ent.Width / 2, (int)ent.Position.Y - ent.Height / 2, Type.SlimeSmall));
+            }
             removeEnemys.Add(ent);
         }
 

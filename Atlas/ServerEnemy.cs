@@ -11,6 +11,7 @@ namespace Edge.Atlas {
         public float summonTimer;
         public float animationTimer;
         public float lifeTimer;
+        public float moveTimer;
         public float Range = 32*1000;
         public int currentFrame;
         public int mult;
@@ -29,6 +30,10 @@ namespace Edge.Atlas {
                 Health = 2f;
             } else if (entType == Type.Minion) {
                 Health = 1f;
+                Width = 16;
+            } else if (entType == Type.SlimeSmall) {
+                Width = 16;
+                Height = 16;
             }
         }
     }

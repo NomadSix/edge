@@ -112,15 +112,6 @@ namespace Edge.Atlas {
             if (player.lifeTimer >= 5) {
                 for (int i = 0; i < ent.Count; i++) {
                     switch (ent[i].entType) {
-                        case Type.Debug: {
-                                if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
-                                    player.dmgTimer = 0;
-                                    player.Health -= .125f;
-                                    player.isDamaged = true;
-                                }
-                                player.dmgTimer += dt;
-                            }
-                            break;
                         case Type.Mage: {
                             }
                             break;
@@ -133,6 +124,14 @@ namespace Edge.Atlas {
                                 }
                                 player.dmgTimer += dt;
                             }
+                            break;
+                        default:
+                            if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
+                                player.dmgTimer = 0;
+                                player.Health -= .025f;
+                                player.isDamaged = true;
+                            }
+                            player.dmgTimer += dt;
                             break;
                     }
                     if (player.Atkbox.Intersects(ent[i].Hitbox)) {
@@ -153,7 +152,10 @@ namespace Edge.Atlas {
                                 if (player.Health > 2.0) player.Health = 2.0f;
                                 break;
                             case Item.Type.Gold:
-                                player.gold += new Random().Next(5);
+                                player.gold += new Random().Next(10);
+                                removeItems.Add(i);
+                                break;
+                            default:
                                 removeItems.Add(i);
                                 break;
                         }

@@ -180,7 +180,7 @@ namespace Edge.Atlas {
                 removeItems.Clear();
 
                 if (enemys.Count < MIN_ENEMYS) {
-                    addEnemys.Add(new ServerEnemy(0, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(2)));
+                    addEnemys.Add(new ServerEnemy(enemys.Count + 1, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(4)));
                 }
 
                 #region Outgoing Updates

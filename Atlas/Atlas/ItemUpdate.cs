@@ -13,7 +13,7 @@ namespace Edge.Atlas {
             this.item = item;
             float dt = (currentTime - lastUpdates) / (float)TimeSpan.TicksPerSecond;
 
-            if (item.life <= 0) {
+            if (item.life <= 0 && item.type != Item.Type.Dust) {
                 removeItems.Add(item);
             }
             item.life -= dt;
