@@ -1,2 +1,4 @@
-1.More Wall Segments
-2.make wall Darker and greyer
+1.Create mage minion explosion animation
+2.Create Fire mage
+3.Create fireball
+4.
