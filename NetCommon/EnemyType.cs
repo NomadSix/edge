@@ -4,6 +4,7 @@ namespace Edge.NetCommon {
         Mage,
         Slime,
         SlimeSmall,
-        FireMage
+        FireMage,
+        Fire
     }
 }

@@ -78,7 +78,8 @@ namespace Edge.Hyperion {
             AssetStore.EnemyTypes.Add(Type.Mage, new Enemy.Style(Type.Mage, Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSprite"), null, null));
             AssetStore.EnemyTypes.Add(Type.Slime, new Enemy.Style(Type.Slime, Content.Load<Texture2D>(@"../Images/Sheets/Slime.png"), null, null));
             AssetStore.EnemyTypes.Add(Type.SlimeSmall, new Enemy.Style(Type.SlimeSmall, Content.Load<Texture2D>(@"../Images/Sheets/LittleSlime.png"), null, null));
-            AssetStore.EnemyTypes.Add(Type.FireMage, new Enemy.Style(Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
+            AssetStore.EnemyTypes.Add(Type.FireMage, new Enemy.Style(Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSpriteColor.png"), Color.DarkRed, null));
+            AssetStore.EnemyTypes.Add(Type.Fire, new Enemy.Style(Type.Fire, Content.Load<Texture2D>(@"../Images/Sheets/Fireball Spritesheet.png"), null, null));
             //AssetStore.EnemyTypes.Add(Type.Debug, new Enemy.Style(Type.Debug, AssetStore.Pixel, null, null));
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
             AssetStore.ItemTypes.Add(Item.Style.Type.Gold, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Gold.png")));

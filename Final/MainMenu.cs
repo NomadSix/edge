@@ -78,6 +78,7 @@ namespace Edge.Hyperion {
             music.IsLooped = true;
             music.Volume = 0f;
             music.Play();
+            cam.Position.X = AssetStore.Ground.Width / 4;
             base.Initialize();
         }
 

@@ -37,8 +37,8 @@ namespace Edge.Atlas {
         public long lastUpdates;
         public long currentTime = DateTime.UtcNow.Ticks;
 
-        readonly int MAX_ENEMYS = 20;
-        readonly int MIN_ENEMYS = 10;
+        readonly int MAX_ENEMYS = 30;
+        readonly int MIN_ENEMYS = 15;
         readonly int SPAWNAREAR = 10;
 
 
@@ -185,7 +185,7 @@ namespace Edge.Atlas {
                 removeItems.Clear();
 
                 if (enemys.Count < MIN_ENEMYS) {
-                    addEnemys.Add(new ServerEnemy(enemys.Count + 1, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(1,4)));
+                    addEnemys.Add(new ServerEnemy(enemys.Count + 1, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(1,5)));
                 }
 
                 #region Outgoing Updates

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 
 using Edge.Hyperion.Engine;
 
@@ -27,7 +27,7 @@ namespace Edge.Hyperion {
             Type = style;
             Width = 32;
             Height = 32;
-            if (Type.type == NetCommon.Type.SlimeSmall) {
+            if (Type.type == NetCommon.Type.SlimeSmall || Type.type == NetCommon.Type.Fire) {
                 Width = 16;
                 Height = 16;
             }
