@@ -8,13 +8,11 @@ namespace Edge.Hyperion {
         public Rectangle AttackRec;
         public Rectangle HitBox;
         public long NetID;
-        public byte R = 255;
-        public byte G = 255;
-        public byte B = 255;
         public string Name;
         public Type entType;
-        public int mult = 0;
+        public float lifeTimer = 0;
         public int currentFrame = 0;
+        public int mult = 0;
         public int gold = 0;
         public bool isAttacking;
         public bool isDamaged;

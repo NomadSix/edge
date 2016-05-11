@@ -76,13 +76,12 @@ namespace Edge.Hyperion {
             AssetStore.ButtonTypes.Add(Button.Style.Type.disabled, new Button.Style(Content.Load<Texture2D>(@"../Images/Grey.png"), Content.Load<Texture2D>(@"../Images/Button/TitleButton.png"), Helvetica, Color.TransparentBlack, Color.TransparentBlack, Color.Gray));
             AssetStore.EnemyTypes.Add(Type.Minion, new Enemy.Style(Type.Minion, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
             AssetStore.EnemyTypes.Add(Type.Mage, new Enemy.Style(Type.Mage, Content.Load<Texture2D>(@"../Images/Sheets/MageWalkingSprite"), null, null));
-            AssetStore.EnemyTypes.Add(Type.Slime, new Enemy.Style(Type.Slime, AssetStore.Pixel, Color.ForestGreen, null));
-            AssetStore.EnemyTypes.Add(Type.SlimeSmall, new Enemy.Style(Type.SlimeSmall, AssetStore.Pixel, Color.DarkSeaGreen, null));
+            AssetStore.EnemyTypes.Add(Type.Slime, new Enemy.Style(Type.Slime, Content.Load<Texture2D>(@"../Images/Sheets/Slime.png"), null, null));
+            AssetStore.EnemyTypes.Add(Type.SlimeSmall, new Enemy.Style(Type.SlimeSmall, Content.Load<Texture2D>(@"../Images/Sheets/LittleSlime.png"), null, null));
             AssetStore.EnemyTypes.Add(Type.FireMage, new Enemy.Style(Type.FireMage, Content.Load<Texture2D>(@"../Images/Sheets/MageMinnion.png"), null, null));
             //AssetStore.EnemyTypes.Add(Type.Debug, new Enemy.Style(Type.Debug, AssetStore.Pixel, null, null));
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
             AssetStore.ItemTypes.Add(Item.Style.Type.Gold, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Gold.png")));
-            AssetStore.ItemTypes.Add(Item.Style.Type.Dust, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Dust.png")));
             AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/Background2.png");
             AssetStore.Controls = Content.Load<Texture2D>(@"../Images/Button/controls.png");
             AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");

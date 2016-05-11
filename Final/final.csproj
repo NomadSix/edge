@@ -146,6 +146,9 @@
     <Content Include="Images\MageArms.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Sheets\LittleSlime.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Sheets\MageMinnion.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -157,6 +160,9 @@
     </Content>
     <Content Include="Images\Sheets\Player\player.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Sheets\Slime.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Sheets\Tiles\DungenSheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

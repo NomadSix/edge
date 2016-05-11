@@ -38,8 +38,9 @@ namespace Edge.Hyperion.UI.Components {
             that.batch.End();
             that.batch.Begin();
             ControlTimer += gametime.ElapsedGameTime.Milliseconds;
-            if (ControlTimer <= 5000) {
-                DrawCenter("INVINCIBLE", 50, Color.Cyan);
+            if (player.lifeTimer < 5)
+                DrawCenter("INVINCIBLE " + (int)(5 - player.lifeTimer), 50, Color.Cyan);
+            if (ControlTimer <= 4600) {
                 DrawCenter("Controls", 100, Color.White);
                 that.batch.Draw(AssetStore.Controls,
                                 new Vector2(GraphicsDevice.Viewport.Width / 2 - AssetStore.Controls.Width / 2f * scale,

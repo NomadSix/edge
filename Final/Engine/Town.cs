@@ -172,6 +172,7 @@ namespace Edge.Hyperion.Engine {
                                     players[i].currentFrame = inMsg.ReadInt32();
                                     players[i].isAttacking = inMsg.ReadBoolean();
                                     players[i].gold = inMsg.ReadInt32();
+                                    players[i].lifeTimer = inMsg.ReadFloat();
                                 }
                                 break;
                             case AtlasPackets.UpdateEnemy:

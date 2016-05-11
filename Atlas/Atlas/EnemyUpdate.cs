@@ -86,14 +86,42 @@ namespace Edge.Atlas {
                                 }
                                 break;
                             case Type.Slime:
-                                movespeed = 60f;
-                                ent.Range = 32 * 5;
-                                if (ent.moveTimer > 2) {
+                                movespeed = 15f;
+                                ent.Range = 32 * 8;
+                                if (ent.moveTimer > 1) {
                                     ent.moveTimer = 0;
-                                } else if (ent.moveTimer > 1) {
-                                    movespeed = 60;
                                 } else if (ent.moveTimer > .5) {
                                     movespeed = 15;
+                                } else if (ent.moveTimer > .25) {
+                                    movespeed = 90;
+                                }
+                                ent.moveTimer += dt;
+                                if (ent.Position.X + ent.Width / 2 < closePlayer.Position.X) {
+                                    ent.Position.X += movespeed * dt;
+                                    ent.MoveVector.X = 1;
+                                }
+                                if (ent.Position.Y + ent.Height / 2 < closePlayer.Position.Y) {
+                                    ent.Position.Y += movespeed * dt;
+                                    ent.MoveVector.Y = 1;
+                                }
+                                if (ent.Position.X + ent.Width / 2 > closePlayer.Position.X) {
+                                    ent.Position.X -= movespeed * dt;
+                                    ent.MoveVector.X = -1;
+                                }
+                                if (ent.Position.Y + ent.Height / 2 > closePlayer.Position.Y) {
+                                    ent.Position.Y -= movespeed * dt;
+                                    ent.MoveVector.Y = -1;
+                                }
+                                break;
+                            case Type.SlimeSmall:
+                                movespeed = 15f;
+                                ent.Range = 32 * 10;
+                                if (ent.moveTimer > 1) {
+                                    ent.moveTimer = 0;
+                                } else if (ent.moveTimer > .5) {
+                                    movespeed = 15;
+                                } else if (ent.moveTimer > .25) {
+                                    movespeed = 89;
                                 }
                                 ent.moveTimer += dt;
                                 if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
@@ -115,7 +143,7 @@ namespace Edge.Atlas {
                                 break;
                             default: {
                                     movespeed = 90;
-                                    ent.Range = 32 * 4;
+                                    ent.Range = 32 * 6;
                                     //ent.MovingTo = 
                                     //    new Vector2(
                                     //        closePlayer.Position.X - closePlayer.Width / 2,

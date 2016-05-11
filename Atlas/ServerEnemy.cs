@@ -31,6 +31,7 @@ namespace Edge.Atlas {
             } else if (entType == Type.Minion) {
                 Health = 1f;
                 Width = 16;
+                Height = 22;
             } else if (entType == Type.SlimeSmall) {
                 Width = 16;
                 Height = 16;

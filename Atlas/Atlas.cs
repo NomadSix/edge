@@ -149,11 +149,11 @@ namespace Edge.Atlas {
                 foreach (var p in players) {
                     PlayerUpdate(p.Value, enemys);
                 }
-                for (int e = 0; e < enemys.Count; e++) {
-                    EnemyUpdate(enemys[e]);
-                }
                 for (int i = 0; i < items.Count; i++) {
                     ItemUpdate(items[i]);
+                }
+                for (int e = 0; e < enemys.Count; e++) {
+                    EnemyUpdate(enemys[e]);
                 }
                 for (int p = 0; p < removePlayers.Count; p++)
                 {
@@ -185,7 +185,7 @@ namespace Edge.Atlas {
                 removeItems.Clear();
 
                 if (enemys.Count < MIN_ENEMYS) {
-                    addEnemys.Add(new ServerEnemy(enemys.Count + 1, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(4)));
+                    addEnemys.Add(new ServerEnemy(enemys.Count + 1, NetRandom.Instance.Next(100, 1400), NetRandom.Instance.Next(100, 1400), (Type)NetRandom.Instance.Next(1,4)));
                 }
 
                 #region Outgoing Updates
@@ -203,6 +203,7 @@ namespace Edge.Atlas {
                     outMsg.Write(p.currentFrame);
                     outMsg.Write(p.isAttacking);
                     outMsg.Write(p.gold);
+                    outMsg.Write(p.lifeTimer);
                 }
                 server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
 

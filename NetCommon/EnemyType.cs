@@ -1,7 +1,7 @@
 namespace Edge.NetCommon {
     public enum Type : int {
-        Mage,
         Minion,
+        Mage,
         Slime,
         SlimeSmall,
         FireMage
