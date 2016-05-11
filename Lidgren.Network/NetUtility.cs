@@ -31,7 +31,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Utility methods

@@ -7,7 +7,7 @@ using System.Net;
 using NetEndPoint = System.Net.IPEndPoint;
 #endif
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Represents a local peer capable of holding zero, one or more connections to remote peers

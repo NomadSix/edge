@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public abstract class NetCryptoProviderBase : NetEncryption
 	{

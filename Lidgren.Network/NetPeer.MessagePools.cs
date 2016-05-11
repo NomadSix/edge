@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public partial class NetPeer
 	{

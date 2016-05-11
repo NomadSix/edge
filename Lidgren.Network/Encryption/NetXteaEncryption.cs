@@ -21,7 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Security;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Methods to encrypt and decrypt data using the XTEA algorithm

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Collections.Generic;
-using Lidgren.Network;
+using Microsoft.Xna.Framework.Net;
 using System.Linq;
 using Edge.NetCommon;
 using Microsoft.Xna.Framework;

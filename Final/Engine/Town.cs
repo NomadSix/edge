@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Thread = System.Threading.Thread;
 
-using Lidgren.Network;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Audio;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
+using Microsoft.Xna.Framework.Net;
+using Keys = Microsoft.Xna.Framework.Input.Keys;using Microsoft.Xna.Framework.Net;
 
 using Edge.Hyperion.Backing;
 using Edge.Hyperion.UI.Components;
@@ -25,7 +24,6 @@ namespace Edge.Hyperion.Engine {
         string Name;
         Color pColor = Color.Gray;
 
-        TileMap Map = new TileMap(@"Map\grassDemo.csv");
         Point mapSize = new Point(AssetStore.TownSize);
         Vector2 MoveVector;
 
@@ -75,7 +73,6 @@ namespace Edge.Hyperion.Engine {
         }
 
         protected override void LoadContent() {
-            Tile.TileSetTexture = that.Content.Load<Texture2D>(@"..\Images\Sheets\Tiles\GrassSheet");
             base.LoadContent();
         }
 
@@ -83,6 +80,8 @@ namespace Edge.Hyperion.Engine {
             if (_isActive == false) {
                 atlasClient.Disconnect("Disconnecting");
                 atlasClient.Shutdown("Shutingdown");
+                Thread.Sleep(1000);
+                that.SetScreen(new MainMenu(that));
             }
 
             serverIO();

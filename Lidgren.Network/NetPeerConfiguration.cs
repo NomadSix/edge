@@ -20,7 +20,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Net;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Partly immutable after NetPeer has been initialized

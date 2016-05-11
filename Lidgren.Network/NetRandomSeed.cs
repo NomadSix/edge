@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Class for generating random seeds

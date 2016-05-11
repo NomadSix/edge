@@ -24,7 +24,7 @@ using System.Diagnostics;
 using NetEndPoint = System.Net.IPEndPoint;
 #endif
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Incoming message either sent from a remote peer or generated within the library

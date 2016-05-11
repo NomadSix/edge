@@ -50,10 +50,6 @@
   <Import Project="..\NetCommon\NetCommon.projitems" Label="Shared" Condition="Exists('..\NetCommon\NetCommon.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.2.13.5.0\lib\CsvHelper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="OpenTK" Condition="'$(OS)'=='Unix'">
@@ -70,19 +66,12 @@
     <Reference Include="MonoGame.Framework" Condition="'$(OS)'=='Windows_NT'">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="xTile">
-      <HintPath>..\..\..\Users\Devon Schimming\Downloads\xTile207\Engine\PC\xTile.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera2D.cs" />
     <Compile Include="DebugPlayer.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Engine\Item.cs" />
-    <Compile Include="Engine\MapCell.cs" />
-    <Compile Include="Engine\Portal.cs" />
-    <Compile Include="Engine\TileMap.cs" />
-    <Compile Include="Engine\Tile.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Final.cs" />
@@ -113,9 +102,9 @@
     <Compile Include="UI\Implementation\Screens\Splash.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+    <ProjectReference Include="..\Lidgren.Network\Microsoft.Xna.Framework.Net.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
-      <Name>Lidgren.Network</Name>
+      <Name>Microsoft.Xna.Framework.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

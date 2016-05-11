@@ -33,7 +33,6 @@ namespace Edge.Hyperion.UI.Implementation.Popups {
             ButtonList.Add(new Button(that, this, new Rectangle(viewport.Width / 2 - Width / 2, (int)init.Y + 8 * Height, Width, Height), AssetStore.ButtonTypes[Button.Style.Type.basic], "Exit", () => {
                 that.sampleState = SamplerState.LinearWrap;
                 World._isActive = false;
-                that.SetScreen(new MainMenu(that));
             }));
             foreach (Button button in ButtonList) {
                 button.DrawOrder = 1;

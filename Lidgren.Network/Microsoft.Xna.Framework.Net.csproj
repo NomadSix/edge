@@ -6,8 +6,8 @@
     <ProjectGuid>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lidgren.Network</RootNamespace>
-    <AssemblyName>Lidgren.Network</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Net</RootNamespace>
+    <AssemblyName>Microsoft.Xna.Framework.Net</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -35,7 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\Lidgren.Network.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Microsoft.Xna.Framework.Net.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>3</LangVersion>
   </PropertyGroup>

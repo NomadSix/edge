@@ -18,7 +18,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using System;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	internal enum NetMessageType : byte
 	{

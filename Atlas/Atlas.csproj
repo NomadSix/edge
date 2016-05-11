@@ -59,9 +59,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Lidgren.Network\Lidgren.Network.csproj">
+    <ProjectReference Include="..\Lidgren.Network\Microsoft.Xna.Framework.Net.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
-      <Name>Lidgren.Network</Name>
+      <Name>Microsoft.Xna.Framework.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

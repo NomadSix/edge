@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public partial class NetBuffer
 	{

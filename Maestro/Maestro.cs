@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Lidgren.Network;
+using Microsoft.Xna.Framework.Net;
 using Edge.Maestro.Net;
 using Edge.Maestro.Lobbies;
 using Edge.NetCommon;

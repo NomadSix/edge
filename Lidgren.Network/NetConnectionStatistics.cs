@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	internal enum MessageResendReason
 	{

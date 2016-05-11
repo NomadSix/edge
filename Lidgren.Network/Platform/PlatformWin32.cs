@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 
-namespace Lidgren.Network {
+namespace Microsoft.Xna.Framework.Net {
 	public static partial class NetUtility {
 		private static readonly long s_timeInitialized = Stopwatch.GetTimestamp ();
 		private static readonly double s_dInvFreq = 1.0 / (double)Stopwatch.Frequency;

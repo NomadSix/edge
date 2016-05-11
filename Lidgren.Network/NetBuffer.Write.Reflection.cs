@@ -19,7 +19,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Reflection;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public partial class NetBuffer
 	{

@@ -26,7 +26,7 @@ using System.Threading;
 // Comment for Linux Mono users: reports of library thread hangs on EnterReadLock() suggests switching to plain lock() works better
 //
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Thread safe (blocking) expanding queue with TryDequeue() and EnqueueFirst()

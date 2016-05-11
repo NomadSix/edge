@@ -20,7 +20,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Exception thrown in the Lidgren Network Library

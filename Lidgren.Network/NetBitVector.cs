@@ -20,7 +20,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Text;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Fixed size vector of booleans

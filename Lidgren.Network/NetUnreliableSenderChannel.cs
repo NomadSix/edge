@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Sender part of Selective repeat ARQ for a particular NetChannel

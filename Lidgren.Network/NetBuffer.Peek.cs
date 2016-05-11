@@ -21,7 +21,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public partial class NetBuffer
 	{

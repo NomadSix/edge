@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public class NetTripleDESEncryption : NetCryptoProviderBase
 	{

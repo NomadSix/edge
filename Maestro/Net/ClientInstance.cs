@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Lidgren.Network;
+using Microsoft.Xna.Framework.Net;
 
 namespace Edge.Maestro.Net {
 	public class ClientInstance {

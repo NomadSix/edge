@@ -23,7 +23,7 @@ using System.Net;
 using NetEndPoint = System.Net.IPEndPoint;
 #endif
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Specialized version of NetPeer used for a "client" connection. It does not accept any incoming connections and maintains a ServerConnection property

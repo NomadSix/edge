@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -54,7 +55,9 @@ namespace Edge.Atlas {
                                 }
                                 break;
                         }
-
+                        if (ent.stadningTimer > 5f)
+                        {
+                        }
                         //move
                         switch (ent.entType) {
                             case Type.Mage: {
@@ -181,9 +184,11 @@ namespace Edge.Atlas {
                             ent.animationTimer += dt;
                             if (ent.animationTimer > .15) {
                                 ent.animationTimer = 0;
+                                ent.stadningTimer = 0;
                                 ent.currentFrame += 1;
                             }
                         } else {
+                            ent.stadningTimer += dt;
                             ent.currentFrame = 0;
                         }
 

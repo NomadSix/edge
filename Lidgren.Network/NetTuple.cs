@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	// replace with BCL 4.0 Tuple<> when appropriate
 	internal struct NetTuple<A, B>

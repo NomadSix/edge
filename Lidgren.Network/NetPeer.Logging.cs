@@ -18,7 +18,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using System.Diagnostics;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public partial class NetPeer
 	{

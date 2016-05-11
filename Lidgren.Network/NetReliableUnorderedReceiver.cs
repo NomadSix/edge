@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	internal sealed class NetReliableUnorderedReceiver : NetReceiverChannelBase
 	{

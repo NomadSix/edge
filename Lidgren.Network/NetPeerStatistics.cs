@@ -25,7 +25,7 @@ using System;
 using System.Text;
 using System.Diagnostics;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Statistics for a NetPeer instance

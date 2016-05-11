@@ -24,7 +24,7 @@ using System.Collections.Generic;
 
 using System.Diagnostics;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Helper class for NetBuffer to write/read bits

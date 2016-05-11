@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Net;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	public static partial class NetUtility
 	{

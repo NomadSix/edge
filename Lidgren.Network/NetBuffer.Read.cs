@@ -8,7 +8,7 @@ using System.Net;
 using NetEndPoint = System.Net.IPEndPoint;
 #endif
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Base class for NetIncomingMessage and NetOutgoingMessage

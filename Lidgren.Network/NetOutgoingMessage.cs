@@ -20,7 +20,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Diagnostics;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Outgoing message used to send data to remote peer(s)

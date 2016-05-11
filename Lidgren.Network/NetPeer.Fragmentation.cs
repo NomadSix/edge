@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Collections.Generic;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	internal class ReceivedFragmentGroup
 	{

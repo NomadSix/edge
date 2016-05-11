@@ -25,7 +25,7 @@ using System.Reflection;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Utility struct for writing Singles

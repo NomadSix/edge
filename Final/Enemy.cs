@@ -27,10 +27,6 @@ namespace Edge.Hyperion {
             Type = style;
             Width = 32;
             Height = 32;
-            if (Type.type == NetCommon.Type.Minion) {
-                Width = 16;
-                Height = 22;
-            }
             if (Type.type == NetCommon.Type.SlimeSmall) {
                 Width = 16;
                 Height = 16;

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace Lidgren.Network
+namespace Microsoft.Xna.Framework.Net
 {
 	/// <summary>
 	/// Big integer class based on BouncyCastle (http://www.bouncycastle.org) big integer code
