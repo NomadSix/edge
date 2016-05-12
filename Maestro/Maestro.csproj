@@ -49,7 +49,7 @@
       <Project>{F778B80C-A131-484D-8B4F-972D0B4389A7}</Project>
       <Name>Atlas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Lidgren.Network\Microsoft.Xna.Framework.Net.csproj">
+    <ProjectReference Include="..\MSLib\Microsoft.Xna.Framework.Net.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
       <Name>Microsoft.Xna.Framework.Net</Name>
     </ProjectReference>

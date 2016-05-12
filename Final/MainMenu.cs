@@ -31,7 +31,7 @@ namespace Edge.Hyperion {
         SoundEffectInstance music;
         float timer;
         float opening = 10f;
-        string ip = "127.0.0.1";
+        string ip = "10.53.5.241";
 
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Enemy> enemys = new List<Enemy>();

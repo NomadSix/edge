@@ -102,7 +102,7 @@
     <Compile Include="UI\Implementation\Screens\Splash.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lidgren.Network\Microsoft.Xna.Framework.Net.csproj">
+    <ProjectReference Include="..\MSLib\Microsoft.Xna.Framework.Net.csproj">
       <Project>{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}</Project>
       <Name>Microsoft.Xna.Framework.Net</Name>
     </ProjectReference>
