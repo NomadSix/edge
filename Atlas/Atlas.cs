@@ -37,8 +37,8 @@ namespace Edge.Atlas {
         public long lastUpdates;
         public long currentTime = DateTime.UtcNow.Ticks;
 
-        readonly int MAX_ENEMYS = 30;
-        readonly int MIN_ENEMYS = 15;
+        readonly int MAX_ENEMYS = 60;
+        readonly int MIN_ENEMYS = 30;
         readonly int SPAWNAREAR = 10;
 
 

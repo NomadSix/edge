@@ -28,7 +28,8 @@ namespace Edge.Hyperion.Engine {
             public enum Type {
                 Health,
                 Gold,
-                Dust
+                Dust,
+                dead
             }
             public Texture2D Base;
 

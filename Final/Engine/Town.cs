@@ -35,6 +35,7 @@ namespace Edge.Hyperion.Engine {
         SoundEffectInstance music;
         SoundEffectInstance damage;
 
+        List<DebugPlayer> top = new List<DebugPlayer>();
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Rectangle> walls = new List<Rectangle>();
         List<Enemy> enemys = new List<Enemy>();
@@ -92,6 +93,9 @@ namespace Edge.Hyperion.Engine {
                 }
                 PlayerIO(player);
                 cam.Position = new Vector2(player.X - viewport.Width / 2, player.Y - viewport.Height / 2);
+            }
+
+            foreach (var player in players) {
                 if (player.isAttacking) {
                     damage.Play();
                 }
@@ -103,6 +107,7 @@ namespace Edge.Hyperion.Engine {
             } else {
                 music.Resume();
             }
+            top = players.OrderByDescending(x => x.gold).ToList();
             pMenu.update(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 8, cam.Position.Y - 50f + viewport.Height / 2.0f + 8), cam);
             base.Update(gameTime);
         }
@@ -124,7 +129,10 @@ namespace Edge.Hyperion.Engine {
             }
             foreach (var e in enemys) { // Main loop to draw each enemy to the world
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, Color.Red);
-                that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Height, e.Width, e.Height), e.Type.BaseColour);
+                if (e.Type.type == Type.Slime || e.Type.type == Type.SlimeSmall)
+                    that.batch.Draw(e.Type.Base, e.hitBox, null, e.Type.BaseColour);
+                else
+                    that.batch.Draw(e.Type.Base, e.hitBox, new Rectangle((e.currentframe % framesPerRow) * e.Width, e.mult * e.Height, e.Width, e.Height), e.Type.BaseColour);
                 //that.batch.Draw(AssetStore.Pixel, e.hitBox, new Color(Color.Red, 100));
             }
             foreach (var p in players) { // Main loop to draw every player that is connected to the server.world
@@ -147,7 +155,7 @@ namespace Edge.Hyperion.Engine {
                 //that.batch.Draw(AssetStore.Pixel, p.AttackRec, new Color(Color.Red, 100));
             }
             foreach(var p in players.Where(x=>x.NetID == atlasClient.UniqueIdentifier))
-                statusBar.draw(p, gameTime);
+                statusBar.draw(p, top, gameTime);
             pMenu.draw(new Vector2(cam.Position.X - 50f + viewport.Width / 2.0f + 16, cam.Position.Y - 50f + viewport.Height / 2.0f + 16));
         }
 

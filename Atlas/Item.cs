@@ -23,7 +23,8 @@ namespace Edge.Atlas {
         public enum Type {
             Health,
             Gold,
-            Dust
+            Dust,
+            Dead
         }
     }
 }

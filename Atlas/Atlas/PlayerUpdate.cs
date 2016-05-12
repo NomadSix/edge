@@ -119,7 +119,7 @@ namespace Edge.Atlas {
                                 if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                     removeEnemys.Add(ent[i]);
                                     player.dmgTimer = 0;
-                                    player.Health -= .25f;
+                                    player.Health -= .125f/3f;
                                     player.isDamaged = true;
                                 }
                                 player.dmgTimer += dt;
@@ -128,7 +128,7 @@ namespace Edge.Atlas {
                         default:
                             if (player.Hitbox.Intersects(ent[i].Hitbox) && player.dmgTimer > .5) {
                                 player.dmgTimer = 0;
-                                player.Health -= .025f;
+                                player.Health -= .025f/3f;
                                 player.isDamaged = true;
                             }
                             player.dmgTimer += dt;

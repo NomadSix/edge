@@ -34,7 +34,7 @@ namespace Edge.Hyperion.UI.Components {
             base.Initialize();
         }
 
-        public void draw(DebugPlayer player, GameTime gametime) {
+        public void draw(DebugPlayer player, List<DebugPlayer> top, GameTime gametime) {
             that.batch.End();
             that.batch.Begin();
             ControlTimer += gametime.ElapsedGameTime.Milliseconds;
@@ -51,6 +51,16 @@ namespace Edge.Hyperion.UI.Components {
             }
             that.batch.Draw(AssetStore.Sword, Bounds, Color.White);
             that.batch.DrawString(AssetStore.FontMain, "Gold: " + player.gold.ToString(), new Vector2(Bounds.X, Bounds.Y + Bounds.Height + 10), Color.White);
+            for (var p = 0; p < top.Count; p++) {
+                var players = top[p];
+                var message = string.Format("#{0} {1} - {2}g", top.IndexOf(players) + 1, players.Name, players.gold);
+                var mesurments = that.Helvetica.MeasureString(message);
+                that.batch.DrawString(
+                                    that.Helvetica, message,
+                                    new Vector2(that.GraphicsDevice.Viewport.Width - mesurments.X - 10, 10 + mesurments.Y * p),
+                                    Color.White
+                                    );
+            }
             HealthBar.draw(player.Health);
             that.batch.End();
         }

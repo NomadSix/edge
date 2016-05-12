@@ -83,6 +83,7 @@ namespace Edge.Hyperion {
             //AssetStore.EnemyTypes.Add(Type.Debug, new Enemy.Style(Type.Debug, AssetStore.Pixel, null, null));
             AssetStore.ItemTypes.Add(Item.Style.Type.Health, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/HealthPot.png")));
             AssetStore.ItemTypes.Add(Item.Style.Type.Gold, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/Gold.png")));
+            AssetStore.ItemTypes.Add(Item.Style.Type.dead, new Item.Style(Content.Load<Texture2D>(@"../Images/Items/deadminion.png")));
             AssetStore.Ground = Content.Load<Texture2D>(@"../Images/layers/Background2.png");
             AssetStore.Controls = Content.Load<Texture2D>(@"../Images/Button/controls.png");
             AssetStore.MainmenuSong = Content.Load<SoundEffect>(@"../Audio/song");

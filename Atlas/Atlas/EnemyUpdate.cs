@@ -53,7 +53,7 @@ namespace Edge.Atlas {
                                 break;
                             case Type.FireMage: {
                                     var rng = new Random();
-                                    if (ent.summonTimer >= .125) {
+                                    if (ent.summonTimer >= .225) {
                                         ent.summonTimer = 0;
                                         addEnemys.Add(new ServerEnemy(enemys.Count + 1, ent.Hitbox.X, ent.Hitbox.Y, Type.Fire));
                                     }
@@ -67,7 +67,7 @@ namespace Edge.Atlas {
                             case Type.FireMage:
                             case Type.Mage: {
                                     movespeed = 30;
-                                    ent.Range = 32 * 4;
+                                    ent.Range = 32 * 6;
 
                                     if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
                                         ent.Position.X -= movespeed * dt;
@@ -120,6 +120,7 @@ namespace Edge.Atlas {
                                     ent.Position.Y -= movespeed * dt;
                                     ent.MoveVector.Y = -1;
                                 }
+                                ent.mult = 0;
                                 break;
                             case Type.SlimeSmall:
                                 movespeed = 15f;
@@ -129,7 +130,7 @@ namespace Edge.Atlas {
                                 } else if (ent.moveTimer > .5) {
                                     movespeed = 15;
                                 } else if (ent.moveTimer > .25) {
-                                    movespeed = 89;
+                                    movespeed = 90;
                                 }
                                 ent.moveTimer += dt;
                                 if (ent.Position.X + ent.Width / 4 < closePlayer.Position.X) {
@@ -148,6 +149,7 @@ namespace Edge.Atlas {
                                     ent.Position.Y -= movespeed * dt;
                                     ent.MoveVector.Y = -1;
                                 }
+                                ent.mult = 0;
                                 break;
                             case Type.Fire:
                                 movespeed = 2000;
@@ -161,7 +163,7 @@ namespace Edge.Atlas {
                                 break;
                             default: {
                                     movespeed = 90;
-                                    ent.Range = 32 * 6;
+                                    ent.Range = 32 * 7;
                                     //ent.MovingTo = 
                                     //    new Vector2(
                                     //        closePlayer.Position.X - closePlayer.Width / 2,
@@ -186,9 +188,9 @@ namespace Edge.Atlas {
                                     }
 
                                     if (ent.MoveVector.X == -1) {
-                                        ent.mult = 1;
+                                        ent.mult = 0;
                                     } else if (ent.MoveVector.X == 1) {
-                                        ent.mult = 3;
+                                        ent.mult = 1;
                                     }
                                     break;
                                 }
@@ -245,9 +247,9 @@ namespace Edge.Atlas {
         }
 
         void die(ServerEnemy ent) {
-            if (ent.Health <= 0)
-            items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 4, (Item.Type)new Random().Next(2)));
-            if (ent.entType == Type.Slime && ent.entType != Type.Fire) {
+            if (ent.Health <= 0 && ent.entType != Type.Fire)
+                items.Add(new Item(items.Count + 1, (int)ent.Position.X + ent.Width / 4, (int)ent.Position.Y + ent.Height / 4, (Item.Type)new Random().Next(2)));
+            if (ent.entType == Type.Slime) {
                 addEnemys.Add(new ServerEnemy(enemys.Count + 1, (int)ent.Position.X + ent.Width / 2, (int)ent.Position.Y + ent.Height / 2, Type.SlimeSmall));
                 addEnemys.Add(new ServerEnemy(enemys.Count + 1, (int)ent.Position.X - ent.Width / 2, (int)ent.Position.Y - ent.Height / 2, Type.SlimeSmall));
             }

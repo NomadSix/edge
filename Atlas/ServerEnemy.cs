@@ -29,7 +29,7 @@ namespace Edge.Atlas {
             world = World.debug;
             if (entType == Type.Mage) {
                 Health = 2f;
-            } else if (entType == Type.SlimeSmall || entType == Type.Fire) {
+            } else if (entType == Type.SlimeSmall || entType == Type.Fire || entType == Type.Minion) {
                 Width = 16;
                 Height = 16;
             }

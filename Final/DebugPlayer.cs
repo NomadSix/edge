@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Edge.Hyperion.Backing;
+using System.Collections.Generic;
 
 namespace Edge.Hyperion {
     public class DebugPlayer : Entity {
