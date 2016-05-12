@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Mixed Platforms</Platform>
     <ProjectGuid>{7852AC49-4D47-40F3-BFB2-5C287872F554}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Edge.Hyperion</RootNamespace>
     <AssemblyName>Hyperion</AssemblyName>
     <IsWebBootstrapper>false</IsWebBootstrapper>

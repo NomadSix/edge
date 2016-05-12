@@ -40,7 +40,6 @@ namespace Edge.Atlas {
 
                     //Update
                     if (ent.world == closePlayer.world) {
-                        Console.WriteLine(ent.entType);
                         switch (ent.entType) {
                             case Type.Mage: {
                                     var rng = new Random();

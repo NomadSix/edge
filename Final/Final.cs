@@ -59,6 +59,7 @@ namespace Edge.Hyperion {
             ContentThread = new Thread(new ThreadStart(LoadLotsOfContent));
             ContentThread.Name = "Content Loading Thread";
             ContentThread.Start();
+            Window.Title = "Edge";
             base.Initialize();
         }
 

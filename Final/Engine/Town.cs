@@ -230,7 +230,7 @@ namespace Edge.Hyperion.Engine {
             outMsg.Write((byte)AtlasPackets.RequestPositionChange);
             outMsg.Write((short)p.MoveVector.X);
             outMsg.Write((short)p.MoveVector.Y);
-            outMsg.Write(System.Environment.UserName);
+            outMsg.Write(AssetStore.Name);
             outMsg.Write(p.isAttacking);
             atlasClient.SendMessage(outMsg, NetDeliveryMethod.ReliableSequenced);
         }

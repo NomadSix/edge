@@ -23,7 +23,7 @@ using Microsoft.Xna.Framework;
 
 namespace Edge.Hyperion {
     public class MainMenu : Screen {
-        string title = "Online";
+        string title = "Edge - Online";
         internal NetClient atlasClient;
         string Port, Address;
         List<btn> btnList = new List<btn>();
@@ -31,7 +31,7 @@ namespace Edge.Hyperion {
         SoundEffectInstance music;
         float timer;
         float opening = 10f;
-        string ip = "10.53.5.241";
+        string ip = "127.0.0.1";
 
         List<DebugPlayer> players = new List<DebugPlayer>();
         List<Enemy> enemys = new List<Enemy>();
@@ -51,6 +51,7 @@ namespace Edge.Hyperion {
             #endregion
         }
         public override void Initialize() {
+            AssetStore.kb.ResetString();
             music = AssetStore.MainmenuSong.CreateInstance();
             var init = new Point(0, 175);
             var Height = 45;
@@ -96,13 +97,13 @@ namespace Edge.Hyperion {
                 music.Volume += .5f / (60 * opening);
             cam.Position = Vector2.Lerp(AssetStore.mouse.LocationV2, cam.Position/100, .95f);
             serverIO();
+            AssetStore.Name = AssetStore.kb.Message;
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             that.batch.Draw(AssetStore.Ground, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, new Vector2(1.5f), SpriteEffects.None, 0f);
-
             //strip.Update();
             //Point firstPos = new Point(AssetStore.TileSize);
             //for (int y = 0; y < mapSize.Y; y++) {
@@ -144,6 +145,9 @@ namespace Edge.Hyperion {
             that.batch.End();
             that.batch.Begin();
             that.batch.Draw(AssetStore.Pixel, new Vector2(viewport.Width / 2 - viewport.Width / 6, 0), null, new Color(50, 50, 50, 150), 0f, Vector2.Zero, new Vector2(viewport.Width / 3, viewport.Height), SpriteEffects.None, 0f);
+
+            var message = string.Format("Name: {0}_", AssetStore.Name);
+            DrawCentery(message, 150, Color.White);
             //for (int i = 0; i < btnList.Count; i++)
             //    btnList[i].Draw(gameTime);
             DrawCenter(title);
@@ -208,6 +212,13 @@ namespace Edge.Hyperion {
             var measure = that.Helvetica.MeasureString(text);
             var location = new Vector2(viewport.Width / 2 - measure.X / 2, 50);
             that.batch.DrawString(that.Helvetica, text, location, Color.White);
+        }
+        public void DrawCentery(string text, int y, Color color)
+        {
+            var viewport = GraphicsDevice.Viewport;
+            var measure = that.Helvetica.MeasureString(text);
+            //var location = Vector2.Transform(new Vector2(viewport.Width / 2 - measure.X / 2, 50), cam.ViewMatrix);
+            that.batch.DrawString(that.Helvetica, text, new Vector2(viewport.Width / 2 - measure.X / 2, y), color);
         }
     }
 }
